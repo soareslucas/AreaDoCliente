@@ -7,6 +7,7 @@ const Container = require("react-bootstrap/Container")
 const Row = require("react-bootstrap/Row")
 const Col = require("react-bootstrap/Col")
 const Alert = require("react-bootstrap/Alert")
+const Modal = require("react-bootstrap/Modal")
 import follow from '../../follow';
 import client from '../../client';
 import { Link } from "react-router-dom";
@@ -116,6 +117,60 @@ class AppSignUp extends React.Component {
 	}
 }
 
+
+
+
+
+class MeuModal extends React.Component {
+
+	constructor(props) {
+		super(props);
+		this.state = { show: false };
+		this.state = { setShow: false };
+		this.handleClose = this.handleClose.bind(this);
+		this.handleShow = this.handleClose.bind(this);
+
+	}
+
+
+	handleClose() {
+		this.state = { show: false };
+	}
+
+	handleShow() {
+		this.state = { show: true };
+	}
+
+ 
+	render() {
+		return (
+			<>
+				<Button variant="primary" onClick={this.handleShow}>
+					Launch demo modal
+				</Button>
+
+				<Modal show={this.show} onHide={this.handleClose}>
+					<Modal.Header closeButton>
+					<Modal.Title>Modal heading</Modal.Title>
+					</Modal.Header>
+					<Modal.Body>Woohoo, you're reading this text in a modal!</Modal.Body>
+					<Modal.Footer>
+					<Button variant="secondary" onClick={this.handleClose}>
+						Close
+					</Button>
+					<Button variant="primary" onClick={this.handleClose}>
+						Save Changes
+					</Button>
+					</Modal.Footer>
+				</Modal>
+			</>
+		)
+
+	}
+}
+
+
+
 // tag::create-dialog[]
 class CreateDialog extends React.Component {
 
@@ -171,6 +226,8 @@ class CreateDialog extends React.Component {
                     <Breadcrumb.Item active href="SignUp">Inscrição</Breadcrumb.Item>
                 </Breadcrumb>
 
+
+				<MeuModal/>
 
 
                 <div> 
@@ -229,8 +286,8 @@ class CreateDialog extends React.Component {
                             <Form.Row>
 
                                 <Form.Group as={Col}  md="6" controlId="4">
-                                    <Form.Label>Nome do Responsável</Form.Label>
-                                    <div key="nomeResponsavel">
+                                    <Form.Label>Nome do Representante Legal</Form.Label>
+                                    <div key="nomeRepresentante">
                                         <Form.Control required placeholder="Nome do Representante Legal"   ref="nomeRepresentante"/>
 										<Form.Control.Feedback type="invalid">
 											Por favor escreva o Nome do Representante Legal.
@@ -261,9 +318,9 @@ class CreateDialog extends React.Component {
                                         
                             <Form.Row>
                                 <Form.Group as={Col}  md="4" controlId="6">
-                                    <Form.Label>Telefone 1</Form.Label>
+                                    <Form.Label>Telefone</Form.Label>
                                     <div key="telefone">
-										<MaskedFormControl required placeholder="(0XX)-XXXXX-XXXX" ref="telefone" mask='111-11111-1111' />
+										<MaskedFormControl required placeholder="(XX)-XXXXX-XXXX" ref="telefone" mask='11-11111-1111' />
 										<Form.Control.Feedback type="invalid">
 											Por favor escreva pelo menos um telefone de contato com o responsável.
 										</Form.Control.Feedback>
@@ -273,7 +330,7 @@ class CreateDialog extends React.Component {
                                 <Form.Group as={Col}   md="4" controlId="7">
 									<Form.Label>Celular</Form.Label>
 									<div key="celular">
-										<MaskedFormControl placeholder="(0XX)-XXXXX-XXXX" ref="celular" mask='111-11111-1111' />
+										<MaskedFormControl placeholder="(XX)-XXXXX-XXXX" ref="celular" mask='11-11111-1111' />
 									</div>
                                 </Form.Group>
 
@@ -289,28 +346,78 @@ class CreateDialog extends React.Component {
                             </Form.Row>
 
 
+
+							<fieldset>
+								<Form.Group as={Row}>
+								<Form.Label as="legend" column sm={2}>
+									Possui Advogado Estabelecido?
+								</Form.Label>
+
+								<Col sm={10}>
+									<Form.Check
+									type="radio"
+									label="Sim"
+									name="formHorizontalRadios"
+									id="formHorizontalRadios1"
+									/>
+									<Form.Check
+									type="radio"
+									label="Não"
+									name="formHorizontalRadios"
+									id="formHorizontalRadios2"
+									/>
+								</Col>
+								</Form.Group>
+							</fieldset>
+
                             <Form.Row> 
                                 <Form.Group as={Col}   md="8" controlId="9">
-                                    <Form.Label>Nome do Gestor</Form.Label>
-                                    <div key="nomeGestor">
-                                        <Form.Control required type="text"  placeholder="Nome do Gestor" ref="nomeGestor"/>
+                                    <Form.Label>Nome do Advogado</Form.Label>
+                                    <div key="advogadoMaster">
+                                        <Form.Control required type="text"  placeholder="Advogado Master" ref="advogadoMaster"/>
 										<Form.Control.Feedback type="invalid">
-											Por favor escreva o Nome do Gestor.
+											Por favor escreva o nome do Advogado Master.
 										</Form.Control.Feedback>
                                     </div>
                                 </Form.Group>
 
-                                <Form.Group  as={Col}  md="4" controlId="10">
-                                    <Form.Label>CPF ou Matrícula </Form.Label>
-                                    <div key="cpfGestor">
-                                        <Form.Control required type="text" placeholder="CPF do Gestor"   ref="cpfGestor" />
+
+								<Form.Group as={Col}  md="4" controlId="formGridEmail">
+                                    <Form.Label>E-mail</Form.Label>
+                                    <div key="emailMaster">
+                                        <Form.Control required type="email" placeholder="E-mail do Master" ref="emailMaster" />      
 										<Form.Control.Feedback type="invalid">
-											Por favor escreva o CPF do Gestor.
-										</Form.Control.Feedback>
+											Por favor escreva o e-mail do Master com o padrão email@dominio.com
+										</Form.Control.Feedback>                                                                      
                                     </div>
                                 </Form.Group>
+
 
                             </Form.Row>
+
+
+							<Form.Row>
+
+								<Form.Group as={Col}  md="4" controlId="6">
+                                    <Form.Label>OAB ou Matricula</Form.Label>
+                                    <div key="identificacaoMaster">
+										<Form.Control required placeholder="Identificação do Master" ref="identificacaoMaster" />
+										<Form.Control.Feedback type="invalid">
+											Por favor escreva uma identificação do Advogado Master.
+										</Form.Control.Feedback>
+									</div>
+                                </Form.Group>
+
+								<Form.Group controlId="formBasicChecbox">
+									<Form.Check type="checkbox" label="Recebe Intimação?" />
+								</Form.Group>
+							</Form.Row>
+
+
+
+
+
+
 
                             <Row>
                                 <Col md="10">
