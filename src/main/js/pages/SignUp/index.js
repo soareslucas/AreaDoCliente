@@ -1,5 +1,7 @@
 import React, { Component } from "react";
-import MaskedFormControl from 'react-bootstrap-maskedinput'
+import { useState } from 'react';
+
+import MaskedFormControl from 'react-bootstrap-maskedinput';
 const ReactDOM = require('react-dom');
 const Button = require("react-bootstrap/Button")
 const Form = require("react-bootstrap/Form")
@@ -8,6 +10,9 @@ const Row = require("react-bootstrap/Row")
 const Col = require("react-bootstrap/Col")
 const Alert = require("react-bootstrap/Alert")
 const Modal = require("react-bootstrap/Modal")
+
+//import ModalAdvogado from './ModalAdvogado';
+
 import follow from '../../follow';
 import client from '../../client';
 import { Link } from "react-router-dom";
@@ -51,7 +56,7 @@ class AppSignUp extends React.Component {
 	// end::follow-2[]
 
 	// tag::create[]
-	onCreate(newEscritorio) {
+	onCreate(newEscritorio) {     
 
 		follow(client, root, ['escritorios']).then(escritorioCollection => {
 			return client({
@@ -118,38 +123,35 @@ class AppSignUp extends React.Component {
 }
 
 
-
-
-
-class MeuModal extends React.Component {
+class ModalAdvogado extends Component {
 
 	constructor(props) {
 		super(props);
-		this.state = { show: false };
-		this.state = { setShow: false };
+        this.state = { show: false };
 		this.handleClose = this.handleClose.bind(this);
-		this.handleShow = this.handleClose.bind(this);
+		this.handleShow = this.handleShow.bind(this);
 
 	}
 
-
 	handleClose() {
-		this.state = { show: false };
+		this.setState({ show: false});
 	}
 
 	handleShow() {
-		this.state = { show: true };
+		this.setState({ show: true});
 	}
 
- 
 	render() {
+
+		const { show } = this.state;
+
 		return (
 			<>
 				<Button variant="primary" onClick={this.handleShow}>
 					Launch demo modal
 				</Button>
 
-				<Modal show={this.show} onHide={this.handleClose}>
+				<Modal show={show} onHide={this.handleClose}>
 					<Modal.Header closeButton>
 					<Modal.Title>Modal heading</Modal.Title>
 					</Modal.Header>
@@ -165,7 +167,6 @@ class MeuModal extends React.Component {
 				</Modal>
 			</>
 		)
-
 	}
 }
 
@@ -227,7 +228,7 @@ class CreateDialog extends React.Component {
                 </Breadcrumb>
 
 
-				<MeuModal/>
+				<ModalAdvogado/>
 
 
                 <div> 

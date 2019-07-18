@@ -24935,7 +24935,7 @@ module.exports = exports["default"];
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
-/** @license React v16.8.6
+/** @license React v16.8.4
  * react-dom.development.js
  *
  * Copyright (c) Facebook, Inc. and its affiliates.
@@ -30269,29 +30269,15 @@ function isInDocument(node) {
   return node && node.ownerDocument && containsNode(node.ownerDocument.documentElement, node);
 }
 
-function isSameOriginFrame(iframe) {
-  try {
-    // Accessing the contentDocument of a HTMLIframeElement can cause the browser
-    // to throw, e.g. if it has a cross-origin src attribute.
-    // Safari will show an error in the console when the access results in "Blocked a frame with origin". e.g:
-    // iframe.contentDocument.defaultView;
-    // A safety way is to access one of the cross origin properties: Window or Location
-    // Which might result in "SecurityError" DOM Exception and it is compatible to Safari.
-    // https://html.spec.whatwg.org/multipage/browsers.html#integration-with-idl
-
-    return typeof iframe.contentWindow.location.href === 'string';
-  } catch (err) {
-    return false;
-  }
-}
-
 function getActiveElementDeep() {
   var win = window;
   var element = getActiveElement();
   while (element instanceof win.HTMLIFrameElement) {
-    if (isSameOriginFrame(element)) {
-      win = element.contentWindow;
-    } else {
+    // Accessing the contentDocument of a HTMLIframeElement can cause the browser
+    // to throw, e.g. if it has a cross-origin src attribute
+    try {
+      win = element.contentDocument.defaultView;
+    } catch (e) {
       return element;
     }
     element = getActiveElement(win.document);
@@ -32581,25 +32567,14 @@ function createElement(type, props, rootContainerElement, parentNamespace) {
       // See discussion in https://github.com/facebook/react/pull/6896
       // and discussion in https://bugzilla.mozilla.org/show_bug.cgi?id=1276240
       domElement = ownerDocument.createElement(type);
-      // Normally attributes are assigned in `setInitialDOMProperties`, however the `multiple` and `size`
-      // attributes on `select`s needs to be added before `option`s are inserted.
-      // This prevents:
-      // - a bug where the `select` does not scroll to the correct option because singular
-      //  `select` elements automatically pick the first item #13222
-      // - a bug where the `select` set the first item as selected despite the `size` attribute #14239
+      // Normally attributes are assigned in `setInitialDOMProperties`, however the `multiple`
+      // attribute on `select`s needs to be added before `option`s are inserted. This prevents
+      // a bug where the `select` does not scroll to the correct option because singular
+      // `select` elements automatically pick the first item.
       // See https://github.com/facebook/react/issues/13222
-      // and https://github.com/facebook/react/issues/14239
-      if (type === 'select') {
+      if (type === 'select' && props.multiple) {
         var node = domElement;
-        if (props.multiple) {
-          node.multiple = true;
-        } else if (props.size) {
-          // Setting a size greater than 1 causes a select to behave like `multiple=true`, where
-          // it is possible that no option is selected.
-          //
-          // This is only necessary when a select in "single selection mode".
-          node.size = props.size;
-        }
+        node.multiple = true;
       }
     }
   } else {
@@ -36251,35 +36226,14 @@ function constructClassInstance(workInProgress, ctor, props, renderExpirationTim
   var unmaskedContext = emptyContextObject;
   var context = null;
   var contextType = ctor.contextType;
-
-  {
-    if ('contextType' in ctor) {
-      var isValid =
-      // Allow null for conditional declaration
-      contextType === null || contextType !== undefined && contextType.$$typeof === REACT_CONTEXT_TYPE && contextType._context === undefined; // Not a <Context.Consumer>
-
-      if (!isValid && !didWarnAboutInvalidateContextType.has(ctor)) {
+  if (typeof contextType === 'object' && contextType !== null) {
+    {
+      if (contextType.$$typeof !== REACT_CONTEXT_TYPE && !didWarnAboutInvalidateContextType.has(ctor)) {
         didWarnAboutInvalidateContextType.add(ctor);
-
-        var addendum = '';
-        if (contextType === undefined) {
-          addendum = ' However, it is set to undefined. ' + 'This can be caused by a typo or by mixing up named and default imports. ' + 'This can also happen due to a circular dependency, so ' + 'try moving the createContext() call to a separate file.';
-        } else if (typeof contextType !== 'object') {
-          addendum = ' However, it is set to a ' + typeof contextType + '.';
-        } else if (contextType.$$typeof === REACT_PROVIDER_TYPE) {
-          addendum = ' Did you accidentally pass the Context.Provider instead?';
-        } else if (contextType._context !== undefined) {
-          // <Context.Consumer>
-          addendum = ' Did you accidentally pass the Context.Consumer instead?';
-        } else {
-          addendum = ' However, it is set to an object with keys {' + Object.keys(contextType).join(', ') + '}.';
-        }
-        warningWithoutStack$1(false, '%s defines an invalid contextType. ' + 'contextType should point to the Context object returned by React.createContext().%s', getComponentName(ctor) || 'Component', addendum);
+        warningWithoutStack$1(false, '%s defines an invalid contextType. ' + 'contextType should point to the Context object returned by React.createContext(). ' + 'Did you accidentally pass the Context.Provider instead?', getComponentName(ctor) || 'Component');
       }
     }
-  }
 
-  if (typeof contextType === 'object' && contextType !== null) {
     context = readContext(contextType);
   } else {
     unmaskedContext = getUnmaskedContext(workInProgress, ctor, true);
@@ -37801,7 +37755,7 @@ function warnOnHookMismatchInDev(currentHookName) {
 }
 
 function throwInvalidHookError() {
-  invariant(false, 'Invalid hook call. Hooks can only be called inside of the body of a function component. This could happen for one of the following reasons:\n1. You might have mismatching versions of React and the renderer (such as React DOM)\n2. You might be breaking the Rules of Hooks\n3. You might have more than one copy of React in the same app\nSee https://fb.me/react-invalid-hook-call for tips about how to debug and fix this problem.');
+  invariant(false, 'Hooks can only be called inside the body of a function component. (https://fb.me/react-invalid-hook-call)');
 }
 
 function areHookInputsEqual(nextDeps, prevDeps) {
@@ -38073,8 +38027,8 @@ function mountReducer(reducer, initialArg, init) {
   var queue = hook.queue = {
     last: null,
     dispatch: null,
-    lastRenderedReducer: reducer,
-    lastRenderedState: initialState
+    eagerReducer: reducer,
+    eagerState: initialState
   };
   var dispatch = queue.dispatch = dispatchAction.bind(null,
   // Flow doesn't know this is non-null, but we do.
@@ -38086,8 +38040,6 @@ function updateReducer(reducer, initialArg, init) {
   var hook = updateWorkInProgressHook();
   var queue = hook.queue;
   !(queue !== null) ? invariant(false, 'Should have a queue. This is likely a bug in React. Please file an issue.') : void 0;
-
-  queue.lastRenderedReducer = reducer;
 
   if (numberOfReRenders > 0) {
     // This is a re-render. Apply the new render phase updates to the previous
@@ -38123,7 +38075,8 @@ function updateReducer(reducer, initialArg, init) {
           hook.baseState = newState;
         }
 
-        queue.lastRenderedState = newState;
+        queue.eagerReducer = reducer;
+        queue.eagerState = newState;
 
         return [newState, _dispatch];
       }
@@ -38202,7 +38155,8 @@ function updateReducer(reducer, initialArg, init) {
     hook.baseUpdate = newBaseUpdate;
     hook.baseState = newBaseState;
 
-    queue.lastRenderedState = _newState;
+    queue.eagerReducer = reducer;
+    queue.eagerState = _newState;
   }
 
   var dispatch = queue.dispatch;
@@ -38218,8 +38172,8 @@ function mountState(initialState) {
   var queue = hook.queue = {
     last: null,
     dispatch: null,
-    lastRenderedReducer: basicStateReducer,
-    lastRenderedState: initialState
+    eagerReducer: basicStateReducer,
+    eagerState: initialState
   };
   var dispatch = queue.dispatch = dispatchAction.bind(null,
   // Flow doesn't know this is non-null, but we do.
@@ -38496,21 +38450,21 @@ function dispatchAction(fiber, queue, action) {
       // The queue is currently empty, which means we can eagerly compute the
       // next state before entering the render phase. If the new state is the
       // same as the current state, we may be able to bail out entirely.
-      var _lastRenderedReducer = queue.lastRenderedReducer;
-      if (_lastRenderedReducer !== null) {
+      var _eagerReducer = queue.eagerReducer;
+      if (_eagerReducer !== null) {
         var prevDispatcher = void 0;
         {
           prevDispatcher = ReactCurrentDispatcher$1.current;
           ReactCurrentDispatcher$1.current = InvalidNestedHooksDispatcherOnUpdateInDEV;
         }
         try {
-          var currentState = queue.lastRenderedState;
-          var _eagerState = _lastRenderedReducer(currentState, action);
+          var currentState = queue.eagerState;
+          var _eagerState = _eagerReducer(currentState, action);
           // Stash the eagerly computed state, and the reducer used to compute
           // it, on the update object. If the reducer hasn't changed by the
           // time we enter the render phase, then the eager state can be used
           // without calling the reducer again.
-          _update2.eagerReducer = _lastRenderedReducer;
+          _update2.eagerReducer = _eagerReducer;
           _update2.eagerState = _eagerState;
           if (is(_eagerState, currentState)) {
             // Fast path. We can bail out without scheduling React to re-render.
@@ -42226,11 +42180,11 @@ function commitHookEffectList(unmountTag, mountTag, finishedWork) {
             if (_destroy === null) {
               addendum = ' You returned null. If your effect does not require clean ' + 'up, return undefined (or nothing).';
             } else if (typeof _destroy.then === 'function') {
-              addendum = '\n\nIt looks like you wrote useEffect(async () => ...) or returned a Promise. ' + 'Instead, write the async function inside your effect ' + 'and call it immediately:\n\n' + 'useEffect(() => {\n' + '  async function fetchData() {\n' + '    // You can await here\n' + '    const response = await MyAPI.getData(someId);\n' + '    // ...\n' + '  }\n' + '  fetchData();\n' + '}, [someId]); // Or [] if effect doesn\'t need props or state\n\n' + 'Learn more about data fetching with Hooks: https://fb.me/react-hooks-data-fetching';
+              addendum = '\n\nIt looks like you wrote useEffect(async () => ...) or returned a Promise. ' + 'Instead, you may write an async function separately ' + 'and then call it from inside the effect:\n\n' + 'async function fetchComment(commentId) {\n' + '  // You can await here\n' + '}\n\n' + 'useEffect(() => {\n' + '  fetchComment(commentId);\n' + '}, [commentId]);\n\n' + 'In the future, React will provide a more idiomatic solution for data fetching ' + "that doesn't involve writing effects manually.";
             } else {
               addendum = ' You returned: ' + _destroy;
             }
-            warningWithoutStack$1(false, 'An effect function must not return anything besides a function, ' + 'which is used for clean-up.%s%s', addendum, getStackByFiberInDevAndProd(finishedWork));
+            warningWithoutStack$1(false, 'An Effect function must not return anything besides a function, ' + 'which is used for clean-up.%s%s', addendum, getStackByFiberInDevAndProd(finishedWork));
           }
         }
       }
@@ -45689,7 +45643,7 @@ implementation) {
 
 // TODO: this is special because it gets imported during build.
 
-var ReactVersion = '16.8.6';
+var ReactVersion = '16.8.4';
 
 // TODO: This type is shared between the reconciler and ReactDOM, but will
 // eventually be lifted out to the renderer.
@@ -49862,7 +49816,7 @@ exports.classNamesShape = classNamesShape;
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
-/** @license React v16.8.6
+/** @license React v16.8.4
  * react.development.js
  *
  * Copyright (c) Facebook, Inc. and its affiliates.
@@ -49884,7 +49838,7 @@ var checkPropTypes = __webpack_require__(/*! prop-types/checkPropTypes */ "./nod
 
 // TODO: this is special because it gets imported during build.
 
-var ReactVersion = '16.8.6';
+var ReactVersion = '16.8.4';
 
 // The Symbol used to tag the ReactElement-like types. If there is no native Symbol
 // nor polyfill, then a plain number is used for performance.
@@ -51297,7 +51251,7 @@ function memo(type, compare) {
 
 function resolveDispatcher() {
   var dispatcher = ReactCurrentDispatcher.current;
-  !(dispatcher !== null) ? invariant(false, 'Invalid hook call. Hooks can only be called inside of the body of a function component. This could happen for one of the following reasons:\n1. You might have mismatching versions of React and the renderer (such as React DOM)\n2. You might be breaking the Rules of Hooks\n3. You might have more than one copy of React in the same app\nSee https://fb.me/react-invalid-hook-call for tips about how to debug and fix this problem.') : void 0;
+  !(dispatcher !== null) ? invariant(false, 'Hooks can only be called inside the body of a function component. (https://fb.me/react-invalid-hook-call)') : void 0;
   return dispatcher;
 }
 
@@ -59895,6 +59849,7 @@ function _setPrototypeOf(o, p) { _setPrototypeOf = Object.setPrototypeOf || func
 
 
 
+
 var ReactDOM = __webpack_require__(/*! react-dom */ "./node_modules/react-dom/index.js");
 
 var Button = __webpack_require__(/*! react-bootstrap/Button */ "./node_modules/react-bootstrap/Button.js");
@@ -59909,7 +59864,8 @@ var Col = __webpack_require__(/*! react-bootstrap/Col */ "./node_modules/react-b
 
 var Alert = __webpack_require__(/*! react-bootstrap/Alert */ "./node_modules/react-bootstrap/Alert.js");
 
-var Modal = __webpack_require__(/*! react-bootstrap/Modal */ "./node_modules/react-bootstrap/Modal.js");
+var Modal = __webpack_require__(/*! react-bootstrap/Modal */ "./node_modules/react-bootstrap/Modal.js"); //import ModalAdvogado from './ModalAdvogado';
+
 
 
 
@@ -60065,50 +60021,48 @@ function (_React$Component) {
   return AppSignUp;
 }(react__WEBPACK_IMPORTED_MODULE_0___default.a.Component);
 
-var MeuModal =
+var ModalAdvogado =
 /*#__PURE__*/
-function (_React$Component2) {
-  _inherits(MeuModal, _React$Component2);
+function (_Component) {
+  _inherits(ModalAdvogado, _Component);
 
-  function MeuModal(props) {
+  function ModalAdvogado(props) {
     var _this6;
 
-    _classCallCheck(this, MeuModal);
+    _classCallCheck(this, ModalAdvogado);
 
-    _this6 = _possibleConstructorReturn(this, _getPrototypeOf(MeuModal).call(this, props));
+    _this6 = _possibleConstructorReturn(this, _getPrototypeOf(ModalAdvogado).call(this, props));
     _this6.state = {
       show: false
     };
-    _this6.state = {
-      setShow: false
-    };
     _this6.handleClose = _this6.handleClose.bind(_assertThisInitialized(_this6));
-    _this6.handleShow = _this6.handleClose.bind(_assertThisInitialized(_this6));
+    _this6.handleShow = _this6.handleShow.bind(_assertThisInitialized(_this6));
     return _this6;
   }
 
-  _createClass(MeuModal, [{
+  _createClass(ModalAdvogado, [{
     key: "handleClose",
     value: function handleClose() {
-      this.state = {
+      this.setState({
         show: false
-      };
+      });
     }
   }, {
     key: "handleShow",
     value: function handleShow() {
-      this.state = {
+      this.setState({
         show: true
-      };
+      });
     }
   }, {
     key: "render",
     value: function render() {
+      var show = this.state.show;
       return react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react__WEBPACK_IMPORTED_MODULE_0___default.a.Fragment, null, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(Button, {
         variant: "primary",
         onClick: this.handleShow
       }, "Launch demo modal"), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(Modal, {
-        show: this.show,
+        show: show,
         onHide: this.handleClose
       }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(Modal.Header, {
         closeButton: true
@@ -60122,14 +60076,14 @@ function (_React$Component2) {
     }
   }]);
 
-  return MeuModal;
-}(react__WEBPACK_IMPORTED_MODULE_0___default.a.Component); // tag::create-dialog[]
+  return ModalAdvogado;
+}(react__WEBPACK_IMPORTED_MODULE_0__["Component"]); // tag::create-dialog[]
 
 
 var CreateDialog =
 /*#__PURE__*/
-function (_React$Component3) {
-  _inherits(CreateDialog, _React$Component3);
+function (_React$Component2) {
+  _inherits(CreateDialog, _React$Component2);
 
   function CreateDialog(props) {
     var _this7;
@@ -60191,7 +60145,7 @@ function (_React$Component3) {
       }, "In\xEDcio"), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react_bootstrap_Breadcrumb__WEBPACK_IMPORTED_MODULE_6___default.a.Item, {
         active: true,
         href: "SignUp"
-      }, "Inscri\xE7\xE3o")), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(MeuModal, null), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", null, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(Alert, {
+      }, "Inscri\xE7\xE3o")), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(ModalAdvogado, null), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", null, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(Alert, {
         show: show,
         variant: "success"
       }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(Alert.Heading, null, "Solicita\xE7\xE3o realizada com sucesso!"), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("p", null, "Seu solicita\xE7\xE3o ser\xE1 analisado pelo gerenciamento de sistemas que far\xE1 a aprova\xE7\xE3o do cadastro."))), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(Form, {
@@ -60377,8 +60331,8 @@ function (_React$Component3) {
 
 var Escritorio =
 /*#__PURE__*/
-function (_React$Component4) {
-  _inherits(Escritorio, _React$Component4);
+function (_React$Component3) {
+  _inherits(Escritorio, _React$Component3);
 
   function Escritorio(props) {
     var _this10;
@@ -60409,8 +60363,8 @@ function (_React$Component4) {
 
 var SignUp =
 /*#__PURE__*/
-function (_Component) {
-  _inherits(SignUp, _Component);
+function (_Component2) {
+  _inherits(SignUp, _Component2);
 
   function SignUp() {
     _classCallCheck(this, SignUp);
