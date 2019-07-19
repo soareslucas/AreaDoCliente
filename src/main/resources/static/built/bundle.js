@@ -59163,7 +59163,7 @@ function (_React$Component2) {
           onDelete: _this5.props.onDelete
         });
       });
-      return react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", null, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(Table, null, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("tbody", null, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("tr", null, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("th", null, "#"), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("th", null, "CNPJ"), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("th", null, "Nome do Escrit\xF3rio"), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("th", null, "Respons\xE1vel"), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("th", null, "V\xEDnculo"), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("th", null, "Telefone"), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("th", null, "Gestor"), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("th", null)), escritorios)));
+      return react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", null, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(Table, null, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("tbody", null, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("tr", null, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("th", null, "#"), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("th", null, "CNPJ"), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("th", null, "Nome do Representante"), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("th", null, "Telefone"), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("th", null, "Advogado Master"), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("th", null)), escritorios)));
     }
   }]);
 
@@ -59193,7 +59193,7 @@ function (_React$Component3) {
   }, {
     key: "render",
     value: function render() {
-      return react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("tr", null, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("td", null, this.props.escritorio.id), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("td", null, this.props.escritorio.cnpj), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("td", null, this.props.escritorio.nome), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("td", null, this.props.escritorio.nomeResponsavel), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("td", null, this.props.escritorio.vinculo), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("td", null, this.props.escritorio.telefone), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("td", null, this.props.escritorio.nomeGestor), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("td", null, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(Button, {
+      return react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("tr", null, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("td", null, this.props.escritorio.id), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("td", null, this.props.escritorio.cnpj), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("td", null, this.props.escritorio.nomeRepresentante), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("td", null, this.props.escritorio.telefone), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("td", null, this.props.escritorio.advogadoMaster), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("td", null, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(Button, {
         onClick: this.handleDelete
       }, "Delete")));
     }
@@ -59849,7 +59849,6 @@ function _setPrototypeOf(o, p) { _setPrototypeOf = Object.setPrototypeOf || func
 
 
 
-
 var ReactDOM = __webpack_require__(/*! react-dom */ "./node_modules/react-dom/index.js");
 
 var Button = __webpack_require__(/*! react-bootstrap/Button */ "./node_modules/react-bootstrap/Button.js");
@@ -59864,8 +59863,7 @@ var Col = __webpack_require__(/*! react-bootstrap/Col */ "./node_modules/react-b
 
 var Alert = __webpack_require__(/*! react-bootstrap/Alert */ "./node_modules/react-bootstrap/Alert.js");
 
-var Modal = __webpack_require__(/*! react-bootstrap/Modal */ "./node_modules/react-bootstrap/Modal.js"); //import ModalAdvogado from './ModalAdvogado';
-
+var Modal = __webpack_require__(/*! react-bootstrap/Modal */ "./node_modules/react-bootstrap/Modal.js");
 
 
 
@@ -60019,65 +60017,7 @@ function (_React$Component) {
   }]);
 
   return AppSignUp;
-}(react__WEBPACK_IMPORTED_MODULE_0___default.a.Component);
-
-var ModalAdvogado =
-/*#__PURE__*/
-function (_Component) {
-  _inherits(ModalAdvogado, _Component);
-
-  function ModalAdvogado(props) {
-    var _this6;
-
-    _classCallCheck(this, ModalAdvogado);
-
-    _this6 = _possibleConstructorReturn(this, _getPrototypeOf(ModalAdvogado).call(this, props));
-    _this6.state = {
-      show: false
-    };
-    _this6.handleClose = _this6.handleClose.bind(_assertThisInitialized(_this6));
-    _this6.handleShow = _this6.handleShow.bind(_assertThisInitialized(_this6));
-    return _this6;
-  }
-
-  _createClass(ModalAdvogado, [{
-    key: "handleClose",
-    value: function handleClose() {
-      this.setState({
-        show: false
-      });
-    }
-  }, {
-    key: "handleShow",
-    value: function handleShow() {
-      this.setState({
-        show: true
-      });
-    }
-  }, {
-    key: "render",
-    value: function render() {
-      var show = this.state.show;
-      return react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react__WEBPACK_IMPORTED_MODULE_0___default.a.Fragment, null, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(Button, {
-        variant: "primary",
-        onClick: this.handleShow
-      }, "Launch demo modal"), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(Modal, {
-        show: show,
-        onHide: this.handleClose
-      }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(Modal.Header, {
-        closeButton: true
-      }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(Modal.Title, null, "Modal heading")), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(Modal.Body, null, "Woohoo, you're reading this text in a modal!"), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(Modal.Footer, null, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(Button, {
-        variant: "secondary",
-        onClick: this.handleClose
-      }, "Close"), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(Button, {
-        variant: "primary",
-        onClick: this.handleClose
-      }, "Save Changes"))));
-    }
-  }]);
-
-  return ModalAdvogado;
-}(react__WEBPACK_IMPORTED_MODULE_0__["Component"]); // tag::create-dialog[]
+}(react__WEBPACK_IMPORTED_MODULE_0___default.a.Component); // tag::create-dialog[]
 
 
 var CreateDialog =
@@ -60086,25 +60026,76 @@ function (_React$Component2) {
   _inherits(CreateDialog, _React$Component2);
 
   function CreateDialog(props) {
-    var _this7;
+    var _this6;
 
     _classCallCheck(this, CreateDialog);
 
-    _this7 = _possibleConstructorReturn(this, _getPrototypeOf(CreateDialog).call(this, props));
-    _this7.handleSubmit = _this7.handleSubmit.bind(_assertThisInitialized(_this7));
-    _this7.state = {
+    _this6 = _possibleConstructorReturn(this, _getPrototypeOf(CreateDialog).call(this, props));
+    _this6.handleSubmit = _this6.handleSubmit.bind(_assertThisInitialized(_this6));
+    _this6.state = {
       validated: false
     };
-    _this7.state = {
+    _this6.state = {
       show: false
     };
-    return _this7;
+    _this6.state = {
+      modal: false
+    };
+    _this6.state = {
+      recebeCitacao: false
+    };
+    _this6.state = {
+      possuiAdvogado: false
+    };
+    _this6.handleClose = _this6.handleClose.bind(_assertThisInitialized(_this6));
+    _this6.handleShow = _this6.handleShow.bind(_assertThisInitialized(_this6));
+    return _this6;
   }
 
   _createClass(CreateDialog, [{
+    key: "handleClose",
+    value: function handleClose() {
+      this.setState({
+        modal: false
+      });
+    }
+  }, {
+    key: "handleShow",
+    value: function handleShow() {
+      this.setState({
+        modal: true
+      });
+    }
+  }, {
+    key: "onRecebeCitacao",
+    value: function onRecebeCitacao() {
+      if (this.state.recebeCitacao == true) {
+        this.setState({
+          recebeCitacao: false
+        });
+      } else {
+        this.setState({
+          recebeCitacao: true
+        });
+      }
+    }
+  }, {
+    key: "onPossuiAdvogado",
+    value: function onPossuiAdvogado() {
+      if (this.state.possuiAdvogado == true) {
+        this.setState({
+          possuiAdvogado: false
+        });
+      } else {
+        this.setState({
+          possuiAdvogado: true
+        });
+      }
+    }
+  }, {
     key: "handleSubmit",
     value: function handleSubmit(e) {
-      var _this8 = this;
+      var _this7 = this;
 
       var form = e.currentTarget;
 
@@ -60118,12 +60109,15 @@ function (_React$Component2) {
         e.preventDefault();
         var newEscritorio = {};
         this.props.attributes.forEach(function (attribute) {
-          newEscritorio[attribute] = ReactDOM.findDOMNode(_this8.refs[attribute]).value.trim();
+          console.log(attribute);
+          newEscritorio[attribute] = ReactDOM.findDOMNode(_this7.refs[attribute]).value.trim();
         });
+        newEscritorio['possuiAdvogado'] = this.state.possuiAdvogado;
+        newEscritorio['recebeCitacao'] = this.state.recebeCitacao;
         this.props.onCreate(newEscritorio); // clear out the dialog's inputs
 
         this.props.attributes.forEach(function (attribute) {
-          ReactDOM.findDOMNode(_this8.refs[attribute]).value = '';
+          ReactDOM.findDOMNode(_this7.refs[attribute]).value = '';
         });
         this.setState({
           validated: false
@@ -60136,25 +60130,86 @@ function (_React$Component2) {
   }, {
     key: "render",
     value: function render() {
-      var _this9 = this;
+      var _this8 = this;
 
       var validated = this.state.validated;
       var show = this.state.show;
-      return react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", null, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react_bootstrap_Breadcrumb__WEBPACK_IMPORTED_MODULE_6___default.a, null, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react_bootstrap_Breadcrumb__WEBPACK_IMPORTED_MODULE_6___default.a.Item, {
-        href: "/"
-      }, "In\xEDcio"), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react_bootstrap_Breadcrumb__WEBPACK_IMPORTED_MODULE_6___default.a.Item, {
-        active: true,
-        href: "SignUp"
-      }, "Inscri\xE7\xE3o")), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(ModalAdvogado, null), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", null, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(Alert, {
+      var modal = this.state.modal;
+      return react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", null, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", null, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(Alert, {
         show: show,
         variant: "success"
       }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(Alert.Heading, null, "Solicita\xE7\xE3o realizada com sucesso!"), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("p", null, "Seu solicita\xE7\xE3o ser\xE1 analisado pelo gerenciamento de sistemas que far\xE1 a aprova\xE7\xE3o do cadastro."))), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(Form, {
         noValidate: true,
         validated: validated,
         onSubmit: function onSubmit(e) {
-          return _this9.handleSubmit(e);
+          return _this8.handleSubmit(e);
         }
-      }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(Form.Row, null, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(Form.Group, {
+      }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react_bootstrap_Breadcrumb__WEBPACK_IMPORTED_MODULE_6___default.a, null, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react_bootstrap_Breadcrumb__WEBPACK_IMPORTED_MODULE_6___default.a.Item, {
+        href: "/"
+      }, "In\xEDcio"), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react_bootstrap_Breadcrumb__WEBPACK_IMPORTED_MODULE_6___default.a.Item, {
+        active: true,
+        href: "SignUp"
+      }, "Inscri\xE7\xE3o")), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(Form.Row, null, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(Form.Group, {
+        as: Col,
+        md: "8",
+        controlId: "9"
+      }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(Form.Label, null, "Nome do Advogado"), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+        key: "advogadoMaster"
+      }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(Form.Control, {
+        required: true,
+        type: "text",
+        placeholder: "Advogado Master",
+        ref: "advogadoMaster"
+      }), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(Form.Control.Feedback, {
+        type: "invalid"
+      }, "Por favor escreva o nome do Advogado Master."))), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(Form.Group, {
+        as: Col,
+        md: "4",
+        controlId: "formGridEmail"
+      }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(Form.Label, null, "E-mail"), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+        key: "emailMaster"
+      }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(Form.Control, {
+        required: true,
+        type: "email",
+        placeholder: "E-mail do Master",
+        ref: "emailMaster"
+      }), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(Form.Control.Feedback, {
+        type: "invalid"
+      }, "Por favor escreva o e-mail do Master com o padr\xE3o email@dominio.com")))), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(Form.Row, null, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(Form.Group, {
+        as: Col,
+        md: "4",
+        controlId: "6"
+      }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(Form.Label, null, "OAB ou Matricula"), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+        key: "identificacaoMaster"
+      }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(Form.Control, {
+        required: true,
+        placeholder: "Identifica\xE7\xE3o do Master",
+        ref: "identificacaoMaster"
+      }), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(Form.Control.Feedback, {
+        type: "invalid"
+      }, "Por favor escreva uma identifica\xE7\xE3o do Advogado Master."))), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(Form.Group, {
+        controlId: "formBasicChecbox"
+      }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+        key: "recebeCitacao"
+      }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(Form.Check, {
+        id: "recebeCitacao",
+        value: "",
+        ref: "recebeCitacao",
+        onClick: this.onRecebeCitacao,
+        type: "checkbox",
+        label: "Recebe Intima\xE7\xE3o?"
+      })))), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(Modal, {
+        show: modal,
+        onHide: this.handleClose
+      }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(Modal.Header, {
+        closeButton: true
+      }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(Modal.Title, null, "Modal heading")), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(Modal.Body, null), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(Modal.Footer, null, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(Button, {
+        variant: "secondary",
+        onClick: this.handleClose
+      }, "Close"), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(Button, {
+        variant: "primary",
+        onClick: this.handleClose
+      }, "Salvar"))), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(Form.Row, null, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(Form.Group, {
         as: Col,
         md: "4",
         controlId: "1"
@@ -60220,6 +60275,19 @@ function (_React$Component2) {
       }, "Por favor selecione qual o v\xEDnculo do respons\xE1vel com o \xF3rg\xE3o.")))), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(Form.Row, null, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(Form.Group, {
         as: Col,
         md: "4",
+        controlId: "1"
+      }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(Form.Label, null, "CNPJ"), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+        key: "cpf"
+      }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react_bootstrap_maskedinput__WEBPACK_IMPORTED_MODULE_1___default.a, {
+        required: true,
+        placeholder: "xxx.xxx.xxx-xx",
+        ref: "cpf",
+        mask: "111.111.111-11"
+      }), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(Form.Control.Feedback, {
+        type: "invalid"
+      }, "Por favor escreva o CPF da Empresa/\xD3rg\xE3o."))), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(Form.Group, {
+        as: Col,
+        md: "4",
         controlId: "6"
       }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(Form.Label, null, "Telefone"), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
         key: "telefone"
@@ -60240,7 +60308,7 @@ function (_React$Component2) {
         placeholder: "(XX)-XXXXX-XXXX",
         ref: "celular",
         mask: "11-11111-1111"
-      }))), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(Form.Group, {
+      })))), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(Form.Row, null, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(Form.Group, {
         as: Col,
         md: "4",
         controlId: "formGridEmail"
@@ -60253,7 +60321,7 @@ function (_React$Component2) {
         ref: "email"
       }), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(Form.Control.Feedback, {
         type: "invalid"
-      }, "Por favor escreva o e-mail com o padr\xE3o email@dominio.com")))), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("fieldset", null, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(Form.Group, {
+      }, "Por favor escreva o e-mail com o padr\xE3o email@dominio.com"))), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("fieldset", null, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(Form.Group, {
         as: Row
       }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(Form.Label, {
         as: "legend",
@@ -60261,60 +60329,22 @@ function (_React$Component2) {
         sm: 2
       }, "Possui Advogado Estabelecido?"), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(Col, {
         sm: 10
+      }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+        key: "possuiAdvogado"
       }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(Form.Check, {
+        ref: "possuiAdvogado",
         type: "radio",
         label: "Sim",
-        name: "formHorizontalRadios",
-        id: "formHorizontalRadios1"
+        name: "possuiAdvogado",
+        id: "formHorizontalRadios1",
+        onClick: this.onRecebeCitacao
       }), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(Form.Check, {
+        ref: "possuiAdvogado",
         type: "radio",
         label: "N\xE3o",
-        name: "formHorizontalRadios",
+        name: "possuiAdvogado",
         id: "formHorizontalRadios2"
-      })))), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(Form.Row, null, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(Form.Group, {
-        as: Col,
-        md: "8",
-        controlId: "9"
-      }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(Form.Label, null, "Nome do Advogado"), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
-        key: "advogadoMaster"
-      }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(Form.Control, {
-        required: true,
-        type: "text",
-        placeholder: "Advogado Master",
-        ref: "advogadoMaster"
-      }), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(Form.Control.Feedback, {
-        type: "invalid"
-      }, "Por favor escreva o nome do Advogado Master."))), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(Form.Group, {
-        as: Col,
-        md: "4",
-        controlId: "formGridEmail"
-      }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(Form.Label, null, "E-mail"), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
-        key: "emailMaster"
-      }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(Form.Control, {
-        required: true,
-        type: "email",
-        placeholder: "E-mail do Master",
-        ref: "emailMaster"
-      }), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(Form.Control.Feedback, {
-        type: "invalid"
-      }, "Por favor escreva o e-mail do Master com o padr\xE3o email@dominio.com")))), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(Form.Row, null, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(Form.Group, {
-        as: Col,
-        md: "4",
-        controlId: "6"
-      }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(Form.Label, null, "OAB ou Matricula"), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
-        key: "identificacaoMaster"
-      }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(Form.Control, {
-        required: true,
-        placeholder: "Identifica\xE7\xE3o do Master",
-        ref: "identificacaoMaster"
-      }), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(Form.Control.Feedback, {
-        type: "invalid"
-      }, "Por favor escreva uma identifica\xE7\xE3o do Advogado Master."))), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(Form.Group, {
-        controlId: "formBasicChecbox"
-      }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(Form.Check, {
-        type: "checkbox",
-        label: "Recebe Intima\xE7\xE3o?"
-      }))), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(Row, null, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(Col, {
+      })))))), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(Row, null, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(Col, {
         md: "10"
       }), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(Col, {
         md: "2"
@@ -60326,45 +60356,12 @@ function (_React$Component2) {
   }]);
 
   return CreateDialog;
-}(react__WEBPACK_IMPORTED_MODULE_0___default.a.Component); // tag::employee[]
-
-
-var Escritorio =
-/*#__PURE__*/
-function (_React$Component3) {
-  _inherits(Escritorio, _React$Component3);
-
-  function Escritorio(props) {
-    var _this10;
-
-    _classCallCheck(this, Escritorio);
-
-    _this10 = _possibleConstructorReturn(this, _getPrototypeOf(Escritorio).call(this, props));
-    _this10.handleDelete = _this10.handleDelete.bind(_assertThisInitialized(_this10));
-    return _this10;
-  }
-
-  _createClass(Escritorio, [{
-    key: "handleDelete",
-    value: function handleDelete() {
-      this.props.onDelete(this.props.escritorio);
-    }
-  }, {
-    key: "render",
-    value: function render() {
-      return react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("tr", null, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("td", null, this.props.escritorio.CNPJ), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("td", null, this.props.escritorio.nome), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("td", null, this.props.escritorio.endereco), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("td", null, this.props.escritorio.nomeResponsavel), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("td", null, this.props.escritorio.vinculo), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("td", null, this.props.escritorio.telefone), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("td", null, this.props.escritorio.email), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("td", null, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("button", {
-        onClick: this.handleDelete
-      }, "Delete")));
-    }
-  }]);
-
-  return Escritorio;
 }(react__WEBPACK_IMPORTED_MODULE_0___default.a.Component);
 
 var SignUp =
 /*#__PURE__*/
-function (_Component2) {
-  _inherits(SignUp, _Component2);
+function (_Component) {
+  _inherits(SignUp, _Component);
 
   function SignUp() {
     _classCallCheck(this, SignUp);

@@ -115,11 +115,9 @@ class EscritorioList extends React.Component {
 						<tr>
                             <th>#</th>
 							<th>CNPJ</th>
-							<th>Nome do Escritório</th>
-                            <th>Responsável</th>
-							<th>Vínculo</th>
+							<th>Nome do Representante</th>
 							<th>Telefone</th>
-							<th>Gestor</th>
+							<th>Advogado Master</th>
 							<th></th>
 						</tr>
 						{escritorios}
@@ -148,11 +146,9 @@ class Escritorio extends React.Component {
 
                 <td>{this.props.escritorio.id}</td>
 				<td>{this.props.escritorio.cnpj}</td>
-				<td>{this.props.escritorio.nome}</td>
-                <td>{this.props.escritorio.nomeResponsavel}</td>
-                <td>{this.props.escritorio.vinculo}</td>
+                <td>{this.props.escritorio.nomeRepresentante}</td>
                 <td>{this.props.escritorio.telefone}</td>
-                <td>{this.props.escritorio.nomeGestor}</td>
+                <td>{this.props.escritorio.advogadoMaster}</td>
 				<td>
 					<Button onClick={this.handleDelete}>Delete</Button>
 				</td>
