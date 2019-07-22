@@ -60108,12 +60108,13 @@ function (_React$Component2) {
       } else {
         e.preventDefault();
         var newEscritorio = {};
+        console.log(ReactDOM.findDOMNode(this.refs['recebeCitacao']).checked);
+        console.log(ReactDOM.findDOMNode(this.refs['possuiAdvogado']).value);
         this.props.attributes.forEach(function (attribute) {
           console.log(attribute);
           newEscritorio[attribute] = ReactDOM.findDOMNode(_this7.refs[attribute]).value.trim();
         });
-        newEscritorio['possuiAdvogado'] = this.state.possuiAdvogado;
-        newEscritorio['recebeCitacao'] = this.state.recebeCitacao;
+        newEscritorio['recebeCitacao'] = ReactDOM.findDOMNode(this.refs['recebeCitacao']).checked;
         this.props.onCreate(newEscritorio); // clear out the dialog's inputs
 
         this.props.attributes.forEach(function (attribute) {
@@ -60193,9 +60194,7 @@ function (_React$Component2) {
         key: "recebeCitacao"
       }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(Form.Check, {
         id: "recebeCitacao",
-        value: "",
         ref: "recebeCitacao",
-        onClick: this.onRecebeCitacao,
         type: "checkbox",
         label: "Recebe Intima\xE7\xE3o?"
       })))), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(Modal, {
@@ -60337,13 +60336,14 @@ function (_React$Component2) {
         label: "Sim",
         name: "possuiAdvogado",
         id: "formHorizontalRadios1",
-        onClick: this.onRecebeCitacao
+        value: "true"
       }), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(Form.Check, {
         ref: "possuiAdvogado",
         type: "radio",
         label: "N\xE3o",
         name: "possuiAdvogado",
-        id: "formHorizontalRadios2"
+        id: "formHorizontalRadios2",
+        value: "true"
       })))))), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(Row, null, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(Col, {
         md: "10"
       }), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(Col, {

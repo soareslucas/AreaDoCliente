@@ -131,12 +131,11 @@ class CreateDialog extends React.Component {
 		this.state = { validated: false };    
 		this.state = { show: false };
 		this.state = { modal: false };
-		
-		this.state = { recebeCitacao: false };
 		this.state = { possuiAdvogado: false };
 		
 		this.handleClose = this.handleClose.bind(this);
 		this.handleShow = this.handleShow.bind(this);
+		this.possuiAdvogado = false;
 
 	}
 
@@ -148,25 +147,15 @@ class CreateDialog extends React.Component {
 		this.setState({ modal: true});
 	}
 	
-	
-	onRecebeCitacao() {
+	onPossuiAdvogadoTrue()
 		
-		if (this.state.recebeCitacao == true){
-			this.setState({ recebeCitacao: false});
-		}else{
-			this.setState({ recebeCitacao: true});
-		}
+		this.possuiAdvogado = true;
 		
 	}
-	
-	
-	onPossuiAdvogado() {
+
+	onPossuiAdvogadoTrue()
 		
-		if (this.state.possuiAdvogado == true){
-			this.setState({ possuiAdvogado: false});
-		}else{
-			this.setState({ possuiAdvogado: true});
-		}
+		this.possuiAdvogado = false;
 		
 	}
 
@@ -181,16 +170,22 @@ class CreateDialog extends React.Component {
 		} else{
 			e.preventDefault();
 			const newEscritorio = {};
+
+			console.log(ReactDOM.findDOMNode(this.refs['recebeCitacao']).checked);
+			
+			console.log(ReactDOM.findDOMNode(this.refs['possuiAdvogado']).value);
+
+
 			this.props.attributes.forEach(attribute => {
 				console.log(attribute)
 				newEscritorio[attribute] = ReactDOM.findDOMNode(this.refs[attribute]).value.trim();
 			});
 			
-			
-			newEscritorio['possuiAdvogado'] = this.state.possuiAdvogado;
-			newEscritorio['recebeCitacao'] = this.state.recebeCitacao;
+			newEscritorio['recebeCitacao'] = ReactDOM.findDOMNode(this.refs['recebeCitacao']).checked
 
-			
+			newEscritorio['poossuiAdvogadoo'
+
+
 			this.props.onCreate(newEscritorio);
 
 			// clear out the dialog's inputs
@@ -281,7 +276,7 @@ class CreateDialog extends React.Component {
 
 					<Form.Group controlId="formBasicChecbox">
 						<div key="recebeCitacao">
-							<Form.Check id="recebeCitacao" value="" ref="recebeCitacao" onClick={this.onRecebeCitacao} type="checkbox" label="Recebe Intimação?" />
+							<Form.Check id="recebeCitacao" ref="recebeCitacao" type="checkbox" label="Recebe Intimação?" />
 						</div>
 					</Form.Group>
 				</Form.Row>
@@ -434,14 +429,16 @@ class CreateDialog extends React.Component {
 										label="Sim"
 										name="possuiAdvogado"
 										id="formHorizontalRadios1"
-										onClick={this.onRecebeCitacao}
+										value="true"
 										/>
 										<Form.Check
 										ref="possuiAdvogado"
 										type="radio"
 										label="Não"
+										onClick=""
 										name="possuiAdvogado"
 										id="formHorizontalRadios2"
+										value="false"
 										/>
 									</div>
 							</Col>
