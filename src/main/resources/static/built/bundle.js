@@ -59849,6 +59849,7 @@ function _setPrototypeOf(o, p) { _setPrototypeOf = Object.setPrototypeOf || func
 
 
 
+
 var ReactDOM = __webpack_require__(/*! react-dom */ "./node_modules/react-dom/index.js");
 
 var Button = __webpack_require__(/*! react-bootstrap/Button */ "./node_modules/react-bootstrap/Button.js");
@@ -60033,64 +60034,35 @@ function (_React$Component2) {
     _this6 = _possibleConstructorReturn(this, _getPrototypeOf(CreateDialog).call(this, props));
     _this6.handleSubmit = _this6.handleSubmit.bind(_assertThisInitialized(_this6));
     _this6.state = {
-      validated: false
-    };
-    _this6.state = {
-      show: false
-    };
-    _this6.state = {
+      validated: false,
+      alerta: false,
+      possuiAdvogado: false,
       modal: false
     };
-    _this6.state = {
-      recebeCitacao: false
-    };
-    _this6.state = {
-      possuiAdvogado: false
-    };
-    _this6.handleClose = _this6.handleClose.bind(_assertThisInitialized(_this6));
-    _this6.handleShow = _this6.handleShow.bind(_assertThisInitialized(_this6));
+    _this6.onPossuiAdvogadoTrue = _this6.onPossuiAdvogadoTrue.bind(_assertThisInitialized(_this6));
+    _this6.onPossuiAdvogadoFalse = _this6.onPossuiAdvogadoFalse.bind(_assertThisInitialized(_this6));
     return _this6;
   }
 
   _createClass(CreateDialog, [{
-    key: "handleClose",
-    value: function handleClose() {
+    key: "onPossuiAdvogadoTrue",
+    value: function onPossuiAdvogadoTrue() {
       this.setState({
-        modal: false
+        possuiAdvogado: true
       });
-    }
-  }, {
-    key: "handleShow",
-    value: function handleShow() {
       this.setState({
         modal: true
       });
     }
   }, {
-    key: "onRecebeCitacao",
-    value: function onRecebeCitacao() {
-      if (this.state.recebeCitacao == true) {
-        this.setState({
-          recebeCitacao: false
-        });
-      } else {
-        this.setState({
-          recebeCitacao: true
-        });
-      }
-    }
-  }, {
-    key: "onPossuiAdvogado",
-    value: function onPossuiAdvogado() {
-      if (this.state.possuiAdvogado == true) {
-        this.setState({
-          possuiAdvogado: false
-        });
-      } else {
-        this.setState({
-          possuiAdvogado: true
-        });
-      }
+    key: "onPossuiAdvogadoFalse",
+    value: function onPossuiAdvogadoFalse() {
+      this.setState({
+        possuiAdvogado: false
+      });
+      this.setState({
+        modal: false
+      });
     }
   }, {
     key: "handleSubmit",
@@ -60124,7 +60096,7 @@ function (_React$Component2) {
           validated: false
         });
         this.setState({
-          show: true
+          alerta: true
         });
       }
     }
@@ -60134,10 +60106,16 @@ function (_React$Component2) {
       var _this8 = this;
 
       var validated = this.state.validated;
-      var show = this.state.show;
+      var possuiAdvogado = this.state.possuiAdvogado;
+      var alerta = this.state.alerta;
       var modal = this.state.modal;
-      return react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", null, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", null, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(Alert, {
-        show: show,
+      return react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", null, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react_bootstrap_Breadcrumb__WEBPACK_IMPORTED_MODULE_6___default.a, null, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react_bootstrap_Breadcrumb__WEBPACK_IMPORTED_MODULE_6___default.a.Item, {
+        href: "/"
+      }, "In\xEDcio"), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react_bootstrap_Breadcrumb__WEBPACK_IMPORTED_MODULE_6___default.a.Item, {
+        active: true,
+        href: "SignUp"
+      }, "Inscri\xE7\xE3o")), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", null, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(Alert, {
+        show: alerta,
         variant: "success"
       }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(Alert.Heading, null, "Solicita\xE7\xE3o realizada com sucesso!"), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("p", null, "Seu solicita\xE7\xE3o ser\xE1 analisado pelo gerenciamento de sistemas que far\xE1 a aprova\xE7\xE3o do cadastro."))), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(Form, {
         noValidate: true,
@@ -60145,70 +60123,7 @@ function (_React$Component2) {
         onSubmit: function onSubmit(e) {
           return _this8.handleSubmit(e);
         }
-      }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react_bootstrap_Breadcrumb__WEBPACK_IMPORTED_MODULE_6___default.a, null, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react_bootstrap_Breadcrumb__WEBPACK_IMPORTED_MODULE_6___default.a.Item, {
-        href: "/"
-      }, "In\xEDcio"), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react_bootstrap_Breadcrumb__WEBPACK_IMPORTED_MODULE_6___default.a.Item, {
-        active: true,
-        href: "SignUp"
-      }, "Inscri\xE7\xE3o")), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(Form.Row, null, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(Form.Group, {
-        as: Col,
-        md: "8",
-        controlId: "9"
-      }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(Form.Label, null, "Nome do Advogado"), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
-        key: "advogadoMaster"
-      }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(Form.Control, {
-        required: true,
-        type: "text",
-        placeholder: "Advogado Master",
-        ref: "advogadoMaster"
-      }), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(Form.Control.Feedback, {
-        type: "invalid"
-      }, "Por favor escreva o nome do Advogado Master."))), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(Form.Group, {
-        as: Col,
-        md: "4",
-        controlId: "formGridEmail"
-      }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(Form.Label, null, "E-mail"), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
-        key: "emailMaster"
-      }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(Form.Control, {
-        required: true,
-        type: "email",
-        placeholder: "E-mail do Master",
-        ref: "emailMaster"
-      }), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(Form.Control.Feedback, {
-        type: "invalid"
-      }, "Por favor escreva o e-mail do Master com o padr\xE3o email@dominio.com")))), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(Form.Row, null, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(Form.Group, {
-        as: Col,
-        md: "4",
-        controlId: "6"
-      }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(Form.Label, null, "OAB ou Matricula"), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
-        key: "identificacaoMaster"
-      }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(Form.Control, {
-        required: true,
-        placeholder: "Identifica\xE7\xE3o do Master",
-        ref: "identificacaoMaster"
-      }), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(Form.Control.Feedback, {
-        type: "invalid"
-      }, "Por favor escreva uma identifica\xE7\xE3o do Advogado Master."))), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(Form.Group, {
-        controlId: "formBasicChecbox"
-      }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
-        key: "recebeCitacao"
-      }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(Form.Check, {
-        id: "recebeCitacao",
-        ref: "recebeCitacao",
-        type: "checkbox",
-        label: "Recebe Intima\xE7\xE3o?"
-      })))), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(Modal, {
-        show: modal,
-        onHide: this.handleClose
-      }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(Modal.Header, {
-        closeButton: true
-      }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(Modal.Title, null, "Modal heading")), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(Modal.Body, null), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(Modal.Footer, null, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(Button, {
-        variant: "secondary",
-        onClick: this.handleClose
-      }, "Close"), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(Button, {
-        variant: "primary",
-        onClick: this.handleClose
-      }, "Salvar"))), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(Form.Row, null, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(Form.Group, {
+      }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(Form.Row, null, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(Form.Group, {
         as: Col,
         md: "4",
         controlId: "1"
@@ -60320,31 +60235,79 @@ function (_React$Component2) {
         ref: "email"
       }), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(Form.Control.Feedback, {
         type: "invalid"
-      }, "Por favor escreva o e-mail com o padr\xE3o email@dominio.com"))), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("fieldset", null, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(Form.Group, {
-        as: Row
-      }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(Form.Label, {
-        as: "legend",
-        column: true,
-        sm: 2
-      }, "Possui Advogado Estabelecido?"), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(Col, {
+      }, "Por favor escreva o e-mail com o padr\xE3o email@dominio.com"))), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(Form.Group, {
+        as: Col,
+        md: "6"
+      }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(Form.Label, null, " Possui Advogado Estabelecido? "), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("input", {
+        ref: "possuiAdvogado",
+        type: "hidden",
+        name: "possuiAdvogado",
+        value: possuiAdvogado
+      }), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(Col, {
         sm: 10
       }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
         key: "possuiAdvogado"
       }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(Form.Check, {
-        ref: "possuiAdvogado",
         type: "radio",
         label: "Sim",
-        name: "possuiAdvogado",
+        name: "formHorizontalRadios1",
         id: "formHorizontalRadios1",
-        value: "true"
+        onClick: this.onPossuiAdvogadoTrue
       }), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(Form.Check, {
-        ref: "possuiAdvogado",
         type: "radio",
         label: "N\xE3o",
-        name: "possuiAdvogado",
+        name: "formHorizontalRadios1",
         id: "formHorizontalRadios2",
-        value: "true"
-      })))))), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(Row, null, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(Col, {
+        onClick: this.onPossuiAdvogadoFalse
+      }))))), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+        style: {
+          display: modal ? 'block' : 'none'
+        }
+      }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(Form.Row, null, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(Form.Group, {
+        as: Col,
+        md: "8",
+        controlId: "9"
+      }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(Form.Label, null, "Nome do Advogado"), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+        key: "advogadoMaster"
+      }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(Form.Control, {
+        type: "text",
+        placeholder: "Advogado Master",
+        ref: "advogadoMaster"
+      }), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(Form.Control.Feedback, {
+        type: "invalid"
+      }, "Por favor escreva o nome do Advogado Master."))), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(Form.Group, {
+        as: Col,
+        md: "4",
+        controlId: "formGridEmail"
+      }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(Form.Label, null, "E-mail"), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+        key: "emailMaster"
+      }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(Form.Control, {
+        type: "email",
+        placeholder: "E-mail do Master",
+        ref: "emailMaster"
+      }), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(Form.Control.Feedback, {
+        type: "invalid"
+      }, "Por favor escreva o e-mail do Master com o padr\xE3o email@dominio.com")))), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(Form.Row, null, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(Form.Group, {
+        as: Col,
+        md: "4",
+        controlId: "6"
+      }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(Form.Label, null, "OAB ou Matricula"), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+        key: "identificacaoMaster"
+      }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(Form.Control, {
+        placeholder: "Identifica\xE7\xE3o do Master",
+        ref: "identificacaoMaster"
+      }), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(Form.Control.Feedback, {
+        type: "invalid"
+      }, "Por favor escreva uma identifica\xE7\xE3o do Advogado Master."))), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(Form.Group, {
+        controlId: "formBasicChecbox"
+      }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+        key: "recebeCitacao"
+      }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(Form.Check, {
+        id: "recebeCitacao",
+        ref: "recebeCitacao",
+        type: "checkbox",
+        label: "Recebe Intima\xE7\xE3o?"
+      }))))), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(Row, null, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(Col, {
         md: "10"
       }), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(Col, {
         md: "2"

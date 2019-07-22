@@ -1,4 +1,5 @@
 import React, { Component } from "react";
+import { useState } from 'react';
 
 import MaskedFormControl from 'react-bootstrap-maskedinput';
 const ReactDOM = require('react-dom');
@@ -125,40 +126,26 @@ class AppSignUp extends React.Component {
 // tag::create-dialog[]
 class CreateDialog extends React.Component {
 
+	
 	constructor(props) {
 		super(props);
 		this.handleSubmit = this.handleSubmit.bind(this);    
-		this.state = { validated: false };    
-		this.state = { show: false };
-		this.state = { modal: false };
-		this.state = { possuiAdvogado: false };
-		
-		this.handleClose = this.handleClose.bind(this);
-		this.handleShow = this.handleShow.bind(this);
-		this.possuiAdvogado = false;
-
-	}
-
-	handleClose() {
-		this.setState({ modal: false});
-	}
-
-	handleShow() {
-		this.setState({ modal: true});
+		this.state = { validated: false, alerta: false, possuiAdvogado: false, modal: false };    
+		this.onPossuiAdvogadoTrue = this.onPossuiAdvogadoTrue.bind(this);
+		this.onPossuiAdvogadoFalse = this.onPossuiAdvogadoFalse.bind(this);
 	}
 	
-	onPossuiAdvogadoTrue()
-		
-		this.possuiAdvogado = true;
-		
-	}
+	onPossuiAdvogadoTrue()	{
+		this.setState({ possuiAdvogado: true });
+		this.setState({ modal: true});
 
-	onPossuiAdvogadoTrue()
-		
-		this.possuiAdvogado = false;
-		
-	}
+ 	}
 
+	onPossuiAdvogadoFalse(){
+		this.setState({ possuiAdvogado: false });
+		this.setState({ modal: false });
+
+	}
 
 	handleSubmit(e) {
 		const form = e.currentTarget;
@@ -172,7 +159,6 @@ class CreateDialog extends React.Component {
 			const newEscritorio = {};
 
 			console.log(ReactDOM.findDOMNode(this.refs['recebeCitacao']).checked);
-			
 			console.log(ReactDOM.findDOMNode(this.refs['possuiAdvogado']).value);
 
 
@@ -183,9 +169,6 @@ class CreateDialog extends React.Component {
 			
 			newEscritorio['recebeCitacao'] = ReactDOM.findDOMNode(this.refs['recebeCitacao']).checked
 
-			newEscritorio['poossuiAdvogadoo'
-
-
 			this.props.onCreate(newEscritorio);
 
 			// clear out the dialog's inputs
@@ -194,7 +177,7 @@ class CreateDialog extends React.Component {
 			});
 
 			this.setState({ validated: false });
-            this.setState({ show: true});
+			this.setState({ alerta: true });
 
 
 		}
@@ -205,98 +188,37 @@ class CreateDialog extends React.Component {
 
 	render() {
 		const { validated } = this.state;
-        const { show } = this.state;
+		const { possuiAdvogado } = this.state;
+		const { alerta } = this.state;
 		const { modal } = this.state;
+
+
 
 		return (
 
 			<div>
-
-
-
-
-					<div> 
-						<Alert show={show} variant="success">
-							<Alert.Heading>Solicitação realizada com sucesso!</Alert.Heading>
-							<p>
-								Seu solicitação será analisado pelo gerenciamento de sistemas que fará a aprovação do cadastro. 
-							</p>
-						</Alert>
-					
-					</div>
+			
+	            <Breadcrumb>
+		            <Breadcrumb.Item href="/">Início</Breadcrumb.Item>
+		            <Breadcrumb.Item active href="SignUp">Inscrição</Breadcrumb.Item>
+		        </Breadcrumb>
+		
+		
+		
+		        <div> 
+		            <Alert show={alerta} variant="success">
+		                <Alert.Heading>Solicitação realizada com sucesso!</Alert.Heading>
+		                <p>
+		                    Seu solicitação será analisado pelo gerenciamento de sistemas que fará a aprovação do cadastro. 
+		                </p>
+		            </Alert>
+		
+		        </div>
 
 				<Form
 					noValidate
 					validated={validated}
 					onSubmit={e => this.handleSubmit(e)} >
-
-					<Breadcrumb>
-						<Breadcrumb.Item href="/">Início</Breadcrumb.Item>
-						<Breadcrumb.Item active href="SignUp">Inscrição</Breadcrumb.Item>
-					</Breadcrumb>
-					
-					
-					<Form.Row> 
-					<Form.Group as={Col} md="8" controlId="9">
-						<Form.Label>Nome do Advogado</Form.Label>
-						<div key="advogadoMaster">
-							<Form.Control required type="text"  placeholder="Advogado Master" ref="advogadoMaster"/>
-							<Form.Control.Feedback type="invalid">
-								Por favor escreva o nome do Advogado Master.
-							</Form.Control.Feedback>
-						</div>
-					</Form.Group>
-
-
-					<Form.Group as={Col} md="4" controlId="formGridEmail">
-						<Form.Label>E-mail</Form.Label>
-						<div key="emailMaster">
-							<Form.Control required type="email" placeholder="E-mail do Master" ref="emailMaster" />      
-							<Form.Control.Feedback type="invalid">
-								Por favor escreva o e-mail do Master com o padrão email@dominio.com
-							</Form.Control.Feedback>                                                                      
-						</div>
-					</Form.Group>
-
-
-				</Form.Row>
-
-
-				<Form.Row>
-
-					<Form.Group as={Col}  md="4" controlId="6">
-						<Form.Label>OAB ou Matricula</Form.Label>
-						<div key="identificacaoMaster">
-							<Form.Control required placeholder="Identificação do Master" ref="identificacaoMaster" />
-							<Form.Control.Feedback type="invalid">
-								Por favor escreva uma identificação do Advogado Master.
-							</Form.Control.Feedback>
-						</div>
-					</Form.Group>
-
-					<Form.Group controlId="formBasicChecbox">
-						<div key="recebeCitacao">
-							<Form.Check id="recebeCitacao" ref="recebeCitacao" type="checkbox" label="Recebe Intimação?" />
-						</div>
-					</Form.Group>
-				</Form.Row>
-
-					<Modal show={modal} onHide={this.handleClose}>
-						<Modal.Header closeButton>
-						<Modal.Title>Modal heading</Modal.Title>
-						</Modal.Header>
-						<Modal.Body>
-
-						</Modal.Body>
-						<Modal.Footer>
-						<Button variant="secondary" onClick={this.handleClose}>
-							Close
-						</Button>
-						<Button variant="primary" onClick={this.handleClose}>
-							Salvar
-						</Button>
-						</Modal.Footer>
-					</Modal>
 
 					<Form.Row>
 						<Form.Group as={Col}  md="4" controlId="1">
@@ -415,37 +337,81 @@ class CreateDialog extends React.Component {
 						</Form.Group>
 						
 						
-						<fieldset>
-							<Form.Group as={Row}>
-							<Form.Label as="legend" column sm={2}>
-								Possui Advogado Estabelecido?
-							</Form.Label>
-		
-								<Col sm={10}>
-									<div key="possuiAdvogado">
-										<Form.Check
-										ref="possuiAdvogado"
-										type="radio"
-										label="Sim"
-										name="possuiAdvogado"
-										id="formHorizontalRadios1"
-										value="true"
-										/>
-										<Form.Check
-										ref="possuiAdvogado"
-										type="radio"
-										label="Não"
-										onClick=""
-										name="possuiAdvogado"
-										id="formHorizontalRadios2"
-										value="false"
-										/>
-									</div>
+						<Form.Group as={Col}  md="6">
+							<Form.Label> Possui Advogado Estabelecido? </Form.Label>
+								
+			                <input ref="possuiAdvogado" type="hidden" name="possuiAdvogado" value={possuiAdvogado} />
+
+							<Col sm={10}>
+								<div key="possuiAdvogado">
+									<Form.Check
+									type="radio"
+									label="Sim"
+									name="formHorizontalRadios1"
+									id="formHorizontalRadios1"
+									onClick={this.onPossuiAdvogadoTrue}
+									/>
+									<Form.Check
+									type="radio"
+									label="Não"
+									name="formHorizontalRadios1"
+									id="formHorizontalRadios2"
+									onClick={this.onPossuiAdvogadoFalse}
+									/>
+								</div>
 							</Col>
-							</Form.Group>
-						</fieldset>
+						</Form.Group>
 					
 					</Form.Row>
+					
+					
+					<div style={{display: modal ? 'block' : 'none' }} > 
+					
+						<Form.Row> 
+							<Form.Group as={Col} md="8" controlId="9">
+								<Form.Label>Nome do Advogado</Form.Label>
+								<div key="advogadoMaster">
+									<Form.Control  type="text"  placeholder="Advogado Master" ref="advogadoMaster"/>
+									<Form.Control.Feedback type="invalid">
+										Por favor escreva o nome do Advogado Master.
+									</Form.Control.Feedback>
+								</div>
+							</Form.Group>
+		
+		
+							<Form.Group as={Col} md="4" controlId="formGridEmail">
+								<Form.Label>E-mail</Form.Label>
+								<div key="emailMaster">
+									<Form.Control  type="email" placeholder="E-mail do Master" ref="emailMaster" />      
+									<Form.Control.Feedback type="invalid">
+										Por favor escreva o e-mail do Master com o padrão email@dominio.com
+									</Form.Control.Feedback>                                                                      
+								</div>
+							</Form.Group>
+						</Form.Row>
+		
+		
+						<Form.Row>
+		
+							<Form.Group as={Col}  md="4" controlId="6">
+								<Form.Label>OAB ou Matricula</Form.Label>
+								<div key="identificacaoMaster">
+									<Form.Control  placeholder="Identificação do Master" ref="identificacaoMaster" />
+									<Form.Control.Feedback type="invalid">
+										Por favor escreva uma identificação do Advogado Master.
+									</Form.Control.Feedback>
+								</div>
+							</Form.Group>
+		
+							<Form.Group controlId="formBasicChecbox">
+								<div key="recebeCitacao">
+									<Form.Check id="recebeCitacao" ref="recebeCitacao" type="checkbox" label="Recebe Intimação?" />
+								</div>
+							</Form.Group>
+						</Form.Row>
+					
+					
+					</div>
 					
 
 
