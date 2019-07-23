@@ -11,7 +11,7 @@ import lombok.Data;
 public class Escritorio {
 
 	private @Id @GeneratedValue Long id;
-	private String CNPJ;
+	private String cnpj;
 	private String nome;
 	private String endereco;
 	private String nomeRepresentante;
@@ -31,9 +31,9 @@ public class Escritorio {
 
 	private Escritorio() {}
 
-	public Escritorio(String CNPJ, String nome, String endereco, String nomeRepresentante, String cpf,  String email, String vinculo, String telefone, String celular, boolean possuiAdvogado, String advogadoMaster, boolean recebeCitacao, String emailMaster, String identificacaoMaster) {
+	public Escritorio(String cnpj, String nome, String endereco, String nomeRepresentante, String cpf,  String email, String vinculo, String telefone, String celular, boolean possuiAdvogado, String advogadoMaster, boolean recebeCitacao, String emailMaster, String identificacaoMaster) {
 		this.id = id;
-		this.CNPJ = CNPJ;
+		this.cnpj = cnpj;
 		this.nome = nome;
 		this.endereco = endereco;
 		this.nomeRepresentante = nomeRepresentante;
