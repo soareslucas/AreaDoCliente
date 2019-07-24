@@ -1,4 +1,4 @@
-package br.jus.tjgo.litigantes;
+package br.jus.tjgo.litigantes.model;
 
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;

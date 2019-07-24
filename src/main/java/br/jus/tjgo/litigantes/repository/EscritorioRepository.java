@@ -1,4 +1,4 @@
-package br.jus.tjgo.litigantes;
+package br.jus.tjgo.litigantes.repository;
 
 
 import org.springframework.data.repository.PagingAndSortingRepository;
@@ -10,6 +10,8 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.PagingAndSortingRepository;
 import org.springframework.data.repository.query.Param;
 import org.springframework.data.rest.core.annotation.RepositoryRestResource;
+
+import br.jus.tjgo.litigantes.model.Escritorio;
 /**
  * @author 
  */

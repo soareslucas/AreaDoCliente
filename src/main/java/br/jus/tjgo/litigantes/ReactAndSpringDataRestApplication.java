@@ -15,10 +15,10 @@ import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 // tag::code[]	
 @SpringBootApplication
 @EntityScan(basePackages = {
-        "br.jus.tjgo.litigantes"
+        "br.jus.tjgo.litigantes.model"
         })
 @EnableJpaRepositories(basePackages = {
-        "br.jus.tjgo.litigantes"
+        "br.jus.tjgo.litigantes.repository"
         })
 
 public class ReactAndSpringDataRestApplication {
