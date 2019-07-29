@@ -16,20 +16,18 @@ import br.jus.tjgo.litigantes.model.Escritorio;
 /**
  * @author 
  */
-@PreAuthorize("hasRole('ROLE_MANAGER')")
 @RepositoryRestResource(collectionResourceRel = "escritorios", path = "escritorios")
 public interface EscritorioRepository extends PagingAndSortingRepository<Escritorio, Long> {
 
 	@Override
-	@PreAuthorize("#escritorio?.manager == null or #escritorio?.manager?.name == authentication?.name")
 	Escritorio save(@Param("escritorio") Escritorio escritorios);
 
 	@Override
-	@PreAuthorize("@escritorioRepository.findById(#id)?.manager?.name == authentication?.name")
+	@PreAuthorize("hasRole('ROLE_MANAGER')")
 	void deleteById(@Param("id") Long id);
 
 	@Override
-	@PreAuthorize("#escritorio?.manager?.name == authentication?.name")
+	@PreAuthorize("hasRole('ROLE_MANAGER')")
 	void delete(@Param("escritorio") Escritorio escritorio);
 	
 	

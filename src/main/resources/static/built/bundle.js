@@ -60123,7 +60123,17 @@ function (_React$Component2) {
         onSubmit: function onSubmit(e) {
           return _this8.handleSubmit(e);
         }
-      }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(Form.Row, null, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(Form.Group, {
+      }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("input", {
+        ref: "manager",
+        type: "hidden",
+        name: "manager",
+        value: ""
+      }), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("input", {
+        ref: "status",
+        type: "hidden",
+        name: "status",
+        value: ""
+      }), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(Form.Row, null, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(Form.Group, {
         as: Col,
         md: "4",
         controlId: "1"

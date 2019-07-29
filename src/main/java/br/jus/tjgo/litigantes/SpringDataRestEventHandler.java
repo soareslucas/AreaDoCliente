@@ -27,15 +27,16 @@ public class SpringDataRestEventHandler {
 
 		//		String name = SecurityContextHolder.getContext().getAuthentication().getName();
 		
-		this.name = "Maria de Fatima";
-		Manager manager = this.managerRepository.findByName(name);
-		
-		if (manager == null) {
-			Manager newManager = new Manager();
-			newManager.setName(this.name);
-			newManager.setRoles(new String[]{"ROLE_MANAGER"});
-			manager = this.managerRepository.save(newManager);
-		}
-		escritorio.setManager(manager);
+//		this.name = "admin";
+//		Manager manager = this.managerRepository.findByName(name);
+//		
+//		if (manager == null) {
+//			Manager newManager = new Manager();
+//			newManager.setName(this.name);
+//			newManager.setRoles(new String[]{"ROLE_MANAGER"});
+//			manager = this.managerRepository.save(newManager);
+//		}
+//		escritorio.setManager(manager);
+		escritorio.setStatus("Solicitado");
 	}
 }

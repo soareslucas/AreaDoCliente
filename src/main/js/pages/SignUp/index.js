@@ -220,6 +220,11 @@ class CreateDialog extends React.Component {
 					validated={validated}
 					onSubmit={e => this.handleSubmit(e)} >
 
+			            <input ref="manager" type="hidden" name="manager" value="" />
+						<input ref="status" type="hidden" name="status" value="" />
+
+						{/* <input ref="" type="hidden" name="possuiAdvogado" value="" /> */}
+
 					<Form.Row>
 						<Form.Group as={Col}  md="4" controlId="1">
 							<Form.Label>CNPJ</Form.Label>
