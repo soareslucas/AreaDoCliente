@@ -3,6 +3,10 @@ package br.jus.tjgo.litigantes.model;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
+import javax.persistence.ManyToOne;
+import javax.persistence.Version;
+
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import lombok.Data;
 
@@ -25,7 +29,10 @@ public class Escritorio {
 	private boolean recebeCitacao;
 	private String emailMaster;
 	private String identificacaoMaster;
+	private String status;
 
+	private @Version @JsonIgnore Long version;
+	private @ManyToOne Manager manager;
 
 
 
@@ -47,10 +54,20 @@ public class Escritorio {
 		this.recebeCitacao = recebeCitacao;
 		this.emailMaster = emailMaster;
 		this.identificacaoMaster = identificacaoMaster;
-
-
-
-
-		
+		this.status = "Solicitado";
 	}
+
+	public Manager getManager() {
+		return manager;
+	}
+
+	public void setManager(Manager manager) {
+		this.manager = manager;
+	}
+	
+	
+	
+	
+	
+	
 }
