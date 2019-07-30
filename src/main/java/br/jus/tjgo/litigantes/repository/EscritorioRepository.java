@@ -20,9 +20,6 @@ import br.jus.tjgo.litigantes.model.Escritorio;
 public interface EscritorioRepository extends PagingAndSortingRepository<Escritorio, Long> {
 
 	@Override
-	Escritorio save(@Param("escritorio") Escritorio escritorios);
-
-	@Override
 	@PreAuthorize("hasRole('ROLE_MANAGER')")
 	void deleteById(@Param("id") Long id);
 

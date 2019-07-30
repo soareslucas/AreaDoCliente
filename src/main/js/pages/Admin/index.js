@@ -74,6 +74,29 @@ class AppAdmin extends React.Component {
 	}
 
 	componentDidMount() {
+
+
+client({ path: 'api/escritorios/' }).then(
+    function(response) {
+        console.log('response: ', response);
+    },
+    function(response) {
+        console.error('response error: ', response);
+    }
+);
+
+
+	client({method: 'GET', path: 'api/escritorios/'}
+	).then(
+		response => {
+				console.log(response)
+				if (response.status.code == 302) {
+						window.location.href = 'http://localhost:8080/login'
+				}		
+	});
+		
+		
+
 		this.loadFromServer(this.state.pageSize);
 	}
 

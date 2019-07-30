@@ -59116,6 +59116,13 @@ function (_React$Component) {
   }, {
     key: "componentDidMount",
     value: function componentDidMount() {
+      _client__WEBPACK_IMPORTED_MODULE_4___default()({
+        path: 'api/escritorios/'
+      }).then(function (response) {
+        console.log('response: ', response);
+      }, function (response) {
+        console.error('response error: ', response);
+      });
       this.loadFromServer(this.state.pageSize);
     }
   }, {

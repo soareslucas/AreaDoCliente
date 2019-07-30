@@ -25,16 +25,23 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
 				.passwordEncoder(Manager.PASSWORD_ENCODER);
 	}
 
-    @Override
-    protected void configure(HttpSecurity http) throws Exception
-    {
-        http.authorizeRequests()
-                .antMatchers("/api/escritorios/").access("hasRole('ROLE_MANAGER')")
-                .antMatchers("/**").permitAll()
-                .anyRequest().authenticated()
-                .and()
-                .formLogin();
-    }
-
+	@Override
+	protected void configure(HttpSecurity http) throws Exception {
+		http
+			.authorizeRequests()
+	            .antMatchers("/api/escritorios/**").access("hasRole('ROLE_MANAGER')")
+				.antMatchers("/**").permitAll()
+				.anyRequest().authenticated()
+				.and()
+			.formLogin()
+				.defaultSuccessUrl("/", true)
+				.permitAll()
+				.and()
+			.httpBasic()
+				.and()
+			.csrf().disable()
+			.logout()
+				.logoutSuccessUrl("/");
+	}
 
 }
