@@ -13,6 +13,7 @@ const Routes = () => (
         <Route path="/" exact={true} component={App} />
         <Route path="/signup" component={SignUp} />
         <Route path="/login" component={Login} />
+		<Route path="/logout" component={App} />
 		<AuthenticatedRoute path="/admin" exact component={Admin} />
         <Route path="/consulta" component={Consulta} />
       <Route path="*" component={() => <h1>Page not found</h1>} />

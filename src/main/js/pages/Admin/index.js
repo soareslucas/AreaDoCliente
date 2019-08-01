@@ -11,6 +11,8 @@ const Col = require("react-bootstrap/Col")
 import Breadcrumb from 'react-bootstrap/Breadcrumb'
 import follow from '../../follow';
 import client from '../../client';
+import AuthenticationService from '../../service/AuthenticationService';
+
 import Header from '../../header';
 
 import { Link } from "react-router-dom";
@@ -81,6 +83,10 @@ class AppAdmin extends React.Component {
 	render() {
 		return (
 			<div>
+
+				<Link className="nav-link" to="/logout" onClick={AuthenticationService.logout}>Logout</Link>
+
+
                 <Breadcrumb>
                     <Breadcrumb.Item href="/">Início</Breadcrumb.Item>
                     <Breadcrumb.Item active href="Admin">Admin</Breadcrumb.Item>

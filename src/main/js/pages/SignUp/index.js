@@ -28,89 +28,16 @@ class AppSignUp extends React.Component {
 		super(props);
 		this.state = {escritorios: [], attributes: [], pageSize: 2, links: {}};
 		this.onCreate = this.onCreate.bind(this);
-		this.onDelete = this.onDelete.bind(this);
 	}
 
-	// tag::follow-2[]
-	loadFromServer(pageSize) {
-		follow(client, root, [
-			{rel: 'escritorios', params: {size: pageSize}}]
-		).then(escritorioCollection => {
-			return client({
-				method: 'GET',
-				path: escritorioCollection.entity._links.profile.href,
-				headers: {'Accept': 'application/schema+json'}
-			}).then(schema => {
-				this.schema = schema.entity;
-				return escritorioCollection;
-			});
-		}).done(escritorioCollection => {
-			this.setState({
-				escritorios: escritorioCollection.entity._embedded.escritorios,
-				attributes: Object.keys(this.schema.properties),
-				pageSize: pageSize,
-				links: escritorioCollection.entity._links});
-		});
-	}
-	// end::follow-2[]
-
-	// tag::create[]
 	onCreate(newEscritorio) {     
-
-		follow(client, root, ['escritorios']).then(escritorioCollection => {
-			return client({
+			client({
 				method: 'POST',
-				path: escritorioCollection.entity._links.self.href,
+				path: 'api/escritorios',
 				entity: newEscritorio,
 				headers: {'Content-Type': 'application/json'}
-			})
-		}).then(response => {
-			return follow(client, root, [
-				{rel: 'escritorios', params: {'size': this.state.pageSize}}]);
-		}).done(response => {
-			if (typeof response.entity._links.last !== "undefined") {
-				this.onNavigate(response.entity._links.last.href);
-			} else {
-				this.onNavigate(response.entity._links.self.href);
-			}
-		});
-	}
-	// end::create[]
-
-	// tag::delete[]
-	onDelete(escritorio) {
-		client({method: 'DELETE', path: escritorio._links.self.href}).done(response => {
-			this.loadFromServer(this.state.pageSize);
-		});
-	}
-	// end::delete[]
-
-	// tag::navigate[]
-	onNavigate(navUri) {
-		client({method: 'GET', path: navUri}).done(escritorioCollection => {
-			this.setState({
-				escritorios: escritorioCollection.entity._embedded.escritorios,
-				attributes: this.state.attributes,
-				pageSize: this.state.pageSize,
-				links: escritorioCollection.entity._links
 			});
-		});
 	}
-	// end::navigate[]
-
-	// tag::update-page-size[]
-	updatePageSize(pageSize) {
-		if (pageSize !== this.state.pageSize) {
-			this.loadFromServer(pageSize);
-		}
-	}
-	// end::update-page-size[]
-
-	// tag::follow-1[]
-	componentDidMount() {
-		this.loadFromServer(this.state.pageSize);
-	}
-	// end::follow-1[]
 
 	render() {
 		return (
@@ -160,21 +87,26 @@ class CreateDialog extends React.Component {
 
 			console.log(ReactDOM.findDOMNode(this.refs['recebeCitacao']).checked);
 			console.log(ReactDOM.findDOMNode(this.refs['possuiAdvogado']).value);
-
-
-			this.props.attributes.forEach(attribute => {
-				console.log(attribute)
-				newEscritorio[attribute] = ReactDOM.findDOMNode(this.refs[attribute]).value.trim();
-			});
 			
+			newEscritorio['manager'] = ReactDOM.findDOMNode(this.refs['manager']).value.trim();
+			newEscritorio['status'] = ReactDOM.findDOMNode(this.refs['status']).value.trim();
+			newEscritorio['cnpj'] = ReactDOM.findDOMNode(this.refs['cnpj']).value.trim();
+			newEscritorio['nome'] = ReactDOM.findDOMNode(this.refs['nome']).value.trim();
+			newEscritorio['endereco'] = ReactDOM.findDOMNode(this.refs['endereco']).value.trim();
+			newEscritorio['nomeRepresentante'] = ReactDOM.findDOMNode(this.refs['nomeRepresentante']).value.trim();
+			newEscritorio['vinculo'] = ReactDOM.findDOMNode(this.refs['vinculo']).value.trim();
+			newEscritorio['cpf'] = ReactDOM.findDOMNode(this.refs['cpf']).value.trim();
+			newEscritorio['celular'] = ReactDOM.findDOMNode(this.refs['celular']).value.trim();
+			newEscritorio['telefone'] = ReactDOM.findDOMNode(this.refs['telefone']).value.trim();
+			newEscritorio['email'] = ReactDOM.findDOMNode(this.refs['email']).value.trim();
+			newEscritorio['possuiAdvogado'] = ReactDOM.findDOMNode(this.refs['possuiAdvogado']).value.trim();
+			newEscritorio['advogadoMaster'] = ReactDOM.findDOMNode(this.refs['advogadoMaster']).value.trim();
+			newEscritorio['emailMaster'] = ReactDOM.findDOMNode(this.refs['emailMaster']).value.trim();
+			newEscritorio['identificacaoMaster'] = ReactDOM.findDOMNode(this.refs['identificacaoMaster']).value.trim();
 			newEscritorio['recebeCitacao'] = ReactDOM.findDOMNode(this.refs['recebeCitacao']).checked
-
 			this.props.onCreate(newEscritorio);
 
-			// clear out the dialog's inputs
-			this.props.attributes.forEach(attribute => {
-				ReactDOM.findDOMNode(this.refs[attribute]).value = '';
-			});
+
 
 			this.setState({ validated: false });
 			this.setState({ alerta: true });
@@ -229,7 +161,7 @@ class CreateDialog extends React.Component {
 						<Form.Group as={Col}  md="4" controlId="1">
 							<Form.Label>CNPJ</Form.Label>
 							<div key="cnpj">
-								<MaskedFormControl required placeholder="xx.xxx.xxx/0001-xx"  ref="cnpj" mask='11.111.111/1111-11' />
+								<MaskedFormControl required placeholder="xx.xxx.xxx/xxxx-xx"  ref="cnpj" mask='11.111.111/1111-11' />
 								<Form.Control.Feedback type="invalid">
 									Por favor escreva o CNPJ da Empresa/Órgão.
 								</Form.Control.Feedback>

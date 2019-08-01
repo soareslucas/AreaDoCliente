@@ -39,7 +39,7 @@ class Index extends React.Component {
                             <i className="far fa-flag"></i>
                         </span>
                         <div className="info-box-content">
-                            <span className="info-box-number">Acompanhar Solicitação de Cadastro</span>
+                            <span className="info-box-number"><Link to="/consulta">Acompanhar Solicitação de Cadastro </Link> </span>
                         </div>
                     </div>
                 </div>

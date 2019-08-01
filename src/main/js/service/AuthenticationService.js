@@ -1,6 +1,5 @@
 import axios from 'axios'
 
-import client from '../client';
 
 export const USER_NAME_SESSION_ATTRIBUTE_NAME = null
 	
@@ -26,7 +25,9 @@ class AuthenticationService {
     
 
     logout() {
-        sessionStorage.removeItem(USER_NAME_SESSION_ATTRIBUTE_NAME);
+		sessionStorage.removeItem(USER_NAME_SESSION_ATTRIBUTE_NAME);
+		return axios.post('/logout')
+
     }
 
     isUserLoggedIn() {
