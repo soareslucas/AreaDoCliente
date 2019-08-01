@@ -15,5 +15,5 @@ registry.register('application/hal+json', require('rest/mime/type/application/ha
 module.exports = rest
 	.wrap(mime, { registry: registry })
 	.wrap(uriTemplateInterceptor)
-	.wrap(errorCode)
+	.wrap(errorCode, { code: 302 })
 	.wrap(defaultRequest, { headers: { 'Accept': 'application/hal+json' }});

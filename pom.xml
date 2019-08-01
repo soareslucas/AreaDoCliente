@@ -60,6 +60,11 @@
 	        <scope>provided</scope>
     	</dependency>
     	
+    	<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-websocket</artifactId>
+		</dependency>
+    	
         <dependency>
         	<groupId>org.postgresql</groupId>
 			<artifactId>postgresql</artifactId>			
@@ -99,25 +104,25 @@
 					<installDirectory>target</installDirectory>
 				</configuration>
 				<executions>
-<!-- 					<execution> -->
-<!-- 						<id>install node and npm</id> -->
-<!-- 						<goals> -->
-<!-- 							<goal>install-node-and-npm</goal> -->
-<!-- 						</goals> -->
-<!-- 						<configuration> -->
-<!-- 							<nodeVersion>v10.15.3</nodeVersion> -->
-<!-- 							<npmVersion>6.4.1</npmVersion> -->
-<!-- 						</configuration> -->
-<!-- 					</execution> -->
-<!-- 					<execution> -->
-<!-- 						<id>npm install</id> -->
-<!-- 						<goals> -->
-<!-- 							<goal>npm</goal> -->
-<!-- 						</goals> -->
-<!-- 						<configuration> -->
-<!-- 							<arguments>install</arguments> -->
-<!-- 						</configuration> -->
-<!-- 					</execution> -->
+					<execution>
+						<id>install node and npm</id>
+						<goals>
+							<goal>install-node-and-npm</goal>
+						</goals>
+						<configuration>
+							<nodeVersion>v10.15.3</nodeVersion>
+							<npmVersion>6.4.1</npmVersion>
+						</configuration>
+					</execution>
+					<execution>
+						<id>npm install</id>
+						<goals>
+							<goal>npm</goal>
+						</goals>
+						<configuration>
+							<arguments>install</arguments>
+						</configuration>
+					</execution>
 					<execution>
 						<id>webpack build</id>
 						<goals>

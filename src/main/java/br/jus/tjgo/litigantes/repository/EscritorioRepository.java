@@ -16,7 +16,7 @@ import br.jus.tjgo.litigantes.model.Escritorio;
 /**
  * @author 
  */
-@RepositoryRestResource(collectionResourceRel = "escritorios", path = "escritorios")
+@PreAuthorize("hasRole('ROLE_MANAGER')")
 public interface EscritorioRepository extends PagingAndSortingRepository<Escritorio, Long> {
 
 	@Override
