@@ -24,7 +24,6 @@ class AppAdmin extends React.Component {
 	constructor(props) {
 		super(props);
 		this.state = {escritorios: [], attributes: [], pageSize: 50, links: {}};
-		this.onCreate = this.onCreate.bind(this);
 		this.onDelete = this.onDelete.bind(this);
 	}
 
@@ -49,26 +48,7 @@ class AppAdmin extends React.Component {
 		});
 	}
 
-	onCreate(newEscritorio) {
 
-		follow(client, root, ['escritorios']).then(escritorioCollection => {
-			return client({
-				method: 'POST',
-				path: escritorioCollection.entity._links.self.href,
-				entity: newEscritorio,
-				headers: {'Content-Type': 'application/json'}
-			})
-		}).then(response => {
-			return follow(client, root, [
-				{rel: 'escritorios', params: {'size': this.state.pageSize}}]);
-		}).done(response => {
-			if (typeof response.entity._links.last !== "undefined") {
-				this.onNavigate(response.entity._links.last.href);
-			} else {
-				this.onNavigate(response.entity._links.self.href);
-			}
-		});
-	}
 	onDelete(escritorio) {
 		client({method: 'DELETE', path: escritorio._links.self.href}).done(response => {
 			this.loadFromServer(this.state.pageSize);
@@ -76,7 +56,6 @@ class AppAdmin extends React.Component {
 	}
 
 	componentDidMount() {
-
 		this.loadFromServer(this.state.pageSize);
 	}
 
@@ -95,9 +74,8 @@ class AppAdmin extends React.Component {
                 <EscritorioList escritorios={this.state.escritorios}
                     links={this.state.links}
                     pageSize={this.state.pageSize}
-                    onNavigate={this.onNavigate}
                     onDelete={this.onDelete}
-                    updatePageSize={this.updatePageSize}/>
+                	/>
 			</div>
 		)
 	}

@@ -10,6 +10,7 @@ const Row = require("react-bootstrap/Row")
 const Col = require("react-bootstrap/Col")
 const Alert = require("react-bootstrap/Alert")
 const Modal = require("react-bootstrap/Modal")
+const Table = require("react-bootstrap/Table")
 
 
 import follow from '../../follow';
@@ -22,44 +23,109 @@ import Breadcrumb from 'react-bootstrap/Breadcrumb'
 
 const root = '/api';
 
-class AppSignUp extends React.Component {
+
+class Escritorio extends React.Component {
 
 	constructor(props) {
 		super(props);
-		this.state = {escritorios: [], attributes: [], pageSize: 2, links: {}};
-		this.onSearch = this.onSearch.bind(this);
-	}
-
-	onSearch(cnpj) {     
-			client({
-				method: 'GET',
-				path: 'api/escritorios/search/findBycnpj?cnpj='+cnpj,
-				headers: {'Content-Type': 'application/json'}
-			}).then(response =>{ console.log(response)});
 	}
 
 	render() {
 		return (
-			<div>
-				<CreateDialog attributes={this.state.attributes} onCreate={this.onSearch}/>
-			</div>
+			<tr>
+
+				<td>{this.props.escritorio.cnpj}</td>
+                <td>{this.props.escritorio.nome}</td>
+                <td>{this.props.escritorio.status}</td>
+
+			</tr>
+		)
+	}
+}
+
+class EscritorioVazio extends React.Component {
+
+	constructor(props) {
+		super(props);
+	}
+
+	render() {
+		return (
+			<>
+			</>
 		)
 	}
 }
 
 
 
-// tag::create-dialog[]
-class CreateDialog extends React.Component {
 
+class EscritorioList extends React.Component {
+
+	constructor(props) {
+		super(props);
+    }
+
+	render() {
+		
+		let escritorios;
+		
+		if(this.props.escritorios != null){			
+			 escritorios = this.props.escritorios.map(escritorio =>
+				<Escritorio key={escritorio._links.self.href} escritorio={escritorio}/>
+			);
+		}else{
+			
+			 escritorios = <EscritorioVazio/>
+		
+		}
+		
+		return (
+			<div>
+				<Table>
+					<tbody>
+						<tr>
+							<th>CNPJ</th>
+							<th>Nome do Escritório</th>
+							<th>Status</th>
+						</tr>
+						
+						{escritorios}
+					</tbody>
+				</Table>
+			</div>
+		)
+	}
+}
+
+
+class App extends React.Component {
 	
 	constructor(props) {
 		super(props);
 		this.handleSubmit = this.handleSubmit.bind(this);    
-		this.state = { validated: false, alerta: false};    
+		this.state = { validated: false, alerta: false, escritorios: [], cnpj: '0'};    
+		this.onSearch = this.onSearch.bind(this);
 	}
 	
-
+	loadFromServer(cnpj) {
+		client({
+			method: 'GET',
+			path: 'api/escritorios/search/findBycnpj?cnpj='+cnpj,
+			headers: {'Content-Type': 'application/json'}
+		}).done(escritorioCollection => {
+		this.setState({
+			escritorios: escritorioCollection.entity._embedded.escritorios});
+	});	
+	}
+		
+	onSearch(cnpj) {     
+		this.loadFromServer(cnpj);
+	}
+	
+	componentDidMount() {
+		this.loadFromServer(this.state.cnpj);
+	}
 
 	handleSubmit(e) {
 		const form = e.currentTarget;
@@ -73,7 +139,7 @@ class CreateDialog extends React.Component {
 			var cnpj = '';
 
 			cnpj = ReactDOM.findDOMNode(this.refs['cnpj']).value.trim();
-			this.props.onSearch(cnpj);
+			this.onSearch(cnpj);
 
 			this.setState({ validated: false });
 			this.setState({ alerta: true });
@@ -91,23 +157,19 @@ class CreateDialog extends React.Component {
 
 		return (
 
-			<div>
-			
+			<div>		
 	            <Breadcrumb>
 		            <Breadcrumb.Item href="/">Início</Breadcrumb.Item>
 		            <Breadcrumb.Item active href="SignUp">Consulta Andamento</Breadcrumb.Item>
 		        </Breadcrumb>
-		
-		
-		
+
 		        <div> 
 		            <Alert show={alerta} variant="success">
-		                <Alert.Heading>Solicitação realizada com sucesso!</Alert.Heading>
+		                <Alert.Heading>Busca realizada com sucesso!</Alert.Heading>
 		                <p>
-		                    Seu solicitação será analisado pelo gerenciamento de sistemas que fará a aprovação do cadastro. 
-		                </p>
+		                    Verifique o status da solicitação de cadastro.
+	                    </p>
 		            </Alert>
-		
 		        </div>
 
 				<Form
@@ -115,10 +177,8 @@ class CreateDialog extends React.Component {
 					validated={validated}
 					onSubmit={e => this.handleSubmit(e)} >
 
-			            <input ref="manager" type="hidden" name="manager" value="" />
-						<input ref="status" type="hidden" name="status" value="" />
-
-						{/* <input ref="" type="hidden" name="possuiAdvogado" value="" /> */}
+		            <input ref="manager" type="hidden" name="manager" value="" />
+					<input ref="status" type="hidden" name="status" value="" />
 
 					<Form.Row>
 			            
@@ -139,9 +199,6 @@ class CreateDialog extends React.Component {
 
 					</Form.Row>
 					
-					
-					
-					
 					<Form.Row>			
 						<Form.Group as={Col} md="11" >
 						</Form.Group>
@@ -157,13 +214,16 @@ class CreateDialog extends React.Component {
 					
 					
 				</Form>
+				
+				
+                <EscritorioList escritorios={this.state.escritorios}/>
+				
+				
 			</div>
 		)
 	}
 
 }
-
-
 
 
 
@@ -173,7 +233,7 @@ class Consulta extends Component {
   render() {
     return (
                 <Header>
-                    <AppSignUp/>
+                    <App/>
                 </Header>
     );
   }
