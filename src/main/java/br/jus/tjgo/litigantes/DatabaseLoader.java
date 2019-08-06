@@ -28,9 +28,9 @@ import br.jus.tjgo.litigantes.repository.*;
  	@Override
  	public void run(String... strings) throws Exception {
 
-// 		this.managers.save(new Manager("admin", "123456",
-// 							"ROLE_MANAGER"));
-// 		
+ 		this.managers.save(new Manager("admin", "123456",
+ 							"ROLE_MANAGER"));
+ 		
 
  	}
  }

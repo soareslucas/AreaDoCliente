@@ -3,6 +3,7 @@ package br.jus.tjgo.litigantes.model;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
+import javax.persistence.Lob;
 import javax.persistence.ManyToOne;
 import javax.persistence.Version;
 
@@ -30,13 +31,12 @@ public class Escritorio {
 	private String emailMaster;
 	private String identificacaoMaster;
 	private String status;
-
-	private @Version @JsonIgnore Long version;
+    private byte[] data;
 
 
 	private Escritorio() {}
 
-	public Escritorio(String cnpj, String nome, String endereco, String nomeRepresentante, String cpf,  String email, String vinculo, String telefone, String celular, boolean possuiAdvogado, String advogadoMaster, boolean recebeCitacao, String emailMaster, String identificacaoMaster) {
+	public Escritorio(String status, byte[] data, String cnpj, String nome, String endereco, String nomeRepresentante, String cpf,  String email, String vinculo, String telefone, String celular, boolean possuiAdvogado, String advogadoMaster, boolean recebeCitacao, String emailMaster, String identificacaoMaster) {
 		this.id = id;
 		this.cnpj = cnpj;
 		this.nome = nome;
@@ -182,12 +182,12 @@ public class Escritorio {
 		this.status = status;
 	}
 
-	public Long getVersion() {
-		return version;
+	public byte[] getData() {
+		return data;
 	}
 
-	public void setVersion(Long version) {
-		this.version = version;
+	public void setData(byte[] data) {
+		this.data = data;
 	}
 	
 	

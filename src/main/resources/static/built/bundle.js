@@ -60868,6 +60868,8 @@ var Row = __webpack_require__(/*! react-bootstrap/Row */ "./node_modules/react-b
 
 var Col = __webpack_require__(/*! react-bootstrap/Col */ "./node_modules/react-bootstrap/Col.js");
 
+var Modal = __webpack_require__(/*! react-bootstrap/Modal */ "./node_modules/react-bootstrap/Modal.js");
+
 
 
 
@@ -60894,6 +60896,7 @@ function (_React$Component) {
       links: {}
     };
     _this.onDelete = _this.onDelete.bind(_assertThisInitialized(_this));
+    _this.onUpdate = _this.onUpdate.bind(_assertThisInitialized(_this));
     return _this;
   }
 
@@ -60940,6 +60943,22 @@ function (_React$Component) {
       });
     }
   }, {
+    key: "onUpdate",
+    value: function onUpdate(escritorio, updatedEscritorio) {
+      var _this4 = this;
+
+      _client__WEBPACK_IMPORTED_MODULE_4___default()({
+        method: 'PUT',
+        path: escritorio._links.self.href,
+        entity: updatedEscritorio,
+        headers: {
+          'Content-Type': 'application/json'
+        }
+      }).done(function (response) {
+        _this4.loadFromServer(_this4.state.pageSize);
+      });
+    }
+  }, {
     key: "componentDidMount",
     value: function componentDidMount() {
       this.loadFromServer(this.state.pageSize);
@@ -60960,7 +60979,9 @@ function (_React$Component) {
         escritorios: this.state.escritorios,
         links: this.state.links,
         pageSize: this.state.pageSize,
-        onDelete: this.onDelete
+        onDelete: this.onDelete,
+        onUpdate: this.onUpdate,
+        attributes: this.state.attributes
       }));
     }
   }]);
@@ -60968,10 +60989,119 @@ function (_React$Component) {
   return AppAdmin;
 }(react__WEBPACK_IMPORTED_MODULE_0___default.a.Component);
 
-var EscritorioList =
+var UpdateDialog =
 /*#__PURE__*/
 function (_React$Component2) {
-  _inherits(EscritorioList, _React$Component2);
+  _inherits(UpdateDialog, _React$Component2);
+
+  function UpdateDialog(props) {
+    var _this5;
+
+    _classCallCheck(this, UpdateDialog);
+
+    _this5 = _possibleConstructorReturn(this, _getPrototypeOf(UpdateDialog).call(this, props));
+    _this5.state = {
+      modal: false
+    };
+    _this5.handleSubmit = _this5.handleSubmit.bind(_assertThisInitialized(_this5));
+    _this5.handleClose = _this5.handleClose.bind(_assertThisInitialized(_this5));
+    _this5.handleShow = _this5.handleShow.bind(_assertThisInitialized(_this5));
+    return _this5;
+  }
+
+  _createClass(UpdateDialog, [{
+    key: "handleSubmit",
+    value: function handleSubmit(e) {
+      var _this6 = this;
+
+      e.preventDefault();
+      var updatedEscritorio = {};
+      this.props.attributes.forEach(function (attribute) {
+        updatedEscritorio[attribute] = ReactDOM.findDOMNode(_this6.refs[attribute]).value.trim();
+      });
+      this.props.onUpdate(this.props.escritorio, updatedEscritorio);
+      this.setState({
+        modal: false
+      });
+    }
+  }, {
+    key: "mostraModal",
+    value: function mostraModal() {
+      this.setState({
+        modal: true
+      });
+    }
+  }, {
+    key: "handleClose",
+    value: function handleClose() {
+      this.setState({
+        modal: false
+      });
+    }
+  }, {
+    key: "handleShow",
+    value: function handleShow() {
+      this.setState({
+        modal: true
+      });
+    }
+  }, {
+    key: "render",
+    value: function render() {
+      var _this7 = this;
+
+      var inputs = this.props.attributes.map(function (attribute) {
+        return (//			if(attribute == 'id'){
+          //				
+          //				<a href="/downloadFile/{fileId}" >Visit W3Schools</a>
+          //				
+          //				
+          //				<Link className="nav-link" to="/admin" onClick={AuthenticationService.logout}>Logout</Link>
+          //
+          //				
+          //			}else{
+          react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("p", {
+            key: attribute + _this7.props.escritorio[attribute]
+          }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("input", {
+            type: "text",
+            placeholder: attribute,
+            defaultValue: _this7.props.escritorio[attribute],
+            ref: attribute,
+            className: "field"
+          }))
+        );
+      } //			}
+      );
+      var dialogId = "updateEscritorio-" + this.props.escritorio._links.self.href;
+      var modal = this.state.modal;
+      return react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+        key: dialogId
+      }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(Button, {
+        onClick: this.handleShow
+      }, "Update"), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("form", null, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(Modal, {
+        show: modal,
+        onHide: this.handleClose
+      }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(Modal.Header, {
+        closeButton: true
+      }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(Modal.Title, null, "Atualizar Status")), inputs, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(Modal.Footer, null, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(Button, {
+        variant: "secondary",
+        onClick: this.handleClose
+      }, "Fechar"), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(Button, {
+        variant: "primary",
+        onClick: this.handleSubmit
+      }, "Salvar")))));
+    }
+  }]);
+
+  return UpdateDialog;
+}(react__WEBPACK_IMPORTED_MODULE_0___default.a.Component);
+
+;
+
+var EscritorioList =
+/*#__PURE__*/
+function (_React$Component3) {
+  _inherits(EscritorioList, _React$Component3);
 
   function EscritorioList(props) {
     _classCallCheck(this, EscritorioList);
@@ -60982,16 +61112,18 @@ function (_React$Component2) {
   _createClass(EscritorioList, [{
     key: "render",
     value: function render() {
-      var _this4 = this;
+      var _this8 = this;
 
       var escritorios = this.props.escritorios.map(function (escritorio) {
         return react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(Escritorio, {
           key: escritorio._links.self.href,
           escritorio: escritorio,
-          onDelete: _this4.props.onDelete
+          attributes: _this8.props.attributes,
+          onUpdate: _this8.props.onUpdate,
+          onDelete: _this8.props.onDelete
         });
       });
-      return react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", null, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(Table, null, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("tbody", null, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("tr", null, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("th", null, "#"), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("th", null, "CNPJ"), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("th", null, "Nome do Representante"), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("th", null, "Telefone"), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("th", null, "Advogado Master"), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("th", null)), escritorios)));
+      return react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", null, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(Table, null, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("tbody", null, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("tr", null, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("th", null, "#"), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("th", null, "CNPJ"), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("th", null, "Nome do Representante"), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("th", null, "Telefone"), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("th", null, "Advogado Master"), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("th", null), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("th", null)), escritorios)));
     }
   }]);
 
@@ -61000,17 +61132,17 @@ function (_React$Component2) {
 
 var Escritorio =
 /*#__PURE__*/
-function (_React$Component3) {
-  _inherits(Escritorio, _React$Component3);
+function (_React$Component4) {
+  _inherits(Escritorio, _React$Component4);
 
   function Escritorio(props) {
-    var _this5;
+    var _this9;
 
     _classCallCheck(this, Escritorio);
 
-    _this5 = _possibleConstructorReturn(this, _getPrototypeOf(Escritorio).call(this, props));
-    _this5.handleDelete = _this5.handleDelete.bind(_assertThisInitialized(_this5));
-    return _this5;
+    _this9 = _possibleConstructorReturn(this, _getPrototypeOf(Escritorio).call(this, props));
+    _this9.handleDelete = _this9.handleDelete.bind(_assertThisInitialized(_this9));
+    return _this9;
   }
 
   _createClass(Escritorio, [{
@@ -61021,7 +61153,11 @@ function (_React$Component3) {
   }, {
     key: "render",
     value: function render() {
-      return react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("tr", null, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("td", null, this.props.escritorio.id), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("td", null, this.props.escritorio.cnpj), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("td", null, this.props.escritorio.nomeRepresentante), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("td", null, this.props.escritorio.telefone), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("td", null, this.props.escritorio.advogadoMaster), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("td", null, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(Button, {
+      return react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("tr", null, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("td", null, this.props.escritorio.id), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("td", null, this.props.escritorio.cnpj), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("td", null, this.props.escritorio.nomeRepresentante), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("td", null, this.props.escritorio.telefone), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("td", null, this.props.escritorio.advogadoMaster), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("td", null, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(UpdateDialog, {
+        escritorio: this.props.escritorio,
+        attributes: this.props.attributes,
+        onUpdate: this.props.onUpdate
+      })), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("td", null, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(Button, {
         onClick: this.handleDelete
       }, "Delete")));
     }
@@ -61374,16 +61510,18 @@ function (_Component) {
 __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react */ "./node_modules/react/index.js");
 /* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_0__);
-/* harmony import */ var react_bootstrap_maskedinput__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! react-bootstrap-maskedinput */ "./node_modules/react-bootstrap-maskedinput/lib/index.js");
-/* harmony import */ var react_bootstrap_maskedinput__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(react_bootstrap_maskedinput__WEBPACK_IMPORTED_MODULE_1__);
-/* harmony import */ var _follow__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../../follow */ "./src/main/js/follow.js");
-/* harmony import */ var _follow__WEBPACK_IMPORTED_MODULE_2___default = /*#__PURE__*/__webpack_require__.n(_follow__WEBPACK_IMPORTED_MODULE_2__);
-/* harmony import */ var _client__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../../client */ "./src/main/js/client.js");
-/* harmony import */ var _client__WEBPACK_IMPORTED_MODULE_3___default = /*#__PURE__*/__webpack_require__.n(_client__WEBPACK_IMPORTED_MODULE_3__);
-/* harmony import */ var react_router_dom__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! react-router-dom */ "./node_modules/react-router-dom/esm/react-router-dom.js");
-/* harmony import */ var _header__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ../../header */ "./src/main/js/header.js");
-/* harmony import */ var react_bootstrap_Breadcrumb__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! react-bootstrap/Breadcrumb */ "./node_modules/react-bootstrap/Breadcrumb.js");
-/* harmony import */ var react_bootstrap_Breadcrumb__WEBPACK_IMPORTED_MODULE_6___default = /*#__PURE__*/__webpack_require__.n(react_bootstrap_Breadcrumb__WEBPACK_IMPORTED_MODULE_6__);
+/* harmony import */ var axios__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! axios */ "./node_modules/axios/index.js");
+/* harmony import */ var axios__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(axios__WEBPACK_IMPORTED_MODULE_1__);
+/* harmony import */ var react_bootstrap_maskedinput__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! react-bootstrap-maskedinput */ "./node_modules/react-bootstrap-maskedinput/lib/index.js");
+/* harmony import */ var react_bootstrap_maskedinput__WEBPACK_IMPORTED_MODULE_2___default = /*#__PURE__*/__webpack_require__.n(react_bootstrap_maskedinput__WEBPACK_IMPORTED_MODULE_2__);
+/* harmony import */ var _follow__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../../follow */ "./src/main/js/follow.js");
+/* harmony import */ var _follow__WEBPACK_IMPORTED_MODULE_3___default = /*#__PURE__*/__webpack_require__.n(_follow__WEBPACK_IMPORTED_MODULE_3__);
+/* harmony import */ var _client__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ../../client */ "./src/main/js/client.js");
+/* harmony import */ var _client__WEBPACK_IMPORTED_MODULE_4___default = /*#__PURE__*/__webpack_require__.n(_client__WEBPACK_IMPORTED_MODULE_4__);
+/* harmony import */ var react_router_dom__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! react-router-dom */ "./node_modules/react-router-dom/esm/react-router-dom.js");
+/* harmony import */ var _header__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ../../header */ "./src/main/js/header.js");
+/* harmony import */ var react_bootstrap_Breadcrumb__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! react-bootstrap/Breadcrumb */ "./node_modules/react-bootstrap/Breadcrumb.js");
+/* harmony import */ var react_bootstrap_Breadcrumb__WEBPACK_IMPORTED_MODULE_7___default = /*#__PURE__*/__webpack_require__.n(react_bootstrap_Breadcrumb__WEBPACK_IMPORTED_MODULE_7__);
 function _typeof(obj) { if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") { _typeof = function _typeof(obj) { return typeof obj; }; } else { _typeof = function _typeof(obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }; } return _typeof(obj); }
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
@@ -61401,6 +61539,7 @@ function _assertThisInitialized(self) { if (self === void 0) { throw new Referen
 function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function"); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, writable: true, configurable: true } }); if (superClass) _setPrototypeOf(subClass, superClass); }
 
 function _setPrototypeOf(o, p) { _setPrototypeOf = Object.setPrototypeOf || function _setPrototypeOf(o, p) { o.__proto__ = p; return o; }; return _setPrototypeOf(o, p); }
+
 
 
 
@@ -61453,7 +61592,7 @@ function (_React$Component) {
   _createClass(AppSignUp, [{
     key: "onCreate",
     value: function onCreate(newEscritorio) {
-      _client__WEBPACK_IMPORTED_MODULE_3___default()({
+      _client__WEBPACK_IMPORTED_MODULE_4___default()({
         method: 'POST',
         path: 'api/escritorios',
         entity: newEscritorio,
@@ -61496,6 +61635,7 @@ function (_React$Component2) {
     };
     _this2.onPossuiAdvogadoTrue = _this2.onPossuiAdvogadoTrue.bind(_assertThisInitialized(_this2));
     _this2.onPossuiAdvogadoFalse = _this2.onPossuiAdvogadoFalse.bind(_assertThisInitialized(_this2));
+    _this2.handleUploadFile = _this2.handleUploadFile.bind(_assertThisInitialized(_this2));
     return _this2;
   }
 
@@ -61517,6 +61657,30 @@ function (_React$Component2) {
       });
       this.setState({
         modal: false
+      });
+    }
+  }, {
+    key: "handleUploadFile",
+    value: function handleUploadFile(e) {
+      var data = new FormData();
+      console.log("Uploading file", e.target.files[0]);
+      data.append('file', e.target.files[0]);
+      axios__WEBPACK_IMPORTED_MODULE_1___default.a.post('upload', data, {
+        headers: {
+          'Content-Type': 'multipart/form-data'
+        }
+      }).then(function (response) {
+        console.log(response);
+      })["catch"](function (error) {
+        console.log(error);
+
+        if (error.response) {
+          //HTTP error happened
+          console.log("Upload error. HTTP error/status code=", error.response.status);
+        } else {
+          //some other error happened
+          console.log("Upload error. HTTP error/status code=", error.message);
+        }
       });
     }
   }, {
@@ -61569,9 +61733,9 @@ function (_React$Component2) {
       var possuiAdvogado = this.state.possuiAdvogado;
       var alerta = this.state.alerta;
       var modal = this.state.modal;
-      return react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", null, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react_bootstrap_Breadcrumb__WEBPACK_IMPORTED_MODULE_6___default.a, null, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react_bootstrap_Breadcrumb__WEBPACK_IMPORTED_MODULE_6___default.a.Item, {
+      return react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", null, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react_bootstrap_Breadcrumb__WEBPACK_IMPORTED_MODULE_7___default.a, null, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react_bootstrap_Breadcrumb__WEBPACK_IMPORTED_MODULE_7___default.a.Item, {
         href: "/"
-      }, "In\xEDcio"), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react_bootstrap_Breadcrumb__WEBPACK_IMPORTED_MODULE_6___default.a.Item, {
+      }, "In\xEDcio"), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react_bootstrap_Breadcrumb__WEBPACK_IMPORTED_MODULE_7___default.a.Item, {
         active: true,
         href: "SignUp"
       }, "Inscri\xE7\xE3o")), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", null, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(Alert, {
@@ -61599,7 +61763,7 @@ function (_React$Component2) {
         controlId: "1"
       }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(Form.Label, null, "CNPJ"), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
         key: "cnpj"
-      }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react_bootstrap_maskedinput__WEBPACK_IMPORTED_MODULE_1___default.a, {
+      }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react_bootstrap_maskedinput__WEBPACK_IMPORTED_MODULE_2___default.a, {
         required: true,
         placeholder: "xx.xxx.xxx/xxxx-xx",
         ref: "cnpj",
@@ -61647,7 +61811,7 @@ function (_React$Component2) {
         as: Col,
         md: "6",
         controlId: "5"
-      }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(Form.Label, null, "V\xEDnculo"), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+      }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(Form.Label, null, "V\xEDnculo do Representante Legal"), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
         key: "vinculo"
       }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(Form.Control, {
         as: "select",
@@ -61660,22 +61824,22 @@ function (_React$Component2) {
         as: Col,
         md: "4",
         controlId: "1"
-      }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(Form.Label, null, "CNPJ"), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+      }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(Form.Label, null, "CPF do Representante Legal"), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
         key: "cpf"
-      }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react_bootstrap_maskedinput__WEBPACK_IMPORTED_MODULE_1___default.a, {
+      }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react_bootstrap_maskedinput__WEBPACK_IMPORTED_MODULE_2___default.a, {
         required: true,
         placeholder: "xxx.xxx.xxx-xx",
         ref: "cpf",
         mask: "111.111.111-11"
       }), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(Form.Control.Feedback, {
         type: "invalid"
-      }, "Por favor escreva o CPF da Empresa/\xD3rg\xE3o."))), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(Form.Group, {
+      }, "Por favor escreva o CPF do Representante Legal."))), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(Form.Group, {
         as: Col,
         md: "4",
         controlId: "6"
       }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(Form.Label, null, "Telefone"), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
         key: "telefone"
-      }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react_bootstrap_maskedinput__WEBPACK_IMPORTED_MODULE_1___default.a, {
+      }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react_bootstrap_maskedinput__WEBPACK_IMPORTED_MODULE_2___default.a, {
         required: true,
         placeholder: "(XX)-XXXXX-XXXX",
         ref: "telefone",
@@ -61688,7 +61852,7 @@ function (_React$Component2) {
         controlId: "7"
       }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(Form.Label, null, "Celular"), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
         key: "celular"
-      }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react_bootstrap_maskedinput__WEBPACK_IMPORTED_MODULE_1___default.a, {
+      }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react_bootstrap_maskedinput__WEBPACK_IMPORTED_MODULE_2___default.a, {
         placeholder: "(XX)-XXXXX-XXXX",
         ref: "celular",
         mask: "11-11111-1111"
@@ -61707,7 +61871,17 @@ function (_React$Component2) {
         type: "invalid"
       }, "Por favor escreva o e-mail com o padr\xE3o email@dominio.com"))), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(Form.Group, {
         as: Col,
-        md: "6"
+        md: "4",
+        controlId: "file"
+      }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(Form.Label, null, "Anexar Arquivo Comprobat\xF3rio"), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+        key: "file"
+      }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(Form.Control, {
+        required: true,
+        type: "file",
+        onChange: this.handleUploadFile
+      }))), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(Form.Group, {
+        as: Col,
+        md: "4"
       }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(Form.Label, null, " Possui Advogado Estabelecido? "), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("input", {
         ref: "possuiAdvogado",
         type: "hidden",
@@ -61737,7 +61911,7 @@ function (_React$Component2) {
         as: Col,
         md: "8",
         controlId: "9"
-      }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(Form.Label, null, "Nome do Advogado"), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+      }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(Form.Label, null, "Nome do Advogado Principal"), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
         key: "advogadoMaster"
       }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(Form.Control, {
         type: "text",
@@ -61745,11 +61919,11 @@ function (_React$Component2) {
         ref: "advogadoMaster"
       }), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(Form.Control.Feedback, {
         type: "invalid"
-      }, "Por favor escreva o nome do Advogado Master."))), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(Form.Group, {
+      }, "Por favor escreva o nome do Advogado Principal."))), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(Form.Group, {
         as: Col,
         md: "4",
         controlId: "formGridEmail"
-      }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(Form.Label, null, "E-mail"), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+      }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(Form.Label, null, "E-mail do Advogado Principal"), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
         key: "emailMaster"
       }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(Form.Control, {
         type: "email",
@@ -61761,14 +61935,14 @@ function (_React$Component2) {
         as: Col,
         md: "4",
         controlId: "6"
-      }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(Form.Label, null, "OAB ou Matricula"), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+      }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(Form.Label, null, "OAB ou Matr\xEDcula"), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
         key: "identificacaoMaster"
       }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(Form.Control, {
-        placeholder: "Identifica\xE7\xE3o do Master",
+        placeholder: "N\xFAmero da Identifica\xE7\xE3o do Advogado Principal",
         ref: "identificacaoMaster"
       }), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(Form.Control.Feedback, {
         type: "invalid"
-      }, "Por favor escreva uma identifica\xE7\xE3o do Advogado Master."))), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(Form.Group, {
+      }, "Por favor escreva uma identifica\xE7\xE3o do Advogado Principal."))), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(Form.Group, {
         controlId: "formBasicChecbox"
       }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
         key: "recebeCitacao"
@@ -61805,7 +61979,7 @@ function (_Component) {
   _createClass(SignUp, [{
     key: "render",
     value: function render() {
-      return react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_header__WEBPACK_IMPORTED_MODULE_5__["default"], null, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(AppSignUp, null));
+      return react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_header__WEBPACK_IMPORTED_MODULE_6__["default"], null, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(AppSignUp, null));
     }
   }]);
 

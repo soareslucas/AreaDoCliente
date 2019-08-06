@@ -1,6 +1,9 @@
 import React, { Component } from "react";
 import { useState } from 'react';
 
+import axios from 'axios'
+
+
 import MaskedFormControl from 'react-bootstrap-maskedinput';
 const ReactDOM = require('react-dom');
 const Button = require("react-bootstrap/Button")
@@ -60,6 +63,8 @@ class CreateDialog extends React.Component {
 		this.state = { validated: false, alerta: false, possuiAdvogado: false, modal: false };    
 		this.onPossuiAdvogadoTrue = this.onPossuiAdvogadoTrue.bind(this);
 		this.onPossuiAdvogadoFalse = this.onPossuiAdvogadoFalse.bind(this);
+		this.handleUploadFile = this.handleUploadFile.bind(this);
+
 	}
 	
 	onPossuiAdvogadoTrue()	{
@@ -73,6 +78,31 @@ class CreateDialog extends React.Component {
 		this.setState({ modal: false });
 
 	}
+	
+	handleUploadFile(e) {
+        const data = new FormData();
+
+        console.log("Uploading file", e.target.files[0]);
+        data.append('file', e.target.files[0]);
+
+		axios.post('upload', data, {
+		    headers: {
+		      'Content-Type': 'multipart/form-data'
+		    }
+		}).then((response) => {
+            console.log(response);
+        }).catch(function (error) {
+            console.log(error);
+            if (error.response) {
+                //HTTP error happened
+                console.log("Upload error. HTTP error/status code=",error.response.status);
+            } else {
+                //some other error happened
+               console.log("Upload error. HTTP error/status code=",error.message);
+            }
+        });
+    };
+
 
 	handleSubmit(e) {
 		const form = e.currentTarget;
@@ -104,9 +134,8 @@ class CreateDialog extends React.Component {
 			newEscritorio['emailMaster'] = ReactDOM.findDOMNode(this.refs['emailMaster']).value.trim();
 			newEscritorio['identificacaoMaster'] = ReactDOM.findDOMNode(this.refs['identificacaoMaster']).value.trim();
 			newEscritorio['recebeCitacao'] = ReactDOM.findDOMNode(this.refs['recebeCitacao']).checked
+			
 			this.props.onCreate(newEscritorio);
-
-
 
 			this.setState({ validated: false });
 			this.setState({ alerta: true });
@@ -146,6 +175,7 @@ class CreateDialog extends React.Component {
 		            </Alert>
 		
 		        </div>
+
 
 				<Form
 					noValidate
@@ -207,7 +237,7 @@ class CreateDialog extends React.Component {
 						</Form.Group>
 
 						<Form.Group as={Col}  md="6" controlId="5">
-							<Form.Label>Vínculo</Form.Label>
+							<Form.Label>Vínculo do Representante Legal</Form.Label>
 							<div key="vinculo">
 								<Form.Control as="select" required placeholder="Vínculo"   ref="vinculo">
 									<option>Escolha...</option>
@@ -231,11 +261,11 @@ class CreateDialog extends React.Component {
 					
 					
 						<Form.Group as={Col}  md="4" controlId="1">
-							<Form.Label>CNPJ</Form.Label>
+							<Form.Label>CPF do Representante Legal</Form.Label>
 							<div key="cpf">
 								<MaskedFormControl required placeholder="xxx.xxx.xxx-xx"  ref="cpf" mask='111.111.111-11' />
 								<Form.Control.Feedback type="invalid">
-									Por favor escreva o CPF da Empresa/Órgão.
+									Por favor escreva o CPF do Representante Legal.
 								</Form.Control.Feedback>
 								
 							</div>
@@ -258,9 +288,6 @@ class CreateDialog extends React.Component {
 							</div>
 						</Form.Group>
 					</Form.Row>
-
-
-
 					
 					<Form.Row>
 						<Form.Group as={Col}  md="4" controlId="formGridEmail">
@@ -273,8 +300,15 @@ class CreateDialog extends React.Component {
 							</div>
 						</Form.Group>
 						
+						<Form.Group as={Col}  md="4" controlId="file">
+							<Form.Label>Anexar Arquivo Comprobatório</Form.Label>
+							<div key="file">
+								<Form.Control required type="file"  onChange={this.handleUploadFile} />                                                                     
+							</div>
+						</Form.Group>
+							
 						
-						<Form.Group as={Col}  md="6">
+						<Form.Group as={Col}  md="4">
 							<Form.Label> Possui Advogado Estabelecido? </Form.Label>
 								
 			                <input ref="possuiAdvogado" type="hidden" name="possuiAdvogado" value={possuiAdvogado} />
@@ -302,22 +336,24 @@ class CreateDialog extends React.Component {
 					</Form.Row>
 					
 					
+					
+					
 					<div style={{display: modal ? 'block' : 'none' }} > 
 					
 						<Form.Row> 
 							<Form.Group as={Col} md="8" controlId="9">
-								<Form.Label>Nome do Advogado</Form.Label>
+								<Form.Label>Nome do Advogado Principal</Form.Label>
 								<div key="advogadoMaster">
 									<Form.Control  type="text"  placeholder="Advogado Master" ref="advogadoMaster"/>
 									<Form.Control.Feedback type="invalid">
-										Por favor escreva o nome do Advogado Master.
+										Por favor escreva o nome do Advogado Principal.
 									</Form.Control.Feedback>
 								</div>
 							</Form.Group>
 		
 		
 							<Form.Group as={Col} md="4" controlId="formGridEmail">
-								<Form.Label>E-mail</Form.Label>
+								<Form.Label>E-mail do Advogado Principal</Form.Label>
 								<div key="emailMaster">
 									<Form.Control  type="email" placeholder="E-mail do Master" ref="emailMaster" />      
 									<Form.Control.Feedback type="invalid">
@@ -331,11 +367,11 @@ class CreateDialog extends React.Component {
 						<Form.Row>
 		
 							<Form.Group as={Col}  md="4" controlId="6">
-								<Form.Label>OAB ou Matricula</Form.Label>
+								<Form.Label>OAB ou Matrícula</Form.Label>
 								<div key="identificacaoMaster">
-									<Form.Control  placeholder="Identificação do Master" ref="identificacaoMaster" />
+									<Form.Control  placeholder="Número da Identificação do Advogado Principal" ref="identificacaoMaster" />
 									<Form.Control.Feedback type="invalid">
-										Por favor escreva uma identificação do Advogado Master.
+										Por favor escreva uma identificação do Advogado Principal.
 									</Form.Control.Feedback>
 								</div>
 							</Form.Group>
