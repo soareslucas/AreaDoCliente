@@ -3,11 +3,6 @@ package br.jus.tjgo.litigantes.model;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
-import javax.persistence.Lob;
-import javax.persistence.ManyToOne;
-import javax.persistence.Version;
-
-import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import lombok.Data;
 
@@ -34,10 +29,8 @@ public class Escritorio {
     private byte[] data;
 
 
-	private Escritorio() {}
 
 	public Escritorio(String status, byte[] data, String cnpj, String nome, String endereco, String nomeRepresentante, String cpf,  String email, String vinculo, String telefone, String celular, boolean possuiAdvogado, String advogadoMaster, boolean recebeCitacao, String emailMaster, String identificacaoMaster) {
-		this.id = id;
 		this.cnpj = cnpj;
 		this.nome = nome;
 		this.endereco = endereco;
