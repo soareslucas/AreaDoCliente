@@ -118,17 +118,14 @@ class UpdateDialog extends React.Component {
 
 	handleSubmit(e) {
 		e.preventDefault();
-		const updatedEscritorio = {};
-		this.props.attributes.forEach(attribute => {
-			updatedEscritorio[attribute] = ReactDOM.findDOMNode(this.refs[attribute]).value.trim();
-		});
+		let updatedEscritorio = {};
+		
+		updatedEscritorio = this.props.escritorio;
+		updatedEscritorio['status'] = ReactDOM.findDOMNode(this.refs['status']).value.trim();
+
+		
 		this.props.onUpdate(this.props.escritorio, updatedEscritorio);
 		this.setState({ modal: false })
-	}
-	
-	
-	mostraModal(){
-		 this.setState({ modal: true });
 	}
 	
 	handleClose(){
@@ -138,35 +135,9 @@ class UpdateDialog extends React.Component {
 	handleShow(){
 		 this.setState({ modal: true });
 	}
-	
-	
+
 
 	render() {
-		const inputs = this.props.attributes.map(attribute =>
-		
-//			if(attribute == 'id'){
-//				
-//				<a href="/downloadFile/{fileId}" >Visit W3Schools</a>
-//				
-//				
-//				<Link className="nav-link" to="/admin" onClick={AuthenticationService.logout}>Logout</Link>
-//
-//				
-//			}else{
-				<p key={attribute+this.props.escritorio[attribute]}>
-					<input type="text" placeholder={attribute}
-						   defaultValue={this.props.escritorio[attribute]}
-						   ref={attribute} className="field"/>
-				</p>
-				
-//			}
-		
-
-				
-				
-				
-				
-		);
 
 		const dialogId = "updateEscritorio-" + this.props.escritorio._links.self.href;
 		const { modal } = this.state;
@@ -174,16 +145,128 @@ class UpdateDialog extends React.Component {
 		return (
 			<div key={dialogId}>
 			
-				<Button onClick={this.handleShow}>Update</Button>
+				<Button onClick={this.handleShow}>Detalhes/Atualizar</Button>
 				
 				<form>
-					<Modal show={modal} onHide={this.handleClose}>
+					<Modal show={modal} onHide={this.handleClose} size="lg">
 				        <Modal.Header closeButton>
 				          <Modal.Title>Atualizar Status</Modal.Title>
 				        </Modal.Header>
 						
-						{inputs}
-	
+						<Modal.Body>
+
+							<Form.Row>
+								<Form.Group as={Col}  md="4" controlId="1">
+									<Form.Label>CNPJ</Form.Label>
+									<h5> {this.props.escritorio['cnpj']} </h5> 			
+								</Form.Group>
+								<Form.Group as={Col} md="8" controlId="2">
+									<Form.Label>Nome do Órgão ou Empresa</Form.Label>
+									<h5> {this.props.escritorio['nome']} </h5> 			
+								</Form.Group>
+							</Form.Row>
+						
+							<Form.Row>
+								<Form.Group as={Col}   md="12" controlId="3">
+									<Form.Label>Endereço</Form.Label>
+									<h5> {this.props.escritorio['endereco']} </h5> 			
+								</Form.Group>
+							</Form.Row>
+						
+							<Form.Row>
+								<Form.Group as={Col}  md="6" controlId="4">
+									<Form.Label>Nome do Representante Legal</Form.Label>
+									<h5> {this.props.escritorio['nomeRepresentante']} </h5> 			
+								</Form.Group>
+								<Form.Group as={Col}  md="6" controlId="5">
+									<Form.Label>Vínculo do Representante Legal</Form.Label>
+									<h5> {this.props.escritorio['vinculo']} </h5> 			
+								</Form.Group>
+							</Form.Row>
+									
+							<Form.Row>
+								<Form.Group as={Col}  md="4" controlId="1">
+									<Form.Label>CPF do Representante Legal</Form.Label>
+									<h5> {this.props.escritorio['cpf']} </h5> 			
+								</Form.Group>
+						
+								<Form.Group as={Col}  md="4" controlId="6">
+									<Form.Label>Telefone</Form.Label>
+									<h5> {this.props.escritorio['telefone']} </h5> 			
+								</Form.Group>
+						
+								<Form.Group as={Col}   md="4" controlId="7">
+									<Form.Label>Celular</Form.Label>
+									<h5> {this.props.escritorio['celular']} </h5> 			
+								</Form.Group>
+							</Form.Row>
+							
+							<Form.Row>
+								<Form.Group as={Col}  md="4" controlId="formGridEmail">
+									<Form.Label>E-mail</Form.Label>
+									<h5> {this.props.escritorio['email']} </h5> 			
+								</Form.Group>
+								
+								
+								<Form.Group as={Col}  md="4">
+									<Form.Label> Arquivo Comprobatório </Form.Label>
+									<h5>
+										<a href={'/downloadFile/'+this.props.escritorio['id'] }> Download Arquivo </a>
+									</h5> 
+								</Form.Group>
+								
+						
+								<Form.Group as={Col}  md="4">
+									<Form.Label> Possui Advogado Estabelecido? </Form.Label>
+									<h5> 
+								     	{this.props.escritorio['possuiAdvogado'] ? 'Sim' : 'Não'}						
+									</h5> 			
+								</Form.Group>
+							
+							</Form.Row>
+							
+							
+							<div style={{display: this.props.escritorio['possuiAdvogado'] ? 'block' : 'none' }} > 
+
+								<Form.Row> 
+									<Form.Group as={Col} md="8" controlId="9">
+										<Form.Label>Nome do Advogado Principal</Form.Label>
+										<h5> {this.props.escritorio['advogadoMaster']} </h5> 			
+									</Form.Group>
+									<Form.Group as={Col} md="4" controlId="formGridEmail">
+										<Form.Label>E-mail do Advogado Principal</Form.Label>
+										<h5> {this.props.escritorio['emailMaster']} </h5> 			
+									</Form.Group>
+								</Form.Row>
+							
+							
+								<Form.Row>
+									<Form.Group as={Col}  md="4" controlId="6">
+										<Form.Label>OAB ou Matrícula</Form.Label>
+										<div key="identificacaoMaster">
+									      <Form.Control plaintext readOnly defaultValue={this.props.escritorio['identificacaoMaster']} />                                                                                                                                       
+										</div>
+									</Form.Group>
+									<Form.Group controlId="formBasicChecbox">
+										<div key="recebeCitacao">
+									      <Form.Control plaintext readOnly defaultValue={this.props.escritorio['recebeCitacao']} />                                                                                                                                       
+										</div>
+									</Form.Group>
+								</Form.Row>
+							</div>							
+							
+							<Form.Row>
+								<Form.Group as={Col}  md="4" controlId="6">
+									<Form.Label>Status da Solicitação</Form.Label>
+									<div key="Status">
+										<Form.Control  type="text" defaultValue={this.props.escritorio['status']}  ref="status"/>                                                                                                                                  
+									</div>
+								</Form.Group>
+							</Form.Row>		
+
+						</Modal.Body>
+						
+						
 						<Modal.Footer>
 				          <Button variant="secondary" onClick={this.handleClose}>
 				            Fechar
@@ -221,9 +304,9 @@ class EscritorioList extends React.Component {
 						<tr>
                             <th>#</th>
 							<th>CNPJ</th>
-							<th>Nome do Representante</th>
+							<th>Nome do Órgão/Empresa</th>
 							<th>Telefone</th>
-							<th>Advogado Master</th>
+							<th>Status Solicitação</th>
 							<th></th>
 							<th></th>
 						</tr>
@@ -253,9 +336,9 @@ class Escritorio extends React.Component {
 
                 <td>{this.props.escritorio.id}</td>
 				<td>{this.props.escritorio.cnpj}</td>
-                <td>{this.props.escritorio.nomeRepresentante}</td>
+                <td>{this.props.escritorio.nome}</td>
                 <td>{this.props.escritorio.telefone}</td>
-                <td>{this.props.escritorio.advogadoMaster}</td>
+                <td>{this.props.escritorio.status}</td>
                 <td>
                 
                 
@@ -267,7 +350,7 @@ class Escritorio extends React.Component {
 					
                 </td>
 				<td>
-					<Button onClick={this.handleDelete}>Delete</Button>
+					<Button onClick={this.handleDelete}>Excluir</Button>
 				</td>
 			</tr>
 		)

@@ -1,10 +1,5 @@
 import React, { Component } from "react";
-import { useState } from 'react';
-
-import axios from 'axios'
-
-
-import MaskedFormControl from 'react-bootstrap-maskedinput';
+import { useState } from 'react';	
 const ReactDOM = require('react-dom');
 const Button = require("react-bootstrap/Button")
 const Form = require("react-bootstrap/Form")
@@ -12,15 +7,13 @@ const Container = require("react-bootstrap/Container")
 const Row = require("react-bootstrap/Row")
 const Col = require("react-bootstrap/Col")
 const Alert = require("react-bootstrap/Alert")
-const Modal = require("react-bootstrap/Modal")
-
-
+import MaskedFormControl from 'react-bootstrap-maskedinput';
 import follow from '../../follow';
 import client from '../../client';
 import { Link } from "react-router-dom";
 import Header from '../../header';
 import Breadcrumb from 'react-bootstrap/Breadcrumb'
-
+import axios from 'axios'
 
 
 const root = '/api';
@@ -60,7 +53,7 @@ class CreateDialog extends React.Component {
 	constructor(props) {
 		super(props);
 		this.handleSubmit = this.handleSubmit.bind(this);    
-		this.state = { validated: false, alerta: false, possuiAdvogado: false, modal: false };    
+		this.state = { validated: false, alerta: false, possuiAdvogado: false, mostra: false };    
 		this.onPossuiAdvogadoTrue = this.onPossuiAdvogadoTrue.bind(this);
 		this.onPossuiAdvogadoFalse = this.onPossuiAdvogadoFalse.bind(this);
 		this.handleUploadFile = this.handleUploadFile.bind(this);
@@ -69,13 +62,13 @@ class CreateDialog extends React.Component {
 	
 	onPossuiAdvogadoTrue()	{
 		this.setState({ possuiAdvogado: true });
-		this.setState({ modal: true});
+		this.setState({ mostra: true});
 
  	}
 
 	onPossuiAdvogadoFalse(){
 		this.setState({ possuiAdvogado: false });
-		this.setState({ modal: false });
+		this.setState({ mostra: false });
 
 	}
 	
@@ -139,7 +132,23 @@ class CreateDialog extends React.Component {
 
 			this.setState({ validated: false });
 			this.setState({ alerta: true });
-
+			
+			ReactDOM.findDOMNode(this.refs['manager']).value = '';
+			ReactDOM.findDOMNode(this.refs['status']).value = '';
+			ReactDOM.findDOMNode(this.refs['cnpj']).value = '';
+			ReactDOM.findDOMNode(this.refs['nome']).value = '';
+			ReactDOM.findDOMNode(this.refs['endereco']).value = '';
+			ReactDOM.findDOMNode(this.refs['nomeRepresentante']).value = '';
+			ReactDOM.findDOMNode(this.refs['vinculo']).value = '';
+			ReactDOM.findDOMNode(this.refs['cpf']).value = '';
+			ReactDOM.findDOMNode(this.refs['celular']).value = '';
+			ReactDOM.findDOMNode(this.refs['telefone']).value = '';
+			ReactDOM.findDOMNode(this.refs['email']).value = '';
+			ReactDOM.findDOMNode(this.refs['possuiAdvogado']).value = '';
+			ReactDOM.findDOMNode(this.refs['advogadoMaster']).value = '';
+			ReactDOM.findDOMNode(this.refs['emailMaster']).value = '';
+			ReactDOM.findDOMNode(this.refs['identificacaoMaster']).value = '';
+			ReactDOM.findDOMNode(this.refs['recebeCitacao']).checked = false;
 
 		}
 
@@ -151,9 +160,7 @@ class CreateDialog extends React.Component {
 		const { validated } = this.state;
 		const { possuiAdvogado } = this.state;
 		const { alerta } = this.state;
-		const { modal } = this.state;
-
-
+		const { mostra } = this.state;
 
 		return (
 
@@ -338,7 +345,7 @@ class CreateDialog extends React.Component {
 					
 					
 					
-					<div style={{display: modal ? 'block' : 'none' }} > 
+					<div style={{display: mostra ? 'block' : 'none' }} > 
 					
 						<Form.Row> 
 							<Form.Group as={Col} md="8" controlId="9">

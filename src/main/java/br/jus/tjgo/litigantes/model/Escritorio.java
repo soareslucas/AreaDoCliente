@@ -29,6 +29,7 @@ public class Escritorio {
     private byte[] data;
 
 
+	private Escritorio() {}
 
 	public Escritorio(String status, byte[] data, String cnpj, String nome, String endereco, String nomeRepresentante, String cpf,  String email, String vinculo, String telefone, String celular, boolean possuiAdvogado, String advogadoMaster, boolean recebeCitacao, String emailMaster, String identificacaoMaster) {
 		this.cnpj = cnpj;

@@ -17,10 +17,7 @@ import br.jus.tjgo.litigantes.repository.ManagerRepository;
 public class SpringDataRestEventHandler {
 
 	private final ManagerRepository managerRepository;
-	String name = "";
 	private  HttpServletRequest request;
-
-
 
 	@Autowired
 	public SpringDataRestEventHandler(ManagerRepository managerRepository, HttpServletRequest request) {
@@ -30,20 +27,6 @@ public class SpringDataRestEventHandler {
 
 	@HandleBeforeCreate
 	public void applyUserInformationUsingSecurityContext(Escritorio escritorio) {
-
-	//		this.name = "admin";
-	//		Manager manager = this.managerRepository.findByName(name);
-	//		
-	//		if (manager == null) {
-	//			Manager newManager = new Manager();
-	//			newManager.setName(this.name);
-	//			newManager.setRoles(new String[]{"ROLE_MANAGER"});
-	//			manager = this.managerRepository.save(newManager);
-	//		}
-	//		escritorio.setManager(manager);
-		
-		System.out.println("okkkkk");
-		
 		byte[] data = (byte[]) this.request.getSession().getAttribute("uploadedFiles");
 		
 		escritorio.setData(data);

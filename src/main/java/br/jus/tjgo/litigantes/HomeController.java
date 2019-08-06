@@ -34,7 +34,6 @@ public class HomeController {
 	
     @RequestMapping(value = "upload", method = RequestMethod.POST)
     @ResponseBody
-    @Transactional
     public String upload(HttpServletRequest request, @RequestParam MultipartFile file)  {
         
     	try {
