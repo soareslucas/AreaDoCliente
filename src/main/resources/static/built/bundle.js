@@ -61467,7 +61467,7 @@ function (_Component) {
         md: "4"
       }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("h3", null, "Sistema de Cita\xE7\xF5es ", react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("i", {
         className: "fas fa-envelope-open-text"
-      })), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(Row, null, "\xA0 \xA0"), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(Row, null, "\xA0 \xA0"), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(Row, null, "\xA0 \xA0"), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(Row, null, "\xA0 \xA0"), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(Row, null, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(Col, {
+      })), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(Row, null, "\xA0 \xA0"), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(Row, null, "\xA0 \xA0"), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(Row, null, "\xA0 \xA0"), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(Row, null, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(Col, {
         md: "6"
       }, " ", this.state.logado ? react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react_router_dom__WEBPACK_IMPORTED_MODULE_1__["Link"], {
         to: "/admin",

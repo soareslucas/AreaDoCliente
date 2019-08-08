@@ -43,14 +43,8 @@ class Header extends Component {
                                             
                                             	<h3>
                                             		Sistema de Citações <i className="fas fa-envelope-open-text"></i>
-                                            		
-
                                             	</h3>
                                             		
-                                                <Row>
-                                                &nbsp; &nbsp;
-                                            	</Row>
-                                            	
                                                 <Row>
                                                 &nbsp; &nbsp;
                                             	</Row>         
@@ -64,8 +58,7 @@ class Header extends Component {
                                             	</Row>    
                                             	
                                             	<Row>
-														<Col md='6'> {this.state.logado ? <Link to="/admin" onClick={AuthenticationService.logout} > <i className="fas fa-reply"></i> Logout   </Link>: ''} </Col>
-																									
+														<Col md='6'> {this.state.logado ? <Link to="/admin" onClick={AuthenticationService.logout} > <i className="fas fa-reply"></i> Logout   </Link>: ''} </Col>																									
 														<Col md='6'> <Link to="/admin"> <i className="fas fa-user-cog"></i> Admin </Link> </Col>
                                             	</Row>
 

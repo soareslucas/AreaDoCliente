@@ -203,11 +203,9 @@ class App extends React.Component {
 					</Form.Row>
 	
 				</Form>
-				
-				
+
                 <EscritorioList escritorios={this.state.escritorios}/>
-				
-				
+
 			</div>
 		)
 	}
