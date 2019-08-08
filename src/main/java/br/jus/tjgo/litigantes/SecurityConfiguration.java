@@ -11,6 +11,8 @@ import org.springframework.security.config.annotation.web.configuration.WebSecur
 import org.springframework.security.web.AuthenticationEntryPoint;
 import org.springframework.security.web.authentication.HttpStatusEntryPoint;
 import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
+import org.springframework.security.web.authentication.SimpleUrlAuthenticationFailureHandler;
+import org.springframework.security.web.authentication.SimpleUrlAuthenticationSuccessHandler;
 
 import br.jus.tjgo.litigantes.model.*;
 
@@ -37,6 +39,8 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
 				.anyRequest().authenticated()
 				.and()
 			.formLogin()
+				.successHandler(new SimpleUrlAuthenticationSuccessHandler())
+				.failureHandler(new SimpleUrlAuthenticationFailureHandler())
 				.permitAll()
 				.and()
 			.httpBasic()
@@ -46,7 +50,7 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
 				.logoutSuccessUrl("/")
 				.and()
 			.exceptionHandling()
-                .defaultAuthenticationEntryPointFor(getRestAuthenticationEntryPoint(), new AntPathRequestMatcher("/api/**"));
+                .defaultAuthenticationEntryPointFor(getRestAuthenticationEntryPoint(), new AntPathRequestMatcher("/**"));
 	}
 	
     private AuthenticationEntryPoint getRestAuthenticationEntryPoint() {

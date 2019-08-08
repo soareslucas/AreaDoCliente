@@ -10,8 +10,15 @@ class AuthenticationService {
 
 
     executeBasicAuthenticationService(username, password) {
-        console.log(username);
-        return axios.post('/login?username='+username+'&password='+password)
+		console.log(username);
+
+		var response = axios.post('/login?username='+username+'&password='+password)
+		.then(response => {
+				console.log(response);
+				return response
+		})
+
+        return response;
     }
 
     createBasicAuthToken(username, password) {

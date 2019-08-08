@@ -11,7 +11,7 @@ const Col = require("react-bootstrap/Col")
 const Alert = require("react-bootstrap/Alert")
 const Modal = require("react-bootstrap/Modal")
 const Table = require("react-bootstrap/Table")
-
+const InputGroup = require("react-bootstrap/InputGroup")
 
 import follow from '../../follow';
 import client from '../../client';
@@ -104,8 +104,7 @@ class App extends React.Component {
 	constructor(props) {
 		super(props);
 		this.handleSubmit = this.handleSubmit.bind(this);    
-		this.state = { validated: false, alerta: false, escritorios: [], cnpj: '0'};    
-		this.onSearch = this.onSearch.bind(this);
+		this.state = { validated: false, alerta: false, escritorios: [], sucesso: false, falha: false};    
 	}
 	
 	loadFromServer(cnpj) {
@@ -113,18 +112,20 @@ class App extends React.Component {
 			method: 'GET',
 			path: 'api/escritorios/search/findBycnpj?cnpj='+cnpj,
 			headers: {'Content-Type': 'application/json'}
-		}).done(escritorioCollection => {
-		this.setState({
-			escritorios: escritorioCollection.entity._embedded.escritorios});
-	});	
-	}
-		
-	onSearch(cnpj) {     
-		this.loadFromServer(cnpj);
-	}
-	
-	componentDidMount() {
-		this.loadFromServer(this.state.cnpj);
+		}).then(escritorioCollection => {
+			this.setState({
+				escritorios: escritorioCollection.entity._embedded.escritorios});
+			return escritorioCollection.entity._embedded.escritorios;
+		}).done( escritorios=>{			
+			if(escritorios.length == 0){
+				this.setState({ falha: true});
+				this.setState({ sucesso: false});
+
+			}else{
+				this.setState({ falha: false});
+				this.setState({ sucesso: true});
+			}
+		});	
 	}
 
 	handleSubmit(e) {
@@ -139,7 +140,8 @@ class App extends React.Component {
 			var cnpj = '';
 
 			cnpj = ReactDOM.findDOMNode(this.refs['cnpj']).value.trim();
-			this.onSearch(cnpj);
+			
+			this.loadFromServer(cnpj);
 
 			this.setState({ validated: false });
 			this.setState({ alerta: true });
@@ -162,15 +164,10 @@ class App extends React.Component {
 		            <Breadcrumb.Item href="/">Início</Breadcrumb.Item>
 		            <Breadcrumb.Item active href="SignUp">Consulta Andamento</Breadcrumb.Item>
 		        </Breadcrumb>
-
-		        <div> 
-		            <Alert show={alerta} variant="success">
-		                <Alert.Heading>Busca realizada com sucesso!</Alert.Heading>
-		                <p>
-		                    Verifique o status da solicitação de cadastro.
-	                    </p>
-		            </Alert>
-		        </div>
+		        
+		        
+			    {this.state.falha && <div className="alert alert-warning">Não há solicitação com esse CNPJ!</div>}
+			    {this.state.sucesso && <div className="alert alert-success">CNPJ encontrado!</div>}
 
 				<Form
 					noValidate
@@ -183,36 +180,28 @@ class App extends React.Component {
 					<Form.Row>
 			            
 			            
-						<Form.Group as={Col} md="6" controlId="1">
+						<Form.Group as={Col} md="4" controlId="1">
 		
 						</Form.Group>
-						<Form.Group as={Col} md="6" controlId="2">
+						<Form.Group as={Col} md="7" controlId="2">
 								<Form.Label>CNPJ</Form.Label>
 								<div key="cnpj">
-									<MaskedFormControl required placeholder="xx.xxx.xxx/xxxx-xx"  ref="cnpj" mask='11.111.111/1111-11' />
-									<Form.Control.Feedback type="invalid">
-										Por favor escreva o CNPJ da Empresa/Órgão.
-									</Form.Control.Feedback>
-									
+									<MaskedFormControl required placeholder="xx.xxx.xxx/xxxx-xx"  ref="cnpj" mask='11.111.111/1111-11' />										
 								</div>
 						</Form.Group>
-
-					</Form.Row>
-					
-					<Form.Row>			
-						<Form.Group as={Col} md="11" >
-						</Form.Group>
 						
-						<Form.Group as={Col} md="1">
-							<Button variant="primary"  type="submit">
-							Buscar 
-							</Button>
-						</Form.Group>
-					</Form.Row>
+						<Form.Group as={Col} md="1" controlId="2">
+							<Form.Label>&nbsp; &nbsp;</Form.Label>
+							<div key="botao">
+									<Button variant="primary" type="submit">
+									    Buscar
+									</Button>
+							</div>
+						</Form.Group>						
+												
 
-		
-					
-					
+					</Form.Row>
+	
 				</Form>
 				
 				

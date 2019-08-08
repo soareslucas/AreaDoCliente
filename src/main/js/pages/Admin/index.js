@@ -9,16 +9,12 @@ const Row = require("react-bootstrap/Row")
 const Col = require("react-bootstrap/Col")
 const Modal = require("react-bootstrap/Modal")
 
-
 import Breadcrumb from 'react-bootstrap/Breadcrumb'
 import follow from '../../follow';
 import client from '../../client';
 import AuthenticationService from '../../service/AuthenticationService';
-
 import Header from '../../header';
-
 import { Link } from "react-router-dom";
-
 const root = '/api';
 
 class AppAdmin extends React.Component {
@@ -28,7 +24,6 @@ class AppAdmin extends React.Component {
 		this.state = {escritorios: [], attributes: [], pageSize: 50, links: {}};
 		this.onDelete = this.onDelete.bind(this);
 		this.onUpdate = this.onUpdate.bind(this);
-
 	}
 
 	loadFromServer(pageSize) {
@@ -52,14 +47,12 @@ class AppAdmin extends React.Component {
 		});
 	}
 
-
 	onDelete(escritorio) {
 		client({method: 'DELETE', path: escritorio._links.self.href}).done(response => {
 			this.loadFromServer(this.state.pageSize);
 		});
 	}
 	
-
 	onUpdate(escritorio, updatedEscritorio) {
 		client({
 			method: 'PUT',
@@ -72,10 +65,6 @@ class AppAdmin extends React.Component {
 			this.loadFromServer(this.state.pageSize);
 		});
 	}
-	
-	
-	
-	
 
 	componentDidMount() {
 		this.loadFromServer(this.state.pageSize);
@@ -84,9 +73,6 @@ class AppAdmin extends React.Component {
 	render() {
 		return (
 			<div>
-
-				<Link className="nav-link" to="/logout" onClick={AuthenticationService.logout}>Logout</Link>
-
 
                 <Breadcrumb>
                     <Breadcrumb.Item href="/">Início</Breadcrumb.Item>
@@ -98,8 +84,7 @@ class AppAdmin extends React.Component {
                     pageSize={this.state.pageSize}
                     onDelete={this.onDelete}
                 	onUpdate={this.onUpdate} 
-                	attributes={this.state.attributes}
-                />
+                	attributes={this.state.attributes} />
 			</div>
 		)
 	}
@@ -244,12 +229,15 @@ class UpdateDialog extends React.Component {
 									<Form.Group as={Col}  md="4" controlId="6">
 										<Form.Label>OAB ou Matrícula</Form.Label>
 										<div key="identificacaoMaster">
-									      <Form.Control plaintext readOnly defaultValue={this.props.escritorio['identificacaoMaster']} />                                                                                                                                       
+											<h5> {this.props.escritorio['identificacaoMaster']} </h5> 		
 										</div>
 									</Form.Group>
 									<Form.Group controlId="formBasicChecbox">
+										<Form.Label>Recebe Citação?</Form.Label>
 										<div key="recebeCitacao">
-									      <Form.Control plaintext readOnly defaultValue={this.props.escritorio['recebeCitacao']} />                                                                                                                                       
+											<h5>
+												{this.props.escritorio['recebeCitacao'] ? 'Sim' : 'Não'}
+											</h5> 		
 										</div>
 									</Form.Group>
 								</Form.Row>

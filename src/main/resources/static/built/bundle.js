@@ -2164,6 +2164,101 @@ function forwardRef(renderFn, _temp) {
 
 /***/ }),
 
+/***/ "./node_modules/@restart/context/mapContextToProps.js":
+/*!************************************************************!*\
+  !*** ./node_modules/@restart/context/mapContextToProps.js ***!
+  \************************************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+exports.__esModule = true;
+exports.default = mapContextToProps;
+
+var _react = _interopRequireDefault(__webpack_require__(/*! react */ "./node_modules/react/index.js"));
+
+var _forwardRef = _interopRequireDefault(__webpack_require__(/*! ./forwardRef */ "./node_modules/@restart/context/forwardRef.js"));
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+function _extends() { _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; }; return _extends.apply(this, arguments); }
+
+var getDisplayName = function getDisplayName(Component) {
+  var name = typeof Component === 'string' ? Component : Component.name || Component.displayName;
+  return name ? "ContextTransform(" + name + ")" : 'ContextTransform';
+};
+
+var ensureConsumer = function ensureConsumer(c) {
+  return c.Consumer || c;
+};
+
+function $mapContextToProps(_ref, Component) {
+  var maybeArrayOfConsumers = _ref.consumers,
+      mapToProps = _ref.mapToProps,
+      displayName = _ref.displayName,
+      _ref$forwardRefAs = _ref.forwardRefAs,
+      forwardRefAs = _ref$forwardRefAs === void 0 ? 'ref' : _ref$forwardRefAs;
+  var consumers = maybeArrayOfConsumers;
+
+  if (!Array.isArray(maybeArrayOfConsumers)) {
+    consumers = [maybeArrayOfConsumers];
+  }
+
+  var SingleConsumer = ensureConsumer(consumers[0]);
+
+  function singleRender(props, ref) {
+    var _extends2;
+
+    var propsWithRef = _extends((_extends2 = {}, _extends2[forwardRefAs] = ref, _extends2), props);
+
+    return _react.default.createElement(SingleConsumer, null, function (value) {
+      return _react.default.createElement(Component, _extends({}, propsWithRef, mapToProps(value, props)));
+    });
+  }
+
+  function multiRender(props, ref) {
+    var _extends3;
+
+    var propsWithRef = _extends((_extends3 = {}, _extends3[forwardRefAs] = ref, _extends3), props);
+
+    return consumers.reduceRight(function (inner, Context) {
+      return function () {
+        for (var _len = arguments.length, args = new Array(_len), _key = 0; _key < _len; _key++) {
+          args[_key] = arguments[_key];
+        }
+
+        var Consumer = ensureConsumer(Context);
+        return _react.default.createElement(Consumer, null, function (value) {
+          return inner.apply(void 0, args.concat([value]));
+        });
+      };
+    }, function () {
+      for (var _len2 = arguments.length, contexts = new Array(_len2), _key2 = 0; _key2 < _len2; _key2++) {
+        contexts[_key2] = arguments[_key2];
+      }
+
+      return _react.default.createElement(Component, _extends({}, propsWithRef, mapToProps.apply(void 0, contexts.concat([props]))));
+    })();
+  }
+
+  var contextTransform = consumers.length === 1 ? singleRender : multiRender;
+  return (0, _forwardRef.default)(contextTransform, {
+    displayName: displayName || getDisplayName(Component)
+  });
+}
+
+function mapContextToProps(maybeOpts, mapToProps, Component) {
+  if (arguments.length === 2) return $mapContextToProps(maybeOpts, mapToProps);
+  return $mapContextToProps({
+    consumers: maybeOpts,
+    mapToProps: mapToProps
+  }, Component);
+}
+
+/***/ }),
+
 /***/ "./node_modules/@restart/hooks/useCommittedRef.js":
 /*!********************************************************!*\
   !*** ./node_modules/@restart/hooks/useCommittedRef.js ***!
@@ -24171,6 +24266,277 @@ module.exports = warning;
 
 /***/ }),
 
+/***/ "./node_modules/react-bootstrap/AbstractNav.js":
+/*!*****************************************************!*\
+  !*** ./node_modules/react-bootstrap/AbstractNav.js ***!
+  \*****************************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+var _interopRequireWildcard = __webpack_require__(/*! @babel/runtime/helpers/interopRequireWildcard */ "./node_modules/@babel/runtime/helpers/interopRequireWildcard.js");
+
+var _interopRequireDefault = __webpack_require__(/*! @babel/runtime/helpers/interopRequireDefault */ "./node_modules/@babel/runtime/helpers/interopRequireDefault.js");
+
+exports.__esModule = true;
+exports.default = void 0;
+
+var _extends2 = _interopRequireDefault(__webpack_require__(/*! @babel/runtime/helpers/extends */ "./node_modules/@babel/runtime/helpers/extends.js"));
+
+var _objectWithoutPropertiesLoose2 = _interopRequireDefault(__webpack_require__(/*! @babel/runtime/helpers/objectWithoutPropertiesLoose */ "./node_modules/@babel/runtime/helpers/objectWithoutPropertiesLoose.js"));
+
+var _inheritsLoose2 = _interopRequireDefault(__webpack_require__(/*! @babel/runtime/helpers/inheritsLoose */ "./node_modules/@babel/runtime/helpers/inheritsLoose.js"));
+
+var _react = _interopRequireDefault(__webpack_require__(/*! react */ "./node_modules/react/index.js"));
+
+var _querySelectorAll = _interopRequireDefault(__webpack_require__(/*! dom-helpers/query/querySelectorAll */ "./node_modules/dom-helpers/query/querySelectorAll.js"));
+
+var _mapContextToProps = _interopRequireDefault(__webpack_require__(/*! @restart/context/mapContextToProps */ "./node_modules/@restart/context/mapContextToProps.js"));
+
+var _SelectableContext = _interopRequireWildcard(__webpack_require__(/*! ./SelectableContext */ "./node_modules/react-bootstrap/SelectableContext.js"));
+
+var _NavContext = _interopRequireDefault(__webpack_require__(/*! ./NavContext */ "./node_modules/react-bootstrap/NavContext.js"));
+
+var _TabContext = _interopRequireDefault(__webpack_require__(/*! ./TabContext */ "./node_modules/react-bootstrap/TabContext.js"));
+
+var noop = function noop() {};
+
+var AbstractNav =
+/*#__PURE__*/
+function (_React$Component) {
+  (0, _inheritsLoose2.default)(AbstractNav, _React$Component);
+
+  function AbstractNav() {
+    var _this;
+
+    for (var _len = arguments.length, args = new Array(_len), _key = 0; _key < _len; _key++) {
+      args[_key] = arguments[_key];
+    }
+
+    _this = _React$Component.call.apply(_React$Component, [this].concat(args)) || this;
+
+    _this.handleSelect = function (key, event) {
+      var _this$props = _this.props,
+          onSelect = _this$props.onSelect,
+          parentOnSelect = _this$props.parentOnSelect;
+      if (key == null) return;
+      if (onSelect) onSelect(key, event);
+      if (parentOnSelect) parentOnSelect(key, event);
+    };
+
+    _this.handleKeyDown = function (event) {
+      var onKeyDown = _this.props.onKeyDown;
+      if (onKeyDown) onKeyDown(event);
+      var nextActiveChild;
+
+      switch (event.key) {
+        case 'ArrowLeft':
+        case 'ArrowUp':
+          nextActiveChild = _this.getNextActiveChild(-1);
+          break;
+
+        case 'ArrowRight':
+        case 'ArrowDown':
+          nextActiveChild = _this.getNextActiveChild(1);
+          break;
+
+        default:
+          return;
+      }
+
+      if (!nextActiveChild) return;
+      event.preventDefault();
+
+      _this.handleSelect(nextActiveChild.dataset.rbEventKey, event);
+
+      _this._needsRefocus = true;
+    };
+
+    _this.attachRef = function (ref) {
+      _this.listNode = ref;
+    };
+
+    _this.state = {
+      navContext: null
+    };
+    return _this;
+  }
+
+  AbstractNav.getDerivedStateFromProps = function getDerivedStateFromProps(_ref) {
+    var activeKey = _ref.activeKey,
+        getControlledId = _ref.getControlledId,
+        getControllerId = _ref.getControllerId,
+        role = _ref.role;
+    return {
+      navContext: {
+        role: role,
+        // used by NavLink to determine it's role
+        activeKey: (0, _SelectableContext.makeEventKey)(activeKey),
+        getControlledId: getControlledId || noop,
+        getControllerId: getControllerId || noop
+      }
+    };
+  };
+
+  var _proto = AbstractNav.prototype;
+
+  _proto.componentDidUpdate = function componentDidUpdate() {
+    if (!this._needsRefocus || !this.listNode) return;
+    var activeChild = this.listNode.querySelector('[data-rb-event-key].active');
+    if (activeChild) activeChild.focus();
+  };
+
+  _proto.getNextActiveChild = function getNextActiveChild(offset) {
+    if (!this.listNode) return null;
+    var items = (0, _querySelectorAll.default)(this.listNode, '[data-rb-event-key]:not(.disabled)');
+    var activeChild = this.listNode.querySelector('.active');
+    var index = items.indexOf(activeChild);
+    if (index === -1) return null;
+    var nextIndex = index + offset;
+    if (nextIndex >= items.length) nextIndex = 0;
+    if (nextIndex < 0) nextIndex = items.length - 1;
+    return items[nextIndex];
+  };
+
+  _proto.render = function render() {
+    var _this$props2 = this.props,
+        Component = _this$props2.as,
+        _ = _this$props2.onSelect,
+        _0 = _this$props2.parentOnSelect,
+        _1 = _this$props2.getControlledId,
+        _2 = _this$props2.getControllerId,
+        _3 = _this$props2.activeKey,
+        props = (0, _objectWithoutPropertiesLoose2.default)(_this$props2, ["as", "onSelect", "parentOnSelect", "getControlledId", "getControllerId", "activeKey"]);
+
+    if (props.role === 'tablist') {
+      props.onKeyDown = this.handleKeyDown;
+    }
+
+    return _react.default.createElement(_SelectableContext.default.Provider, {
+      value: this.handleSelect
+    }, _react.default.createElement(_NavContext.default.Provider, {
+      value: this.state.navContext
+    }, _react.default.createElement(Component, (0, _extends2.default)({}, props, {
+      onKeyDown: this.handleKeyDown,
+      ref: this.attachRef
+    }))));
+  };
+
+  return AbstractNav;
+}(_react.default.Component);
+
+AbstractNav.defaultProps = {
+  as: 'ul'
+};
+
+var _default = (0, _mapContextToProps.default)([_SelectableContext.default, _TabContext.default], function (parentOnSelect, tabContext, _ref2) {
+  var role = _ref2.role;
+  if (!tabContext) return {
+    parentOnSelect: parentOnSelect
+  };
+  var activeKey = tabContext.activeKey,
+      getControllerId = tabContext.getControllerId,
+      getControlledId = tabContext.getControlledId;
+  return {
+    activeKey: activeKey,
+    parentOnSelect: parentOnSelect,
+    role: role || 'tablist',
+    // pass these two through to avoid having to listen to
+    // both Tab and Nav contexts in NavLink
+    getControllerId: getControllerId,
+    getControlledId: getControlledId
+  };
+}, AbstractNav);
+
+exports.default = _default;
+module.exports = exports["default"];
+
+/***/ }),
+
+/***/ "./node_modules/react-bootstrap/AbstractNavItem.js":
+/*!*********************************************************!*\
+  !*** ./node_modules/react-bootstrap/AbstractNavItem.js ***!
+  \*********************************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+var _interopRequireWildcard = __webpack_require__(/*! @babel/runtime/helpers/interopRequireWildcard */ "./node_modules/@babel/runtime/helpers/interopRequireWildcard.js");
+
+var _interopRequireDefault = __webpack_require__(/*! @babel/runtime/helpers/interopRequireDefault */ "./node_modules/@babel/runtime/helpers/interopRequireDefault.js");
+
+exports.__esModule = true;
+exports.default = void 0;
+
+var _extends2 = _interopRequireDefault(__webpack_require__(/*! @babel/runtime/helpers/extends */ "./node_modules/@babel/runtime/helpers/extends.js"));
+
+var _objectWithoutPropertiesLoose2 = _interopRequireDefault(__webpack_require__(/*! @babel/runtime/helpers/objectWithoutPropertiesLoose */ "./node_modules/@babel/runtime/helpers/objectWithoutPropertiesLoose.js"));
+
+var _classnames = _interopRequireDefault(__webpack_require__(/*! classnames */ "./node_modules/classnames/index.js"));
+
+var _react = _interopRequireWildcard(__webpack_require__(/*! react */ "./node_modules/react/index.js"));
+
+var _useEventCallback = _interopRequireDefault(__webpack_require__(/*! @restart/hooks/useEventCallback */ "./node_modules/@restart/hooks/useEventCallback.js"));
+
+var _NavContext = _interopRequireDefault(__webpack_require__(/*! ./NavContext */ "./node_modules/react-bootstrap/NavContext.js"));
+
+var _SelectableContext = _interopRequireWildcard(__webpack_require__(/*! ./SelectableContext */ "./node_modules/react-bootstrap/SelectableContext.js"));
+
+var defaultProps = {
+  disabled: false
+};
+
+var AbstractNavItem = _react.default.forwardRef(function (_ref, ref) {
+  var active = _ref.active,
+      className = _ref.className,
+      tabIndex = _ref.tabIndex,
+      eventKey = _ref.eventKey,
+      onSelect = _ref.onSelect,
+      onClick = _ref.onClick,
+      Component = _ref.as,
+      props = (0, _objectWithoutPropertiesLoose2.default)(_ref, ["active", "className", "tabIndex", "eventKey", "onSelect", "onClick", "as"]);
+  var navKey = (0, _SelectableContext.makeEventKey)(eventKey, props.href);
+  var parentOnSelect = (0, _react.useContext)(_SelectableContext.default);
+  var navContext = (0, _react.useContext)(_NavContext.default);
+  var isActive = active;
+
+  if (navContext) {
+    if (!props.role && navContext.role === 'tablist') props.role = 'tab';
+    props['data-rb-event-key'] = navKey;
+    props.id = navContext.getControllerId(navKey);
+    props['aria-controls'] = navContext.getControlledId(navKey);
+    isActive = active == null && navKey != null ? navContext.activeKey === navKey : active;
+  }
+
+  if (props.role === 'tab') {
+    props.tabIndex = isActive ? tabIndex : -1;
+    props['aria-selected'] = isActive;
+  }
+
+  var handleOnclick = (0, _useEventCallback.default)(function (e) {
+    if (onClick) onClick(e);
+    if (navKey == null) return;
+    if (onSelect) onSelect(navKey, e);
+    if (parentOnSelect) parentOnSelect(navKey, e);
+  });
+  return _react.default.createElement(Component, (0, _extends2.default)({}, props, {
+    ref: ref,
+    onClick: handleOnclick,
+    className: (0, _classnames.default)(className, isActive && 'active')
+  }));
+});
+
+AbstractNavItem.defaultProps = defaultProps;
+var _default = AbstractNavItem;
+exports.default = _default;
+module.exports = exports["default"];
+
+/***/ }),
+
 /***/ "./node_modules/react-bootstrap/Alert.js":
 /*!***********************************************!*\
   !*** ./node_modules/react-bootstrap/Alert.js ***!
@@ -24266,6 +24632,57 @@ Alert.Heading = (0, _createWithBsPrefix.default)('alert-heading', {
   Component: DivStyledAsH4
 });
 var _default = Alert;
+exports.default = _default;
+module.exports = exports["default"];
+
+/***/ }),
+
+/***/ "./node_modules/react-bootstrap/Badge.js":
+/*!***********************************************!*\
+  !*** ./node_modules/react-bootstrap/Badge.js ***!
+  \***********************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+var _interopRequireDefault = __webpack_require__(/*! @babel/runtime/helpers/interopRequireDefault */ "./node_modules/@babel/runtime/helpers/interopRequireDefault.js");
+
+exports.__esModule = true;
+exports.default = void 0;
+
+var _extends2 = _interopRequireDefault(__webpack_require__(/*! @babel/runtime/helpers/extends */ "./node_modules/@babel/runtime/helpers/extends.js"));
+
+var _objectWithoutPropertiesLoose2 = _interopRequireDefault(__webpack_require__(/*! @babel/runtime/helpers/objectWithoutPropertiesLoose */ "./node_modules/@babel/runtime/helpers/objectWithoutPropertiesLoose.js"));
+
+var _classnames = _interopRequireDefault(__webpack_require__(/*! classnames */ "./node_modules/classnames/index.js"));
+
+var _react = _interopRequireDefault(__webpack_require__(/*! react */ "./node_modules/react/index.js"));
+
+var _ThemeProvider = __webpack_require__(/*! ./ThemeProvider */ "./node_modules/react-bootstrap/ThemeProvider.js");
+
+var defaultProps = {
+  pill: false
+};
+
+var Badge = _react.default.forwardRef(function (_ref, ref) {
+  var bsPrefix = _ref.bsPrefix,
+      variant = _ref.variant,
+      pill = _ref.pill,
+      className = _ref.className,
+      props = (0, _objectWithoutPropertiesLoose2.default)(_ref, ["bsPrefix", "variant", "pill", "className"]);
+  var prefix = (0, _ThemeProvider.useBootstrapPrefix)(bsPrefix, 'badge');
+  return _react.default.createElement("span", (0, _extends2.default)({
+    ref: ref
+  }, props, {
+    className: (0, _classnames.default)(className, prefix, pill && prefix + "-pill", variant && prefix + "-" + variant)
+  }));
+});
+
+Badge.displayName = 'Badge';
+Badge.defaultProps = defaultProps;
+var _default = Badge;
 exports.default = _default;
 module.exports = exports["default"];
 
@@ -24466,6 +24883,30 @@ var Button = _react.default.forwardRef(function (_ref, ref) {
 Button.displayName = 'Button';
 Button.defaultProps = defaultProps;
 var _default = Button;
+exports.default = _default;
+module.exports = exports["default"];
+
+/***/ }),
+
+/***/ "./node_modules/react-bootstrap/CardContext.js":
+/*!*****************************************************!*\
+  !*** ./node_modules/react-bootstrap/CardContext.js ***!
+  \*****************************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+var _interopRequireDefault = __webpack_require__(/*! @babel/runtime/helpers/interopRequireDefault */ "./node_modules/@babel/runtime/helpers/interopRequireDefault.js");
+
+exports.__esModule = true;
+exports.default = void 0;
+
+var _react = _interopRequireDefault(__webpack_require__(/*! react */ "./node_modules/react/index.js"));
+
+var _default = _react.default.createContext(null);
+
 exports.default = _default;
 module.exports = exports["default"];
 
@@ -25398,6 +25839,102 @@ module.exports = exports["default"];
 
 /***/ }),
 
+/***/ "./node_modules/react-bootstrap/InputGroup.js":
+/*!****************************************************!*\
+  !*** ./node_modules/react-bootstrap/InputGroup.js ***!
+  \****************************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+var _interopRequireDefault = __webpack_require__(/*! @babel/runtime/helpers/interopRequireDefault */ "./node_modules/@babel/runtime/helpers/interopRequireDefault.js");
+
+exports.__esModule = true;
+exports.default = void 0;
+
+var _extends2 = _interopRequireDefault(__webpack_require__(/*! @babel/runtime/helpers/extends */ "./node_modules/@babel/runtime/helpers/extends.js"));
+
+var _objectWithoutPropertiesLoose2 = _interopRequireDefault(__webpack_require__(/*! @babel/runtime/helpers/objectWithoutPropertiesLoose */ "./node_modules/@babel/runtime/helpers/objectWithoutPropertiesLoose.js"));
+
+var _inheritsLoose2 = _interopRequireDefault(__webpack_require__(/*! @babel/runtime/helpers/inheritsLoose */ "./node_modules/@babel/runtime/helpers/inheritsLoose.js"));
+
+var _classnames = _interopRequireDefault(__webpack_require__(/*! classnames */ "./node_modules/classnames/index.js"));
+
+var _react = _interopRequireDefault(__webpack_require__(/*! react */ "./node_modules/react/index.js"));
+
+var _createWithBsPrefix = _interopRequireDefault(__webpack_require__(/*! ./utils/createWithBsPrefix */ "./node_modules/react-bootstrap/utils/createWithBsPrefix.js"));
+
+var _ThemeProvider = __webpack_require__(/*! ./ThemeProvider */ "./node_modules/react-bootstrap/ThemeProvider.js");
+
+/**
+ *
+ * @property {InputGroupAppend} Append
+ * @property {InputGroupPrepend} Prepend
+ * @property {InputGroupText} Text
+ * @property {InputGroupRadio} Radio
+ * @property {InputGroupCheckbox} Checkbox
+ */
+var InputGroup =
+/*#__PURE__*/
+function (_React$Component) {
+  (0, _inheritsLoose2.default)(InputGroup, _React$Component);
+
+  function InputGroup() {
+    return _React$Component.apply(this, arguments) || this;
+  }
+
+  var _proto = InputGroup.prototype;
+
+  _proto.render = function render() {
+    var _this$props = this.props,
+        bsPrefix = _this$props.bsPrefix,
+        size = _this$props.size,
+        className = _this$props.className,
+        Component = _this$props.as,
+        props = (0, _objectWithoutPropertiesLoose2.default)(_this$props, ["bsPrefix", "size", "className", "as"]);
+    return _react.default.createElement(Component, (0, _extends2.default)({}, props, {
+      className: (0, _classnames.default)(className, bsPrefix, size && bsPrefix + "-" + size)
+    }));
+  };
+
+  return InputGroup;
+}(_react.default.Component);
+
+InputGroup.defaultProps = {
+  as: 'div'
+};
+var InputGroupAppend = (0, _createWithBsPrefix.default)('input-group-append');
+var InputGroupPrepend = (0, _createWithBsPrefix.default)('input-group-prepend');
+var InputGroupText = (0, _createWithBsPrefix.default)('input-group-text', {
+  Component: 'span'
+});
+
+var InputGroupCheckbox = function InputGroupCheckbox(props) {
+  return _react.default.createElement(InputGroupText, null, _react.default.createElement("input", (0, _extends2.default)({
+    type: "checkbox"
+  }, props)));
+};
+
+var InputGroupRadio = function InputGroupRadio(props) {
+  return _react.default.createElement(InputGroupText, null, _react.default.createElement("input", (0, _extends2.default)({
+    type: "radio"
+  }, props)));
+};
+
+var DecoratedInputGroup = (0, _ThemeProvider.createBootstrapComponent)(InputGroup, 'input-group');
+DecoratedInputGroup.Text = InputGroupText;
+DecoratedInputGroup.Radio = InputGroupRadio;
+DecoratedInputGroup.Checkbox = InputGroupCheckbox;
+DecoratedInputGroup.Append = InputGroupAppend;
+DecoratedInputGroup.Prepend = InputGroupPrepend;
+var _default = DecoratedInputGroup;
+exports.default = _default;
+module.exports = exports["default"];
+
+/***/ }),
+
 /***/ "./node_modules/react-bootstrap/Modal.js":
 /*!***********************************************!*\
   !*** ./node_modules/react-bootstrap/Modal.js ***!
@@ -25906,6 +26443,264 @@ module.exports = exports["default"];
 
 /***/ }),
 
+/***/ "./node_modules/react-bootstrap/Nav.js":
+/*!*********************************************!*\
+  !*** ./node_modules/react-bootstrap/Nav.js ***!
+  \*********************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+var _interopRequireWildcard = __webpack_require__(/*! @babel/runtime/helpers/interopRequireWildcard */ "./node_modules/@babel/runtime/helpers/interopRequireWildcard.js");
+
+var _interopRequireDefault = __webpack_require__(/*! @babel/runtime/helpers/interopRequireDefault */ "./node_modules/@babel/runtime/helpers/interopRequireDefault.js");
+
+exports.__esModule = true;
+exports.default = void 0;
+
+var _extends2 = _interopRequireDefault(__webpack_require__(/*! @babel/runtime/helpers/extends */ "./node_modules/@babel/runtime/helpers/extends.js"));
+
+var _objectWithoutPropertiesLoose2 = _interopRequireDefault(__webpack_require__(/*! @babel/runtime/helpers/objectWithoutPropertiesLoose */ "./node_modules/@babel/runtime/helpers/objectWithoutPropertiesLoose.js"));
+
+var _classnames = _interopRequireDefault(__webpack_require__(/*! classnames */ "./node_modules/classnames/index.js"));
+
+var _all = _interopRequireDefault(__webpack_require__(/*! prop-types-extra/lib/all */ "./node_modules/prop-types-extra/lib/all.js"));
+
+var _react = _interopRequireWildcard(__webpack_require__(/*! react */ "./node_modules/react/index.js"));
+
+var _hook = _interopRequireDefault(__webpack_require__(/*! uncontrollable/hook */ "./node_modules/uncontrollable/hook.js"));
+
+var _ThemeProvider = __webpack_require__(/*! ./ThemeProvider */ "./node_modules/react-bootstrap/ThemeProvider.js");
+
+var _NavbarContext = _interopRequireDefault(__webpack_require__(/*! ./NavbarContext */ "./node_modules/react-bootstrap/NavbarContext.js"));
+
+var _CardContext = _interopRequireDefault(__webpack_require__(/*! ./CardContext */ "./node_modules/react-bootstrap/CardContext.js"));
+
+var _AbstractNav = _interopRequireDefault(__webpack_require__(/*! ./AbstractNav */ "./node_modules/react-bootstrap/AbstractNav.js"));
+
+var _NavItem = _interopRequireDefault(__webpack_require__(/*! ./NavItem */ "./node_modules/react-bootstrap/NavItem.js"));
+
+var _NavLink = _interopRequireDefault(__webpack_require__(/*! ./NavLink */ "./node_modules/react-bootstrap/NavLink.js"));
+
+var defaultProps = {
+  justify: false,
+  fill: false,
+  as: 'div'
+};
+
+var Nav = _react.default.forwardRef(function (uncontrolledProps, ref) {
+  var _classNames;
+
+  var _useUncontrolled = (0, _hook.default)(uncontrolledProps, {
+    activeKey: 'onSelect'
+  }),
+      as = _useUncontrolled.as,
+      bsPrefix = _useUncontrolled.bsPrefix,
+      variant = _useUncontrolled.variant,
+      fill = _useUncontrolled.fill,
+      justify = _useUncontrolled.justify,
+      navbar = _useUncontrolled.navbar,
+      className = _useUncontrolled.className,
+      children = _useUncontrolled.children,
+      activeKey = _useUncontrolled.activeKey,
+      props = (0, _objectWithoutPropertiesLoose2.default)(_useUncontrolled, ["as", "bsPrefix", "variant", "fill", "justify", "navbar", "className", "children", "activeKey"]);
+
+  bsPrefix = (0, _ThemeProvider.useBootstrapPrefix)(bsPrefix, 'nav');
+  var navbarBsPrefix, cardHeaderBsPrefix;
+  var navbarContext = (0, _react.useContext)(_NavbarContext.default);
+  var cardContext = (0, _react.useContext)(_CardContext.default);
+
+  if (navbarContext) {
+    navbarBsPrefix = navbarContext.bsPrefix;
+    navbar = navbar == null ? true : navbar;
+  } else if (cardContext) {
+    cardHeaderBsPrefix = cardContext.cardHeaderBsPrefix;
+  }
+
+  return _react.default.createElement(_AbstractNav.default, (0, _extends2.default)({
+    as: as,
+    ref: ref,
+    activeKey: activeKey,
+    className: (0, _classnames.default)(className, (_classNames = {}, _classNames[bsPrefix] = !navbar, _classNames[navbarBsPrefix + "-nav"] = navbar, _classNames[cardHeaderBsPrefix + "-" + variant] = !!cardHeaderBsPrefix, _classNames[bsPrefix + "-" + variant] = !!variant, _classNames[bsPrefix + "-fill"] = fill, _classNames[bsPrefix + "-justified"] = justify, _classNames))
+  }, props), children);
+});
+
+Nav.displayName = 'Nav';
+Nav.defaultProps = defaultProps;
+Nav.Item = _NavItem.default;
+Nav.Link = _NavLink.default;
+Nav._Nav = Nav; // for Testing until enzyme is working with context
+
+var _default = Nav;
+exports.default = _default;
+module.exports = exports["default"];
+
+/***/ }),
+
+/***/ "./node_modules/react-bootstrap/NavContext.js":
+/*!****************************************************!*\
+  !*** ./node_modules/react-bootstrap/NavContext.js ***!
+  \****************************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+var _interopRequireDefault = __webpack_require__(/*! @babel/runtime/helpers/interopRequireDefault */ "./node_modules/@babel/runtime/helpers/interopRequireDefault.js");
+
+exports.__esModule = true;
+exports.default = void 0;
+
+var _react = _interopRequireDefault(__webpack_require__(/*! react */ "./node_modules/react/index.js"));
+
+var NavContext = _react.default.createContext(null);
+
+var _default = NavContext;
+exports.default = _default;
+module.exports = exports["default"];
+
+/***/ }),
+
+/***/ "./node_modules/react-bootstrap/NavItem.js":
+/*!*************************************************!*\
+  !*** ./node_modules/react-bootstrap/NavItem.js ***!
+  \*************************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+var _interopRequireDefault = __webpack_require__(/*! @babel/runtime/helpers/interopRequireDefault */ "./node_modules/@babel/runtime/helpers/interopRequireDefault.js");
+
+exports.__esModule = true;
+exports.default = void 0;
+
+var _extends2 = _interopRequireDefault(__webpack_require__(/*! @babel/runtime/helpers/extends */ "./node_modules/@babel/runtime/helpers/extends.js"));
+
+var _objectWithoutPropertiesLoose2 = _interopRequireDefault(__webpack_require__(/*! @babel/runtime/helpers/objectWithoutPropertiesLoose */ "./node_modules/@babel/runtime/helpers/objectWithoutPropertiesLoose.js"));
+
+var _classnames = _interopRequireDefault(__webpack_require__(/*! classnames */ "./node_modules/classnames/index.js"));
+
+var _react = _interopRequireDefault(__webpack_require__(/*! react */ "./node_modules/react/index.js"));
+
+var _ThemeProvider = __webpack_require__(/*! ./ThemeProvider */ "./node_modules/react-bootstrap/ThemeProvider.js");
+
+var defaultProps = {
+  as: 'div'
+};
+
+var NavItem = _react.default.forwardRef(function (_ref, ref) {
+  var bsPrefix = _ref.bsPrefix,
+      className = _ref.className,
+      children = _ref.children,
+      Component = _ref.as,
+      props = (0, _objectWithoutPropertiesLoose2.default)(_ref, ["bsPrefix", "className", "children", "as"]);
+  bsPrefix = (0, _ThemeProvider.useBootstrapPrefix)(bsPrefix, 'nav-item');
+  return _react.default.createElement(Component, (0, _extends2.default)({}, props, {
+    ref: ref,
+    className: (0, _classnames.default)(className, bsPrefix)
+  }), children);
+});
+
+NavItem.displayName = 'NavItem';
+NavItem.defaultProps = defaultProps;
+var _default = NavItem;
+exports.default = _default;
+module.exports = exports["default"];
+
+/***/ }),
+
+/***/ "./node_modules/react-bootstrap/NavLink.js":
+/*!*************************************************!*\
+  !*** ./node_modules/react-bootstrap/NavLink.js ***!
+  \*************************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+var _interopRequireDefault = __webpack_require__(/*! @babel/runtime/helpers/interopRequireDefault */ "./node_modules/@babel/runtime/helpers/interopRequireDefault.js");
+
+exports.__esModule = true;
+exports.default = void 0;
+
+var _extends2 = _interopRequireDefault(__webpack_require__(/*! @babel/runtime/helpers/extends */ "./node_modules/@babel/runtime/helpers/extends.js"));
+
+var _objectWithoutPropertiesLoose2 = _interopRequireDefault(__webpack_require__(/*! @babel/runtime/helpers/objectWithoutPropertiesLoose */ "./node_modules/@babel/runtime/helpers/objectWithoutPropertiesLoose.js"));
+
+var _classnames = _interopRequireDefault(__webpack_require__(/*! classnames */ "./node_modules/classnames/index.js"));
+
+var _react = _interopRequireDefault(__webpack_require__(/*! react */ "./node_modules/react/index.js"));
+
+var _SafeAnchor = _interopRequireDefault(__webpack_require__(/*! ./SafeAnchor */ "./node_modules/react-bootstrap/SafeAnchor.js"));
+
+var _AbstractNavItem = _interopRequireDefault(__webpack_require__(/*! ./AbstractNavItem */ "./node_modules/react-bootstrap/AbstractNavItem.js"));
+
+var _ThemeProvider = __webpack_require__(/*! ./ThemeProvider */ "./node_modules/react-bootstrap/ThemeProvider.js");
+
+var defaultProps = {
+  disabled: false,
+  as: _SafeAnchor.default
+};
+
+var NavLink = _react.default.forwardRef(function (_ref, ref) {
+  var bsPrefix = _ref.bsPrefix,
+      disabled = _ref.disabled,
+      className = _ref.className,
+      href = _ref.href,
+      eventKey = _ref.eventKey,
+      onSelect = _ref.onSelect,
+      as = _ref.as,
+      props = (0, _objectWithoutPropertiesLoose2.default)(_ref, ["bsPrefix", "disabled", "className", "href", "eventKey", "onSelect", "as"]);
+  bsPrefix = (0, _ThemeProvider.useBootstrapPrefix)(bsPrefix, 'nav-link');
+  return _react.default.createElement(_AbstractNavItem.default, (0, _extends2.default)({}, props, {
+    href: href,
+    ref: ref,
+    eventKey: eventKey,
+    as: as,
+    disabled: disabled,
+    onSelect: onSelect,
+    className: (0, _classnames.default)(className, bsPrefix, disabled && 'disabled')
+  }));
+});
+
+NavLink.displayName = 'NavLink';
+NavLink.defaultProps = defaultProps;
+var _default = NavLink;
+exports.default = _default;
+module.exports = exports["default"];
+
+/***/ }),
+
+/***/ "./node_modules/react-bootstrap/NavbarContext.js":
+/*!*******************************************************!*\
+  !*** ./node_modules/react-bootstrap/NavbarContext.js ***!
+  \*******************************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+var _interopRequireDefault = __webpack_require__(/*! @babel/runtime/helpers/interopRequireDefault */ "./node_modules/@babel/runtime/helpers/interopRequireDefault.js");
+
+exports.__esModule = true;
+exports.default = void 0;
+
+var _react = _interopRequireDefault(__webpack_require__(/*! react */ "./node_modules/react/index.js"));
+
+var _default = _react.default.createContext(null);
+
+exports.default = _default;
+module.exports = exports["default"];
+
+/***/ }),
+
 /***/ "./node_modules/react-bootstrap/Row.js":
 /*!*********************************************!*\
   !*** ./node_modules/react-bootstrap/Row.js ***!
@@ -26089,6 +26884,61 @@ function (_React$Component) {
 
 SafeAnchor.defaultProps = defaultProps;
 var _default = SafeAnchor;
+exports.default = _default;
+module.exports = exports["default"];
+
+/***/ }),
+
+/***/ "./node_modules/react-bootstrap/SelectableContext.js":
+/*!***********************************************************!*\
+  !*** ./node_modules/react-bootstrap/SelectableContext.js ***!
+  \***********************************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+var _interopRequireDefault = __webpack_require__(/*! @babel/runtime/helpers/interopRequireDefault */ "./node_modules/@babel/runtime/helpers/interopRequireDefault.js");
+
+exports.__esModule = true;
+exports.default = exports.makeEventKey = void 0;
+
+var _react = _interopRequireDefault(__webpack_require__(/*! react */ "./node_modules/react/index.js"));
+
+var SelectableContext = _react.default.createContext();
+
+var makeEventKey = function makeEventKey(eventKey, href) {
+  if (eventKey != null) return String(eventKey);
+  return href || null;
+};
+
+exports.makeEventKey = makeEventKey;
+var _default = SelectableContext;
+exports.default = _default;
+
+/***/ }),
+
+/***/ "./node_modules/react-bootstrap/TabContext.js":
+/*!****************************************************!*\
+  !*** ./node_modules/react-bootstrap/TabContext.js ***!
+  \****************************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+var _interopRequireDefault = __webpack_require__(/*! @babel/runtime/helpers/interopRequireDefault */ "./node_modules/@babel/runtime/helpers/interopRequireDefault.js");
+
+exports.__esModule = true;
+exports.default = void 0;
+
+var _react = _interopRequireDefault(__webpack_require__(/*! react */ "./node_modules/react/index.js"));
+
+var TabContext = _react.default.createContext(null);
+
+var _default = TabContext;
 exports.default = _default;
 module.exports = exports["default"];
 
@@ -60536,6 +61386,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react */ "./node_modules/react/index.js");
 /* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_0__);
 /* harmony import */ var react_router_dom__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! react-router-dom */ "./node_modules/react-router-dom/esm/react-router-dom.js");
+/* harmony import */ var _service_AuthenticationService__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./service/AuthenticationService */ "./src/main/js/service/AuthenticationService.js");
 function _typeof(obj) { if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") { _typeof = function _typeof(obj) { return typeof obj; }; } else { _typeof = function _typeof(obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }; } return _typeof(obj); }
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
@@ -60567,6 +61418,12 @@ var Row = __webpack_require__(/*! react-bootstrap/Row */ "./node_modules/react-b
 
 var Col = __webpack_require__(/*! react-bootstrap/Col */ "./node_modules/react-bootstrap/Col.js");
 
+var Nav = __webpack_require__(/*! react-bootstrap/Nav */ "./node_modules/react-bootstrap/Nav.js");
+
+var Badge = __webpack_require__(/*! react-bootstrap/Badge */ "./node_modules/react-bootstrap/Badge.js");
+
+
+
 var Header =
 /*#__PURE__*/
 function (_Component) {
@@ -60580,6 +61437,9 @@ function (_Component) {
     _this = _possibleConstructorReturn(this, _getPrototypeOf(Header).call(this, props));
     _this.children = {
       validated: false
+    };
+    _this.state = {
+      logado: _service_AuthenticationService__WEBPACK_IMPORTED_MODULE_2__["default"].isUserLoggedIn()
     };
     return _this;
   }
@@ -60598,28 +61458,29 @@ function (_Component) {
       }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
         className: "container"
       }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(Col, {
-        md: "4"
+        md: "8"
       }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
         className: "container"
       }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("a", {
         className: "navbar-brand"
       }, " ", react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("h1", null, "Tribunal de Justi\xE7a do Estado de Goi\xE1s")))), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(Col, {
-        md: "8"
-      }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(Row, null, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(Col, {
-        md: "10"
-      }), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(Col, {
-        md: "2"
-      }, " ", react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("h3", {
-        className: "box-title"
-      }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react_router_dom__WEBPACK_IMPORTED_MODULE_1__["Link"], {
+        md: "4"
+      }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("h3", null, "Sistema de Cita\xE7\xF5es ", react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("i", {
+        className: "fas fa-envelope-open-text"
+      })), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(Row, null, "\xA0 \xA0"), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(Row, null, "\xA0 \xA0"), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(Row, null, "\xA0 \xA0"), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(Row, null, "\xA0 \xA0"), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(Row, null, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(Col, {
+        md: "6"
+      }, " ", this.state.logado ? react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react_router_dom__WEBPACK_IMPORTED_MODULE_1__["Link"], {
+        to: "/admin",
+        onClick: _service_AuthenticationService__WEBPACK_IMPORTED_MODULE_2__["default"].logout
+      }, " ", react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("i", {
+        className: "fas fa-reply"
+      }), " Logout   ") : '', " "), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(Col, {
+        md: "6"
+      }, " ", react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react_router_dom__WEBPACK_IMPORTED_MODULE_1__["Link"], {
         to: "/admin"
-      }, "Admin ")))), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(Row, null, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(Col, {
-        md: "2"
-      }, " "), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(Col, {
-        md: "10"
-      }, "  ", react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("h3", {
-        className: "box-title"
-      }, "SISTEMA DE PR\xC9-CADASTRO ELETR\xD4NICO TJ GOI\xC1S \u2013 PESSOA JUR\xCDDICA")))))))), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+      }, " ", react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("i", {
+        className: "fas fa-user-cog"
+      }), " Admin "), " "))))))), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
         className: "box-body"
       }, this.props.children))), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(Col, null)));
     }
@@ -60733,7 +61594,8 @@ function (_Component) {
     value: function loginClicked() {
       var _this2 = this;
 
-      _service_AuthenticationService__WEBPACK_IMPORTED_MODULE_1__["default"].executeBasicAuthenticationService(this.state.username, this.state.password).then(function () {
+      _service_AuthenticationService__WEBPACK_IMPORTED_MODULE_1__["default"].executeBasicAuthenticationService(this.state.username, this.state.password).then(function (response) {
+        console.log(response);
         _service_AuthenticationService__WEBPACK_IMPORTED_MODULE_1__["default"].registerSuccessfulLogin(_this2.state.username, _this2.state.password);
 
         _this2.props.history.push('/admin');
@@ -60793,9 +61655,10 @@ function (_Component) {
         type: "invalid"
       }, "Por favor escreva a senha."))), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react_bootstrap_Form__WEBPACK_IMPORTED_MODULE_4___default.a.Group, {
         as: react_bootstrap_Col__WEBPACK_IMPORTED_MODULE_5___default.a,
-        md: "2"
-      }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react_bootstrap_Form__WEBPACK_IMPORTED_MODULE_4___default.a.Label, null), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
-        key: "button"
+        md: "2",
+        controlId: "2"
+      }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react_bootstrap_Form__WEBPACK_IMPORTED_MODULE_4___default.a.Label, null, "\xA0 \xA0"), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+        key: "botao"
       }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(Button, {
         onClick: this.loginClicked,
         variant: "primary",
@@ -60966,11 +61829,7 @@ function (_React$Component) {
   }, {
     key: "render",
     value: function render() {
-      return react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", null, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react_router_dom__WEBPACK_IMPORTED_MODULE_7__["Link"], {
-        className: "nav-link",
-        to: "/logout",
-        onClick: _service_AuthenticationService__WEBPACK_IMPORTED_MODULE_5__["default"].logout
-      }, "Logout"), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react_bootstrap_Breadcrumb__WEBPACK_IMPORTED_MODULE_2___default.a, null, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react_bootstrap_Breadcrumb__WEBPACK_IMPORTED_MODULE_2___default.a.Item, {
+      return react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", null, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react_bootstrap_Breadcrumb__WEBPACK_IMPORTED_MODULE_2___default.a, null, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react_bootstrap_Breadcrumb__WEBPACK_IMPORTED_MODULE_2___default.a.Item, {
         href: "/"
       }, "In\xEDcio"), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react_bootstrap_Breadcrumb__WEBPACK_IMPORTED_MODULE_2___default.a.Item, {
         active: true,
@@ -61038,13 +61897,6 @@ function (_React$Component2) {
   }, {
     key: "render",
     value: function render() {
-      //		const inputs = (
-      //				<p key={attribute+this.props.escritorio[attribute]}>
-      //					<input type="text" placeholder={attribute}
-      //						   defaultValue={this.props.escritorio[attribute]}
-      //						   ref={attribute} className="field"/>
-      //				</p>	
-      //		);
       var dialogId = "updateEscritorio-" + this.props.escritorio._links.self.href;
       var modal = this.state.modal;
       return react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
@@ -61119,19 +61971,11 @@ function (_React$Component2) {
         controlId: "6"
       }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(Form.Label, null, "OAB ou Matr\xEDcula"), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
         key: "identificacaoMaster"
-      }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(Form.Control, {
-        plaintext: true,
-        readOnly: true,
-        defaultValue: this.props.escritorio['identificacaoMaster']
-      }))), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(Form.Group, {
+      }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("h5", null, " ", this.props.escritorio['identificacaoMaster'], " "))), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(Form.Group, {
         controlId: "formBasicChecbox"
-      }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+      }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(Form.Label, null, "Recebe Cita\xE7\xE3o?"), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
         key: "recebeCitacao"
-      }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(Form.Control, {
-        plaintext: true,
-        readOnly: true,
-        defaultValue: this.props.escritorio['recebeCitacao']
-      }))))), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(Form.Row, null, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(Form.Group, {
+      }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("h5", null, this.props.escritorio['recebeCitacao'] ? 'Sim' : 'Não'))))), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(Form.Row, null, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(Form.Group, {
         as: Col,
         md: "4",
         controlId: "6"
@@ -61310,6 +62154,8 @@ var Modal = __webpack_require__(/*! react-bootstrap/Modal */ "./node_modules/rea
 
 var Table = __webpack_require__(/*! react-bootstrap/Table */ "./node_modules/react-bootstrap/Table.js");
 
+var InputGroup = __webpack_require__(/*! react-bootstrap/InputGroup */ "./node_modules/react-bootstrap/InputGroup.js");
+
 
 
 
@@ -61409,9 +62255,9 @@ function (_React$Component4) {
       validated: false,
       alerta: false,
       escritorios: [],
-      cnpj: '0'
+      sucesso: false,
+      falha: false
     };
-    _this.onSearch = _this.onSearch.bind(_assertThisInitialized(_this));
     return _this;
   }
 
@@ -61426,21 +62272,31 @@ function (_React$Component4) {
         headers: {
           'Content-Type': 'application/json'
         }
-      }).done(function (escritorioCollection) {
+      }).then(function (escritorioCollection) {
         _this2.setState({
           escritorios: escritorioCollection.entity._embedded.escritorios
         });
+
+        return escritorioCollection.entity._embedded.escritorios;
+      }).done(function (escritorios) {
+        if (escritorios.length == 0) {
+          _this2.setState({
+            falha: true
+          });
+
+          _this2.setState({
+            sucesso: false
+          });
+        } else {
+          _this2.setState({
+            falha: false
+          });
+
+          _this2.setState({
+            sucesso: true
+          });
+        }
       });
-    }
-  }, {
-    key: "onSearch",
-    value: function onSearch(cnpj) {
-      this.loadFromServer(cnpj);
-    }
-  }, {
-    key: "componentDidMount",
-    value: function componentDidMount() {
-      this.loadFromServer(this.state.cnpj);
     }
   }, {
     key: "handleSubmit",
@@ -61457,7 +62313,7 @@ function (_React$Component4) {
         e.preventDefault();
         var cnpj = '';
         cnpj = ReactDOM.findDOMNode(this.refs['cnpj']).value.trim();
-        this.onSearch(cnpj);
+        this.loadFromServer(cnpj);
         this.setState({
           validated: false
         });
@@ -61478,10 +62334,11 @@ function (_React$Component4) {
       }, "In\xEDcio"), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react_bootstrap_Breadcrumb__WEBPACK_IMPORTED_MODULE_6___default.a.Item, {
         active: true,
         href: "SignUp"
-      }, "Consulta Andamento")), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", null, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(Alert, {
-        show: alerta,
-        variant: "success"
-      }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(Alert.Heading, null, "Busca realizada com sucesso!"), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("p", null, "Verifique o status da solicita\xE7\xE3o de cadastro."))), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(Form, {
+      }, "Consulta Andamento")), this.state.falha && react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+        className: "alert alert-warning"
+      }, "N\xE3o h\xE1 solicita\xE7\xE3o com esse CNPJ!"), this.state.sucesso && react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+        className: "alert alert-success"
+      }, "CNPJ encontrado!"), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(Form, {
         noValidate: true,
         validated: validated,
         onSubmit: function onSubmit(e) {
@@ -61499,11 +62356,11 @@ function (_React$Component4) {
         value: ""
       }), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(Form.Row, null, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(Form.Group, {
         as: Col,
-        md: "6",
+        md: "4",
         controlId: "1"
       }), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(Form.Group, {
         as: Col,
-        md: "6",
+        md: "7",
         controlId: "2"
       }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(Form.Label, null, "CNPJ"), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
         key: "cnpj"
@@ -61512,18 +62369,16 @@ function (_React$Component4) {
         placeholder: "xx.xxx.xxx/xxxx-xx",
         ref: "cnpj",
         mask: "11.111.111/1111-11"
-      }), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(Form.Control.Feedback, {
-        type: "invalid"
-      }, "Por favor escreva o CNPJ da Empresa/\xD3rg\xE3o.")))), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(Form.Row, null, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(Form.Group, {
+      }))), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(Form.Group, {
         as: Col,
-        md: "11"
-      }), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(Form.Group, {
-        as: Col,
-        md: "1"
+        md: "1",
+        controlId: "2"
+      }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(Form.Label, null, "\xA0 \xA0"), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+        key: "botao"
       }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(Button, {
         variant: "primary",
         type: "submit"
-      }, "Buscar")))), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(EscritorioList, {
+      }, "Buscar"))))), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(EscritorioList, {
         escritorios: this.state.escritorios
       }));
     }
@@ -61951,7 +62806,9 @@ function (_React$Component2) {
         required: true,
         type: "file",
         onChange: this.handleUploadFile
-      }))), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(Form.Group, {
+      }), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(Form.Control.Feedback, {
+        type: "invalid"
+      }, "Por favor insira um arquivo comprobat\xF3rio da representa\xE7\xE3o legal."))), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(Form.Group, {
         as: Col,
         md: "4"
       }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(Form.Label, null, " Possui Advogado Estabelecido? "), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("input", {
@@ -62155,7 +63012,11 @@ function () {
     key: "executeBasicAuthenticationService",
     value: function executeBasicAuthenticationService(username, password) {
       console.log(username);
-      return axios__WEBPACK_IMPORTED_MODULE_0___default.a.post('/login?username=' + username + '&password=' + password);
+      var response = axios__WEBPACK_IMPORTED_MODULE_0___default.a.post('/login?username=' + username + '&password=' + password).then(function (response) {
+        console.log(response);
+        return response;
+      });
+      return response;
     }
   }, {
     key: "createBasicAuthToken",

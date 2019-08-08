@@ -6,12 +6,6 @@ import Form from 'react-bootstrap/Form';
 import Col from 'react-bootstrap/Col';
 const Button = require("react-bootstrap/Button");
 
-
-
-
-
-
-
 class Login extends Component {
 
     constructor(props) {
@@ -41,10 +35,10 @@ class Login extends Component {
 
         AuthenticationService
             .executeBasicAuthenticationService(this.state.username, this.state.password)
-            .then(() => {
+            .then(response => {
+				console.log(response);
                 AuthenticationService.registerSuccessfulLogin(this.state.username, this.state.password)
                 this.props.history.push('/admin')
-
                 this.setState({ showSuccessMessage: true })
 
             }).catch(() => {
@@ -101,17 +95,20 @@ class Login extends Component {
 								</div>
 						</Form.Group>
 
-						<Form.Group as={Col} md="2">
-							<Form.Label></Form.Label>
 
-								<div key="button">
+
+
+
+						<Form.Group as={Col} md="2" controlId="2">
+							<Form.Label>&nbsp; &nbsp;</Form.Label>
+							<div key="botao">
 									<Button onClick={this.loginClicked} variant="primary"  type="submit">
 										Buscar 
 									</Button>
-									
-								</div>
+							</div>
+						</Form.Group>	
 
-						</Form.Group>
+
 
 					</Form.Row>
 

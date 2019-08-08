@@ -311,6 +311,9 @@ class CreateDialog extends React.Component {
 							<Form.Label>Anexar Arquivo Comprobatório</Form.Label>
 							<div key="file">
 								<Form.Control required type="file"  onChange={this.handleUploadFile} />                                                                     
+								<Form.Control.Feedback type="invalid">
+									Por favor insira um arquivo comprobatório da representação legal.
+								</Form.Control.Feedback>   
 							</div>
 						</Form.Group>
 							
