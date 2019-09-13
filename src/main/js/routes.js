@@ -18,7 +18,7 @@ const Routes = () => (
         <Route path="/consulta" component={Consulta} />
       <Route path="*" component={() => <h1>Page not found</h1>} />
     </Switch>
-  </BrowserRouter>	
+  </BrowserRouter>
 
 
 

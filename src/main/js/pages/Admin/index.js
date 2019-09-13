@@ -21,9 +21,10 @@ class AppAdmin extends React.Component {
 
 	constructor(props) {
 		super(props);
-		this.state = {escritorios: [], attributes: [], pageSize: 50, links: {}};
+		this.state = { validated: false, alerta: false, escritorios: [], sucesso: false, falha: false, escritorios: [], attributes: [], pageSize: 50, links: {}};
 		this.onDelete = this.onDelete.bind(this);
 		this.onUpdate = this.onUpdate.bind(this);
+		this.handleSubmit = this.handleSubmit.bind(this);    
 	}
 
 	loadFromServer(pageSize) {
@@ -69,8 +70,60 @@ class AppAdmin extends React.Component {
 	componentDidMount() {
 		this.loadFromServer(this.state.pageSize);
 	}
+	
+	
+	
+	buscarCNPJ(cnpj) {
+		client({
+			method: 'GET',
+			path: 'api/escritorios/search/findBycnpj?cnpj='+cnpj,
+			headers: {'Content-Type': 'application/json'}
+		}).then(escritorioCollection => {
+			this.setState({
+				escritorios: escritorioCollection.entity._embedded.escritorios});
+			return escritorioCollection.entity._embedded.escritorios;
+		}).done( escritorios=>{			
+			if(escritorios.length == 0){
+				this.setState({ falha: true});
+				this.setState({ sucesso: false});
+
+			}else{
+				this.setState({ falha: false});
+				this.setState({ sucesso: true});
+			}
+		});	
+	}
+
+	
+	
+	handleSubmit(e) {
+		const form = e.currentTarget;
+		if (form.checkValidity() === false) {
+			e.preventDefault();
+			e.stopPropagation();
+			this.setState({ validated: true });
+
+		} else{
+			e.preventDefault();
+			var cnpj = '';
+
+			cnpj = ReactDOM.findDOMNode(this.refs['cnpj']).value.trim();
+			
+			this.buscarCNPJ(cnpj);
+
+			this.setState({ validated: false });
+			this.setState({ alerta: true });
+
+
+		}
+		
+	}
+	
 
 	render() {
+		
+		const { validated } = this.state;
+
 		return (
 			<div>
 
@@ -78,6 +131,44 @@ class AppAdmin extends React.Component {
                     <Breadcrumb.Item href="/">Início</Breadcrumb.Item>
                     <Breadcrumb.Item active href="Admin">Admin</Breadcrumb.Item>
                 </Breadcrumb>
+                
+                
+                
+				<Form
+				noValidate
+				validated={validated}
+				onSubmit={e => this.handleSubmit(e)} >
+		
+		            <input ref="manager" type="hidden" name="manager" value="" />
+					<input ref="status" type="hidden" name="status" value="" />
+		
+					<Form.Row>
+			            
+			            
+						<Form.Group as={Col} md="4" controlId="1">
+		
+						</Form.Group>
+						<Form.Group as={Col} md="7" controlId="2">
+								<Form.Label>CNPJ</Form.Label>
+								<div key="cnpj">
+									<MaskedFormControl required placeholder="xx.xxx.xxx/xxxx-xx"  ref="cnpj" mask='11.111.111/1111-11' />										
+								</div>
+						</Form.Group>
+						
+						<Form.Group as={Col} md="1" controlId="2">
+							<Form.Label>&nbsp; &nbsp;</Form.Label>
+							<div key="botao">
+									<Button variant="primary" type="submit">
+									    Buscar
+									</Button>
+							</div>
+						</Form.Group>						
+												
+		
+					</Form.Row>
+		
+				</Form>
+                
 
                 <EscritorioList escritorios={this.state.escritorios}
                     links={this.state.links}
@@ -277,16 +368,24 @@ class UpdateDialog extends React.Component {
 class EscritorioList extends React.Component {
 
 	constructor(props) {
-		super(props);
+		super(props);		
     }
+
+
 
 	render() {
 		const escritorios = this.props.escritorios.map(escritorio =>
 			<Escritorio key={escritorio._links.self.href} escritorio={escritorio} attributes={this.props.attributes} onUpdate={this.props.onUpdate} onDelete={this.props.onDelete}/>
 		);
-
+		
 		return (
+				
+				
+				
+				
 			<div>
+		
+			
 				<Table>
 					<tbody>
 						<tr>

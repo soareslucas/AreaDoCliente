@@ -61698,6 +61698,8 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var react_router_dom__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! react-router-dom */ "./node_modules/react-router-dom/esm/react-router-dom.js");
 function _typeof(obj) { if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") { _typeof = function _typeof(obj) { return typeof obj; }; } else { _typeof = function _typeof(obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }; } return _typeof(obj); }
 
+function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
+
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
 function _defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } }
@@ -61747,19 +61749,23 @@ function (_React$Component) {
   _inherits(AppAdmin, _React$Component);
 
   function AppAdmin(props) {
+    var _this$state;
+
     var _this;
 
     _classCallCheck(this, AppAdmin);
 
     _this = _possibleConstructorReturn(this, _getPrototypeOf(AppAdmin).call(this, props));
-    _this.state = {
+    _this.state = (_this$state = {
+      validated: false,
+      alerta: false,
       escritorios: [],
-      attributes: [],
-      pageSize: 50,
-      links: {}
-    };
+      sucesso: false,
+      falha: false
+    }, _defineProperty(_this$state, "escritorios", []), _defineProperty(_this$state, "attributes", []), _defineProperty(_this$state, "pageSize", 50), _defineProperty(_this$state, "links", {}), _this$state);
     _this.onDelete = _this.onDelete.bind(_assertThisInitialized(_this));
     _this.onUpdate = _this.onUpdate.bind(_assertThisInitialized(_this));
+    _this.handleSubmit = _this.handleSubmit.bind(_assertThisInitialized(_this));
     return _this;
   }
 
@@ -61827,14 +61833,118 @@ function (_React$Component) {
       this.loadFromServer(this.state.pageSize);
     }
   }, {
+    key: "buscarCNPJ",
+    value: function buscarCNPJ(cnpj) {
+      var _this5 = this;
+
+      _client__WEBPACK_IMPORTED_MODULE_4___default()({
+        method: 'GET',
+        path: 'api/escritorios/search/findBycnpj?cnpj=' + cnpj,
+        headers: {
+          'Content-Type': 'application/json'
+        }
+      }).then(function (escritorioCollection) {
+        _this5.setState({
+          escritorios: escritorioCollection.entity._embedded.escritorios
+        });
+
+        return escritorioCollection.entity._embedded.escritorios;
+      }).done(function (escritorios) {
+        if (escritorios.length == 0) {
+          _this5.setState({
+            falha: true
+          });
+
+          _this5.setState({
+            sucesso: false
+          });
+        } else {
+          _this5.setState({
+            falha: false
+          });
+
+          _this5.setState({
+            sucesso: true
+          });
+        }
+      });
+    }
+  }, {
+    key: "handleSubmit",
+    value: function handleSubmit(e) {
+      var form = e.currentTarget;
+
+      if (form.checkValidity() === false) {
+        e.preventDefault();
+        e.stopPropagation();
+        this.setState({
+          validated: true
+        });
+      } else {
+        e.preventDefault();
+        var cnpj = '';
+        cnpj = ReactDOM.findDOMNode(this.refs['cnpj']).value.trim();
+        this.buscarCNPJ(cnpj);
+        this.setState({
+          validated: false
+        });
+        this.setState({
+          alerta: true
+        });
+      }
+    }
+  }, {
     key: "render",
     value: function render() {
+      var _this6 = this;
+
+      var validated = this.state.validated;
       return react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", null, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react_bootstrap_Breadcrumb__WEBPACK_IMPORTED_MODULE_2___default.a, null, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react_bootstrap_Breadcrumb__WEBPACK_IMPORTED_MODULE_2___default.a.Item, {
         href: "/"
       }, "In\xEDcio"), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react_bootstrap_Breadcrumb__WEBPACK_IMPORTED_MODULE_2___default.a.Item, {
         active: true,
         href: "Admin"
-      }, "Admin")), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(EscritorioList, {
+      }, "Admin")), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(Form, {
+        noValidate: true,
+        validated: validated,
+        onSubmit: function onSubmit(e) {
+          return _this6.handleSubmit(e);
+        }
+      }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("input", {
+        ref: "manager",
+        type: "hidden",
+        name: "manager",
+        value: ""
+      }), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("input", {
+        ref: "status",
+        type: "hidden",
+        name: "status",
+        value: ""
+      }), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(Form.Row, null, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(Form.Group, {
+        as: Col,
+        md: "4",
+        controlId: "1"
+      }), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(Form.Group, {
+        as: Col,
+        md: "7",
+        controlId: "2"
+      }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(Form.Label, null, "CNPJ"), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+        key: "cnpj"
+      }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react_bootstrap_maskedinput__WEBPACK_IMPORTED_MODULE_1___default.a, {
+        required: true,
+        placeholder: "xx.xxx.xxx/xxxx-xx",
+        ref: "cnpj",
+        mask: "11.111.111/1111-11"
+      }))), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(Form.Group, {
+        as: Col,
+        md: "1",
+        controlId: "2"
+      }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(Form.Label, null, "\xA0 \xA0"), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+        key: "botao"
+      }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(Button, {
+        variant: "primary",
+        type: "submit"
+      }, "Buscar"))))), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(EscritorioList, {
         escritorios: this.state.escritorios,
         links: this.state.links,
         pageSize: this.state.pageSize,
@@ -61854,18 +61964,18 @@ function (_React$Component2) {
   _inherits(UpdateDialog, _React$Component2);
 
   function UpdateDialog(props) {
-    var _this5;
+    var _this7;
 
     _classCallCheck(this, UpdateDialog);
 
-    _this5 = _possibleConstructorReturn(this, _getPrototypeOf(UpdateDialog).call(this, props));
-    _this5.state = {
+    _this7 = _possibleConstructorReturn(this, _getPrototypeOf(UpdateDialog).call(this, props));
+    _this7.state = {
       modal: false
     };
-    _this5.handleSubmit = _this5.handleSubmit.bind(_assertThisInitialized(_this5));
-    _this5.handleClose = _this5.handleClose.bind(_assertThisInitialized(_this5));
-    _this5.handleShow = _this5.handleShow.bind(_assertThisInitialized(_this5));
-    return _this5;
+    _this7.handleSubmit = _this7.handleSubmit.bind(_assertThisInitialized(_this7));
+    _this7.handleClose = _this7.handleClose.bind(_assertThisInitialized(_this7));
+    _this7.handleShow = _this7.handleShow.bind(_assertThisInitialized(_this7));
+    return _this7;
   }
 
   _createClass(UpdateDialog, [{
@@ -62014,15 +62124,15 @@ function (_React$Component3) {
   _createClass(EscritorioList, [{
     key: "render",
     value: function render() {
-      var _this6 = this;
+      var _this8 = this;
 
       var escritorios = this.props.escritorios.map(function (escritorio) {
         return react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(Escritorio, {
           key: escritorio._links.self.href,
           escritorio: escritorio,
-          attributes: _this6.props.attributes,
-          onUpdate: _this6.props.onUpdate,
-          onDelete: _this6.props.onDelete
+          attributes: _this8.props.attributes,
+          onUpdate: _this8.props.onUpdate,
+          onDelete: _this8.props.onDelete
         });
       });
       return react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", null, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(Table, null, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("tbody", null, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("tr", null, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("th", null, "#"), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("th", null, "CNPJ"), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("th", null, "Nome do \xD3rg\xE3o/Empresa"), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("th", null, "Telefone"), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("th", null, "Status Solicita\xE7\xE3o"), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("th", null), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("th", null)), escritorios)));
@@ -62038,13 +62148,13 @@ function (_React$Component4) {
   _inherits(Escritorio, _React$Component4);
 
   function Escritorio(props) {
-    var _this7;
+    var _this9;
 
     _classCallCheck(this, Escritorio);
 
-    _this7 = _possibleConstructorReturn(this, _getPrototypeOf(Escritorio).call(this, props));
-    _this7.handleDelete = _this7.handleDelete.bind(_assertThisInitialized(_this7));
-    return _this7;
+    _this9 = _possibleConstructorReturn(this, _getPrototypeOf(Escritorio).call(this, props));
+    _this9.handleDelete = _this9.handleDelete.bind(_assertThisInitialized(_this9));
+    return _this9;
   }
 
   _createClass(Escritorio, [{
