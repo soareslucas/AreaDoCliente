@@ -61923,8 +61923,17 @@ function (_React$Component) {
       }), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(Form.Row, null, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(Form.Group, {
         as: Col,
         md: "4",
-        controlId: "1"
-      }), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(Form.Group, {
+        controlId: "5"
+      }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(Form.Label, null, "Campo de Busca"), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+        key: "vinculo"
+      }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(Form.Control, {
+        as: "select",
+        required: true,
+        placeholder: "Escolha o Campo de Busca",
+        ref: "campo"
+      }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("option", null, "Escolha..."), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("option", null, "CNPJ"), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("option", null, "Nome do escrit\xF3rio"), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("option", null, "Status"), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("option", null, "Nome Representante Legal")), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(Form.Control.Feedback, {
+        type: "invalid"
+      }, "Por favor selecione qual o campo de busca."))), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(Form.Group, {
         as: Col,
         md: "7",
         controlId: "2"

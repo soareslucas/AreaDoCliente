@@ -17,11 +17,12 @@ import Header from '../../header';
 import { Link } from "react-router-dom";
 const root = '/api';
 
+
 class AppAdmin extends React.Component {
 
 	constructor(props) {
 		super(props);
-		this.state = { validated: false, alerta: false, escritorios: [], sucesso: false, falha: false, escritorios: [], attributes: [], pageSize: 50, links: {}};
+		this.state = {campo:'', validated: false, alerta: false, escritorios: [], sucesso: false, falha: false, escritorios: [], attributes: [], pageSize: 50, links: {}};
 		this.onDelete = this.onDelete.bind(this);
 		this.onUpdate = this.onUpdate.bind(this);
 		this.handleSubmit = this.handleSubmit.bind(this);    
@@ -73,10 +74,10 @@ class AppAdmin extends React.Component {
 	
 	
 	
-	buscarCNPJ(cnpj) {
+	buscarCampo(campo) {
 		client({
 			method: 'GET',
-			path: 'api/escritorios/search/findBycnpj?cnpj='+cnpj,
+			path: 'api/escritorios/search/findBy'+campo+'?'+campo+'='+campo,
 			headers: {'Content-Type': 'application/json'}
 		}).then(escritorioCollection => {
 			this.setState({
@@ -107,15 +108,22 @@ class AppAdmin extends React.Component {
 			e.preventDefault();
 			var cnpj = '';
 
-			cnpj = ReactDOM.findDOMNode(this.refs['cnpj']).value.trim();
+			campo = ReactDOM.findDOMNode(this.refs['campo']).value.trim();
 			
-			this.buscarCNPJ(cnpj);
+			this.buscarCampo(cnpj);
 
 			this.setState({ validated: false });
 			this.setState({ alerta: true });
 
 
 		}
+		
+	}
+	
+	
+	handleChange(e) {
+
+		
 		
 	}
 	
@@ -143,17 +151,41 @@ class AppAdmin extends React.Component {
 					<input ref="status" type="hidden" name="status" value="" />
 		
 					<Form.Row>
-			            
-			            
-						<Form.Group as={Col} md="4" controlId="1">
-		
-						</Form.Group>
+
+						
+						<Form.Group as={Col}  md="4" controlId="5">
+								<Form.Label>Campo de Busca</Form.Label>
+								<div key="vinculo">
+									<Form.Control as="select" onChange={this.handleChange} required placeholder="Escolha o Campo de Busca"   ref="campo">
+										<option>Escolha...</option>
+										<option value="cnpj">CNPJ</option>
+										<option value="nome" >Nome do escritório</option>		
+										<option value="status" >Status</option>
+										<option value="nomeRepresentante" >Nome Representante Legal</option>
+
+									</Form.Control>
+									<Form.Control.Feedback type="invalid">
+										Por favor selecione qual o campo de busca.
+									</Form.Control.Feedback>
+								</div>
+							</Form.Group>
+						
 						<Form.Group as={Col} md="7" controlId="2">
 								<Form.Label>CNPJ</Form.Label>
 								<div key="cnpj">
 									<MaskedFormControl required placeholder="xx.xxx.xxx/xxxx-xx"  ref="cnpj" mask='11.111.111/1111-11' />										
 								</div>
 						</Form.Group>
+						
+						
+						<Form.Group as={Col} md="7" controlId="2">
+						<Form.Label>CNPJ</Form.Label>
+						<div key="cnpj">
+								<Form.Control required placeholder="xx.xxx.xxx/xxxx-xx"  ref="cnpj"/>										
+							</div>
+					</Form.Group>
+						
+						
 						
 						<Form.Group as={Col} md="1" controlId="2">
 							<Form.Label>&nbsp; &nbsp;</Form.Label>
