@@ -23,6 +23,13 @@ public interface EscritorioRepository extends PagingAndSortingRepository<Escrito
     List<Escritorio> findAll();
 
     List<Escritorio> findBycnpj(@Param("cnpj") String cnpj);
+    
+    List<Escritorio> findBynome(@Param("nome") String nome);
+    
+    List<Escritorio> findBystatus(@Param("status") String status);
+    
+    List<Escritorio> findBynomeRepresentante(@Param("nomeRepresentante") String nomeRepresentante);
+    
 	
 	@Query("SELECT u FROM Escritorio u WHERE u.id = :id ")
 	Escritorio findEscritorioById(@Param("id") Long id);

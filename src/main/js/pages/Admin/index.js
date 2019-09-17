@@ -17,6 +17,11 @@ import Header from '../../header';
 import { Link } from "react-router-dom";
 const root = '/api';
 
+import { MDBTable, MDBTableBody, MDBTableHead, MDBDataTable } from 'mdbreact';
+
+import MaterialTable from 'material-table';
+
+
 
 class AppAdmin extends React.Component {
 
@@ -26,6 +31,8 @@ class AppAdmin extends React.Component {
 		this.onDelete = this.onDelete.bind(this);
 		this.onUpdate = this.onUpdate.bind(this);
 		this.handleSubmit = this.handleSubmit.bind(this);    
+		this.handleChange = this.handleChange.bind(this);    
+
 	}
 
 	loadFromServer(pageSize) {
@@ -74,10 +81,10 @@ class AppAdmin extends React.Component {
 	
 	
 	
-	buscarCampo(campo) {
+	buscarCampo(campo, busca) {
 		client({
 			method: 'GET',
-			path: 'api/escritorios/search/findBy'+campo+'?'+campo+'='+campo,
+			path: 'api/escritorios/search/findBy'+campo+'?'+campo+'='+busca,
 			headers: {'Content-Type': 'application/json'}
 		}).then(escritorioCollection => {
 			this.setState({
@@ -96,7 +103,6 @@ class AppAdmin extends React.Component {
 	}
 
 	
-	
 	handleSubmit(e) {
 		const form = e.currentTarget;
 		if (form.checkValidity() === false) {
@@ -106,11 +112,12 @@ class AppAdmin extends React.Component {
 
 		} else{
 			e.preventDefault();
-			var cnpj = '';
-
-			campo = ReactDOM.findDOMNode(this.refs['campo']).value.trim();
+			var busca = '';
 			
-			this.buscarCampo(cnpj);
+			
+			busca = ReactDOM.findDOMNode(this.refs['busca']).value.trim()
+			
+			this.buscarCampo(this.state.campo, busca);
 
 			this.setState({ validated: false });
 			this.setState({ alerta: true });
@@ -122,9 +129,7 @@ class AppAdmin extends React.Component {
 	
 	
 	handleChange(e) {
-
-		
-		
+		this.setState({ campo: ReactDOM.findDOMNode(this.refs['campo']).value.trim()});
 	}
 	
 
@@ -168,26 +173,20 @@ class AppAdmin extends React.Component {
 										Por favor selecione qual o campo de busca.
 									</Form.Control.Feedback>
 								</div>
-							</Form.Group>
+						</Form.Group>
+						
+
 						
 						<Form.Group as={Col} md="7" controlId="2">
-								<Form.Label>CNPJ</Form.Label>
-								<div key="cnpj">
-									<MaskedFormControl required placeholder="xx.xxx.xxx/xxxx-xx"  ref="cnpj" mask='11.111.111/1111-11' />										
-								</div>
+							<Form.Label>&nbsp; &nbsp;</Form.Label>
+							<div key="busca">
+									<Form.Control required ref="busca"/>										
+							</div>
 						</Form.Group>
 						
 						
-						<Form.Group as={Col} md="7" controlId="2">
-						<Form.Label>CNPJ</Form.Label>
-						<div key="cnpj">
-								<Form.Control required placeholder="xx.xxx.xxx/xxxx-xx"  ref="cnpj"/>										
-							</div>
-					</Form.Group>
 						
-						
-						
-						<Form.Group as={Col} md="1" controlId="2">
+						<Form.Group as={Col} md="1" controlId="4">
 							<Form.Label>&nbsp; &nbsp;</Form.Label>
 							<div key="botao">
 									<Button variant="primary" type="submit">
@@ -201,6 +200,8 @@ class AppAdmin extends React.Component {
 		
 				</Form>
                 
+				
+				
 
                 <EscritorioList escritorios={this.state.escritorios}
                     links={this.state.links}
@@ -400,38 +401,64 @@ class UpdateDialog extends React.Component {
 class EscritorioList extends React.Component {
 
 	constructor(props) {
-		super(props);		
+		super(props);
+		this.state = {
+			    columns: [
+				      { title: '#', field: 'id' },
+				      { title: 'CNPJ', field: 'cnpj' },
+				      { title: 'Nome do Escritório', field: 'nome' },
+				      { title: 'Telefone', field: 'telefone' },
+				      { title: 'Status', field: 'telefone' },
+
+				    ],
+				    data: Object.assign({}, this.props.escritorios) ,
+				  };
+
     }
-
-
+				      	      
 
 	render() {
-		const escritorios = this.props.escritorios.map(escritorio =>
-			<Escritorio key={escritorio._links.self.href} escritorio={escritorio} attributes={this.props.attributes} onUpdate={this.props.onUpdate} onDelete={this.props.onDelete}/>
-		);
+				
 		
 		return (
-				
-				
-				
-				
+
 			<div>
-		
 			
-				<Table>
-					<tbody>
-						<tr>
-                            <th>#</th>
-							<th>CNPJ</th>
-							<th>Nome do Órgão/Empresa</th>
-							<th>Telefone</th>
-							<th>Status Solicitação</th>
-							<th></th>
-							<th></th>
-						</tr>
-						{escritorios}
-					</tbody>
-				</Table>
+				<MaterialTable
+					title="Editable Example"
+					columns={this.state.columns}
+					data={this.state.data}
+			      editable={{
+			          onRowAdd: newData =>
+			            new Promise(resolve => {
+			              setTimeout(() => {
+			                resolve();
+			                const data = [...state.data];
+			                data.push(newData);
+			                setState({ ...state, data });
+			              }, 600);
+			            }),
+			          onRowUpdate: (newData, oldData) =>
+			            new Promise(resolve => {
+			              setTimeout(() => {
+			                resolve();
+			                const data = [...state.data];
+			                data[data.indexOf(oldData)] = newData;
+			                setState({ ...state, data });
+			              }, 600);
+			            }),
+			          onRowDelete: oldData =>
+			            new Promise(resolve => {
+			              setTimeout(() => {
+			                resolve();
+			                const data = [...state.data];
+			                data.splice(data.indexOf(oldData), 1);
+			                setState({ ...state, data });
+			              }, 600);
+			            }),
+			        }}
+			      />
+
 			</div>
 		)
 	}
@@ -461,9 +488,9 @@ class Escritorio extends React.Component {
                 <td>
                 
                 
-					<UpdateDialog escritorio={this.props.escritorio}
-					  attributes={this.props.attributes}
-					  onUpdate={this.props.onUpdate}/>  
+				<UpdateDialog escritorio={this.props.escritorio}
+				  attributes={this.props.attributes}
+				  onUpdate={this.props.onUpdate}/>  
 					  		
 					
 					
