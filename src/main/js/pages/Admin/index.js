@@ -403,59 +403,81 @@ class EscritorioList extends React.Component {
 	constructor(props) {
 		super(props);
 		this.state = {
-			    columns: [
-				      { title: '#', field: 'id' },
-				      { title: 'CNPJ', field: 'cnpj' },
-				      { title: 'Nome do Escritório', field: 'nome' },
-				      { title: 'Telefone', field: 'telefone' },
-				      { title: 'Status', field: 'telefone' },
-
-				    ],
-				    data: Object.assign({}, this.props.escritorios) ,
-				  };
+		    columns: [
+			      { title: '#', field: 'id' },
+			      { title: 'CNPJ', field: 'cnpj' },
+			      { title: 'Nome do Escritório', field: 'nome' },
+			      { title: 'Telefone', field: 'telefone' },
+			      { title: 'Status', field: 'status' },
+			      { title: 'Atualizar', field: 'atualizar' },
+			    ],      
+	     };
+	     this.handleDelete = this.handleDelete.bind(this);
 
     }
-				      	      
+				      
+
+	handleDelete() {
+		this.props.onDelete(this.props.escritorio);
+	}
+
+	      
 
 	render() {
-				
+		
+		
+		
+		const escritorios = this.props.escritorios.map(function(elem) {
+			  return {
+				  id: elem.id,
+				  cnpj: elem.cnpj,
+				  nome: elem.nome,
+				  telefone: elem.telefone,
+				  status: elem.status,			  } 
+			});
+		
+		
+		
+
 		
 		return (
 
 			<div>
 			
+			
+			
+
+			
+			
+			
+			
 				<MaterialTable
-					title="Editable Example"
+					title=""
 					columns={this.state.columns}
-					data={this.state.data}
-			      editable={{
-			          onRowAdd: newData =>
-			            new Promise(resolve => {
-			              setTimeout(() => {
-			                resolve();
-			                const data = [...state.data];
-			                data.push(newData);
-			                setState({ ...state, data });
-			              }, 600);
-			            }),
-			          onRowUpdate: (newData, oldData) =>
-			            new Promise(resolve => {
-			              setTimeout(() => {
-			                resolve();
-			                const data = [...state.data];
-			                data[data.indexOf(oldData)] = newData;
-			                setState({ ...state, data });
-			              }, 600);
-			            }),
-			          onRowDelete: oldData =>
-			            new Promise(resolve => {
-			              setTimeout(() => {
-			                resolve();
-			                const data = [...state.data];
-			                data.splice(data.indexOf(oldData), 1);
-			                setState({ ...state, data });
-			              }, 600);
-			            }),
+					data={escritorios}
+					editable={{
+					      onRowAdd: newData =>
+			          new Promise(resolve => {
+			            setTimeout(() => {
+			              resolve();
+			              const data = [...state.data];
+			              data.push(newData);
+			              setState({ ...state, data });
+			            }, 600);
+			          }),
+				        onRowUpdate: (newData, oldData) =>
+				          new Promise(resolve => {
+				            setTimeout(() => {
+				              resolve();
+				              const data = [...state.data];
+				              data[data.indexOf(oldData)] = newData;
+				              setState({ ...state, data });
+				            }, 600);
+				          }),
+				        onRowDelete: <Button onClick={this.handleDelete} >Excluir</Button>,
+				      }}
+					options={{
+			          paging: false
 			        }}
 			      />
 
