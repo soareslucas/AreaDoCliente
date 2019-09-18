@@ -157,11 +157,10 @@ class AppAdmin extends React.Component {
 		
 					<Form.Row>
 						<Form.Group as={Col}  md="4" controlId="5">
-								<Form.Label>Campo de Busca</Form.Label>
-								<div key="vinculo">
+								<Form.Label>&nbsp; &nbsp;</Form.Label>
+								<div key="escolha">
 									<Form.Control as="select" onChange={this.handleChange} placeholder="Escolha o Campo de Busca"   ref="campo">
 										<option>Escolha...</option>
-										<option value="cnpj">CNPJ</option>
 										<option value="nome" >Nome do escritório</option>		
 										<option value="status" >Status</option>
 										<option value="nomeRepresentante" >Nome Representante Legal</option>
@@ -184,27 +183,8 @@ class AppAdmin extends React.Component {
 						</Form.Group>					
 					</Form.Row>
 
-					<Form.Row>
-						<Form.Group as={Col}  md="4" controlId="1">
-							<Form.Label>CNPJ</Form.Label>
-							<div key="cnpj">
-								<MaskedFormControl  placeholder="xx.xxx.xxx/xxxx-xx"  ref="cnpj" mask='11.111.111/1111-11' />
-							</div>
-						</Form.Group>
-						<Form.Group as={Col} md="1" controlId="4">
-							<Form.Label>&nbsp; &nbsp;</Form.Label>
-							<div key="botao">
-									<Button variant="primary" type="submit">
-									    Buscar
-									</Button>
-							</div>
-						</Form.Group>						
-					</Form.Row>
-
 				</Form>
-                
-				
-				
+
 
                 <EscritorioList escritorios={this.state.escritorios}
                     links={this.state.links}
