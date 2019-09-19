@@ -25,11 +25,11 @@ public interface EscritorioRepository extends  JpaSpecificationExecutor<Escritor
 
     List<Escritorio> findBycnpj(@Param("cnpj") String cnpj);
         
-    Iterable<Escritorio> findBynomeContainingIgnoreCase(String nome);
+    Iterable<Escritorio> findByNomeContainingIgnoreCase(@Param("nome") String nome);
     
-    Iterable<Escritorio> findBystatusContainingIgnoreCase(String status);
+    Iterable<Escritorio> findByStatusContainingIgnoreCase(@Param("status") String status);
 
-    Iterable<Escritorio> findBynomeRepresentanteContainingIgnoreCase(String nomeRepresentante);
+    Iterable<Escritorio> findByNomeRepresentanteContainingIgnoreCase(@Param("nomeRepresentante") String nomeRepresentante);
 	
 	@Query("SELECT u FROM Escritorio u WHERE u.id = :id ")
 	Escritorio findEscritorioById(@Param("id") Long id);

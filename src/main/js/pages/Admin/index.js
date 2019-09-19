@@ -8,6 +8,8 @@ const Table = require("react-bootstrap/Table")
 const Row = require("react-bootstrap/Row")
 const Col = require("react-bootstrap/Col")
 const Modal = require("react-bootstrap/Modal")
+const Tab = require("react-bootstrap/Tab")
+const Tabs = require("react-bootstrap/Tabs")
 
 import Breadcrumb from 'react-bootstrap/Breadcrumb'
 import follow from '../../follow';
@@ -82,9 +84,13 @@ class AppAdmin extends React.Component {
 	
 	
 	buscarCampo(campo, busca) {
+		
+		
+		var field = campo.charAt(0).toLowerCase() + campo.slice(1)
+		
 		client({
 			method: 'GET',
-			path: 'api/escritorios/search/findBy'+campo+'ContainingIgnoreCase?'+campo+'='+busca,
+			path: 'api/escritorios/search/findBy'+campo+'ContainingIgnoreCase?'+field+'='+busca,
 			headers: {'Content-Type': 'application/json'}
 		}).then(escritorioCollection => {
 			this.setState({
@@ -113,12 +119,8 @@ class AppAdmin extends React.Component {
 		} else{
 			e.preventDefault();
 			var busca = '';
-			
-			
-			busca = ReactDOM.findDOMNode(this.refs['busca']).value.trim()
-			
+			busca = ReactDOM.findDOMNode(this.refs['busca']).value.trim();
 			this.buscarCampo(this.state.campo, busca);
-
 			this.setState({ validated: false });
 			this.setState({ alerta: true });
 
@@ -126,7 +128,6 @@ class AppAdmin extends React.Component {
 		}
 		
 	}
-	
 	
 	handleChange(e) {
 		this.setState({ campo: ReactDOM.findDOMNode(this.refs['campo']).value.trim()});
@@ -144,55 +145,63 @@ class AppAdmin extends React.Component {
                     <Breadcrumb.Item href="/">Início</Breadcrumb.Item>
                     <Breadcrumb.Item active href="Admin">Admin</Breadcrumb.Item>
                 </Breadcrumb>
-                
-                
-                
-				<Form
-				noValidate
-				validated={validated}
-				onSubmit={e => this.handleSubmit(e)} >
-		
-		            <input ref="manager" type="hidden" name="manager" value="" />
-					<input ref="status" type="hidden" name="status" value="" />
-		
-					<Form.Row>
-						<Form.Group as={Col}  md="4" controlId="5">
-								<Form.Label>&nbsp; &nbsp;</Form.Label>
-								<div key="escolha">
-									<Form.Control as="select" onChange={this.handleChange} placeholder="Escolha o Campo de Busca"   ref="campo">
-										<option>Escolha...</option>
-										<option value="nome" >Nome do escritório</option>		
-										<option value="status" >Status</option>
-										<option value="nomeRepresentante" >Nome Representante Legal</option>
-									</Form.Control>
-								</div>
-						</Form.Group>
-						<Form.Group as={Col} md="7" controlId="2">
-							<Form.Label>&nbsp; &nbsp;</Form.Label>
-							<div key="busca">
-									<Form.Control ref="busca"/>										
-							</div>
-						</Form.Group>
-						<Form.Group as={Col} md="1" controlId="4">
-							<Form.Label>&nbsp; &nbsp;</Form.Label>
-							<div key="botao">
-									<Button variant="primary" type="submit">
-									    Buscar
-									</Button>
-							</div>
-						</Form.Group>					
-					</Form.Row>
-
-				</Form>
-
-
-                <EscritorioList escritorios={this.state.escritorios}
-                    links={this.state.links}
-                    pageSize={this.state.pageSize}
-                    onDelete={this.onDelete}
-                	onUpdate={this.onUpdate} 
-                	attributes={this.state.attributes} />
-			</div>
+ 	            
+			    <Tabs defaultActiveKey="ativas" id="uncontrolled-tab-example">
+			        <Tab eventKey="ativas" title="Ativas">
+						<Form
+						noValidate
+						validated={validated}
+						onSubmit={e => this.handleSubmit(e)} >
+				
+				            <input ref="manager" type="hidden" name="manager" value="" />
+							<input ref="status" type="hidden" name="status" value="" />
+				
+							<Form.Row>
+								<Form.Group as={Col}  md="4" controlId="5">
+										<Form.Label>&nbsp; &nbsp;</Form.Label>
+										<div key="escolha">
+											<Form.Control as="select" onChange={this.handleChange} placeholder="Escolha o Campo de Busca"   ref="campo">
+												<option>Escolha o campo de busca...</option>
+												<option value="Nome" >Nome do escritório</option>		
+												<option value="Status" >Status</option>
+												<option value="NomeRepresentante" >Nome Representante Legal</option>
+											</Form.Control>
+										</div>
+								</Form.Group>
+								<Form.Group as={Col} md="7" controlId="2">
+									<Form.Label>&nbsp; &nbsp;</Form.Label>
+									<div key="busca">
+											<Form.Control placeholder="Escreva aqui sua pesquisa..." ref="busca"/>										
+									</div>
+								</Form.Group>
+								<Form.Group as={Col} md="1" controlId="4">
+									<Form.Label>&nbsp; &nbsp;</Form.Label>
+									<div key="botao">
+											<Button variant="primary" type="submit">
+											    Buscar
+											</Button>
+									</div>
+								</Form.Group>					
+							</Form.Row>
+			
+						</Form>
+			
+			            <EscritorioList escritorios={this.state.escritorios}
+			                links={this.state.links}
+			                pageSize={this.state.pageSize}
+			                onDelete={this.onDelete}
+			            	onUpdate={this.onUpdate} 
+			            	attributes={this.state.attributes} />
+			        
+		            </Tab>
+			            
+		            <Tab eventKey="baixadas" title="Baixadas">
+			          Baixadas
+			      	</Tab>
+			
+			    </Tabs>
+			    
+            </div>
 		)
 	}
 }
@@ -203,29 +212,21 @@ class UpdateDialog extends React.Component {
 	constructor(props) {
 		super(props);
 		this.state = {modal:  false};
-		this.handleSubmit = this.handleSubmit.bind(this);
 		this.handleClose = this.handleClose.bind(this);
 		this.handleShow = this.handleShow.bind(this);
-	}
-
-	handleSubmit(e) {
-		e.preventDefault();
-		let updatedEscritorio = {};
-		
-		updatedEscritorio = this.props.escritorio;
-		updatedEscritorio['status'] = ReactDOM.findDOMNode(this.refs['status']).value.trim();
-
-		
-		this.props.onUpdate(this.props.escritorio, updatedEscritorio);
-		this.setState({ modal: false })
 	}
 	
 	handleClose(){
 		 this.setState({ modal: false });
 	}
 	
-	handleShow(){
-		 this.setState({ modal: true });
+	handleShow(e){
+		e.preventDefault();
+		let updatedEscritorio = {};
+		updatedEscritorio = this.props.escritorio;
+		updatedEscritorio['status'] = "Em análise";
+		this.props.onUpdate(this.props.escritorio, updatedEscritorio);
+		this.setState({ modal: true });
 	}
 
 
@@ -237,7 +238,7 @@ class UpdateDialog extends React.Component {
 		return (
 			<div key={dialogId}>
 			
-				<Button onClick={this.handleShow}>Detalhes/Atualizar</Button>
+				<Button onClick={this.handleShow}> <i className="fas fa-search-plus"></i> </Button>
 				
 				<form>
 					<Modal show={modal} onHide={this.handleClose} size="lg">
@@ -257,7 +258,7 @@ class UpdateDialog extends React.Component {
 									<h5> {this.props.escritorio['nome']} </h5> 			
 								</Form.Group>
 							</Form.Row>
-						
+							
 							<Form.Row>
 								<Form.Group as={Col}   md="12" controlId="3">
 									<Form.Label>Endereço</Form.Label>
@@ -281,12 +282,10 @@ class UpdateDialog extends React.Component {
 									<Form.Label>CPF do Representante Legal</Form.Label>
 									<h5> {this.props.escritorio['cpf']} </h5> 			
 								</Form.Group>
-						
 								<Form.Group as={Col}  md="4" controlId="6">
 									<Form.Label>Telefone</Form.Label>
 									<h5> {this.props.escritorio['telefone']} </h5> 			
 								</Form.Group>
-						
 								<Form.Group as={Col}   md="4" controlId="7">
 									<Form.Label>Celular</Form.Label>
 									<h5> {this.props.escritorio['celular']} </h5> 			
@@ -298,15 +297,12 @@ class UpdateDialog extends React.Component {
 									<Form.Label>E-mail</Form.Label>
 									<h5> {this.props.escritorio['email']} </h5> 			
 								</Form.Group>
-								
-								
 								<Form.Group as={Col}  md="4">
 									<Form.Label> Arquivo Comprobatório </Form.Label>
 									<h5>
 										<a href={'/downloadFile/'+this.props.escritorio['id'] }> Download Arquivo </a>
 									</h5> 
-								</Form.Group>
-								
+								</Form.Group>								
 						
 								<Form.Group as={Col}  md="4">
 									<Form.Label> Possui Advogado Estabelecido? </Form.Label>
@@ -348,26 +344,13 @@ class UpdateDialog extends React.Component {
 										</div>
 									</Form.Group>
 								</Form.Row>
+								
 							</div>							
-							
-							<Form.Row>
-								<Form.Group as={Col}  md="4" controlId="6">
-									<Form.Label>Status da Solicitação</Form.Label>
-									<div key="Status">
-										<Form.Control  type="text" defaultValue={this.props.escritorio['status']}  ref="status"/>                                                                                                                                  
-									</div>
-								</Form.Group>
-							</Form.Row>		
-
 						</Modal.Body>
-						
 						
 						<Modal.Footer>
 				          <Button variant="secondary" onClick={this.handleClose}>
 				            Fechar
-				          </Button>
-				          <Button variant="primary" onClick={this.handleSubmit}>
-				            Salvar
 				          </Button>
 				        </Modal.Footer>
 				      </Modal>
@@ -385,24 +368,28 @@ class EscritorioList extends React.Component {
 
 	constructor(props) {
 		super(props);		
+		this.mostraAlert = this.mostraAlert.bind(this);
+		this.state = {baixadoSucesso:  false};
     }
+	
+	
+	mostraAlert() {
+		this.setState({ baixadoSucesso: true });
 
-
+	}
 
 	render() {
 		const escritorios = this.props.escritorios.map(escritorio =>
-			<Escritorio key={escritorio._links.self.href} escritorio={escritorio} attributes={this.props.attributes} onUpdate={this.props.onUpdate} onDelete={this.props.onDelete}/>
+			<Escritorio key={escritorio._links.self.href} escritorio={escritorio} attributes={this.props.attributes} mostraAlert={this.mostraAlert} onUpdate={this.props.onUpdate} onDelete={this.props.onDelete}/>
 		);
 		
 		return (
 				
-				
-				
-				
 			<div>
-		
-			
-				<Table>
+	
+		    	{this.state.baixadoSucesso && <div className="alert alert-success" >Solicitação Baixada!</div>}	
+
+		    	<Table>
 					<tbody>
 						<tr>
                             <th>#</th>
@@ -410,8 +397,8 @@ class EscritorioList extends React.Component {
 							<th>Nome do Órgão/Empresa</th>
 							<th>Telefone</th>
 							<th>Status Solicitação</th>
-							<th></th>
-							<th></th>
+							<th>Detalhes</th>
+							<th>Baixar</th>
 						</tr>
 						{escritorios}
 					</tbody>
@@ -426,36 +413,38 @@ class Escritorio extends React.Component {
 
 	constructor(props) {
 		super(props);
-		this.handleDelete = this.handleDelete.bind(this);
+		this.handleBaixar = this.handleBaixar.bind(this);
+	}
+	
+	
+	handleBaixar() {
+		let updatedEscritorio = {};
+		updatedEscritorio = this.props.escritorio;
+		updatedEscritorio['status'] = "Baixado";
+		this.props.onUpdate(this.props.escritorio, updatedEscritorio);		
+		this.props.mostraAlert();
 	}
 
-	handleDelete() {
-		this.props.onDelete(this.props.escritorio);
-	}
 
 	render() {
 		return (
-			<tr>
-
-                <td>{this.props.escritorio.id}</td>
-				<td>{this.props.escritorio.cnpj}</td>
-                <td>{this.props.escritorio.nome}</td>
-                <td>{this.props.escritorio.telefone}</td>
-                <td>{this.props.escritorio.status}</td>
-                <td>
-                
-                
-				<UpdateDialog escritorio={this.props.escritorio}
-				  attributes={this.props.attributes}
-				  onUpdate={this.props.onUpdate}/>  
-					  		
-					
-					
-                </td>
-				<td>
-					<Button onClick={this.handleDelete}>Excluir</Button>
-				</td>
-			</tr>
+				
+				<tr>
+	
+	                <td>{this.props.escritorio.id}</td>
+					<td>{this.props.escritorio.cnpj}</td>
+	                <td>{this.props.escritorio.nome}</td>
+	                <td>{this.props.escritorio.telefone}</td>
+	                <td>{this.props.escritorio.status}</td>
+	                <td>  
+						<UpdateDialog escritorio={this.props.escritorio}
+						  attributes={this.props.attributes}
+						  onUpdate={this.props.onUpdate}/>  
+	                </td>
+					<td>
+						<Button alt="Baixar" onClick={this.handleBaixar}> <i className="fas fa-check-square"></i> </Button>
+					</td>
+				</tr>
 		)
 	}
 }

@@ -103,7 +103,7 @@ class Login extends Component {
 							<Form.Label>&nbsp; &nbsp;</Form.Label>
 							<div key="botao">
 									<Button onClick={this.loginClicked} variant="primary"  type="submit">
-										Buscar 
+										Entrar 
 									</Button>
 							</div>
 						</Form.Group>	

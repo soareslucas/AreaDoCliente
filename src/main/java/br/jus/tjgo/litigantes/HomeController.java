@@ -38,13 +38,10 @@ public class HomeController {
         
     	try {
             byte [] uploadedFiles = file.getBytes();
-            
-            System.out.println(file.getName());
-            
             request.getSession().setAttribute("uploadedFiles", uploadedFiles);
             
         } catch (IOException e) {
-            throw new RuntimeException("Can't read file " + file.getOriginalFilename(), e);
+            throw new RuntimeException("Não foi possível ler o arquivo " + file.getOriginalFilename(), e);
         }
 
         return "{\"propriedade\": \"ok\"}";
