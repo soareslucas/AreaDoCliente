@@ -137,6 +137,10 @@ class AppAdmin extends React.Component {
 	render() {
 		
 		const { validated } = this.state;
+		const statusBaixadas = 'Baixado';
+		const statusEmAndamento = 'Em Andamento';
+
+		
 
 		return (
 			<div>
@@ -191,11 +195,24 @@ class AppAdmin extends React.Component {
 			                pageSize={this.state.pageSize}
 			                onDelete={this.onDelete}
 			            	onUpdate={this.onUpdate} 
-			            	attributes={this.state.attributes} />
+			            	attributes={this.state.attributes}
+		            		status={statusEmAndamento}
+
+			            />
 			        
 		            </Tab>
 			            
 		            <Tab eventKey="baixadas" title="Baixadas">
+		            
+			            <EscritorioList escritorios={this.state.escritorios}
+		                links={this.state.links}
+		                pageSize={this.state.pageSize}
+		                onDelete={this.onDelete}
+		            	onUpdate={this.onUpdate} 
+		            	attributes={this.state.attributes}  
+		            	status={statusBaixadas}
+		            	/>
+
 			          Baixadas
 			      	</Tab>
 			
@@ -375,13 +392,18 @@ class EscritorioList extends React.Component {
 	
 	mostraAlert() {
 		this.setState({ baixadoSucesso: true });
-
 	}
 
 	render() {
-		const escritorios = this.props.escritorios.map(escritorio =>
-			<Escritorio key={escritorio._links.self.href} escritorio={escritorio} attributes={this.props.attributes} mostraAlert={this.mostraAlert} onUpdate={this.props.onUpdate} onDelete={this.props.onDelete}/>
-		);
+		const escritorios = this.props.escritorios.map(escritorio =>{
+				if(this.props.status == 'Em Andamento' && escritorio.status != 'Baixado'){
+					return  <Escritorio key={escritorio._links.self.href} escritorio={escritorio} attributes={this.props.attributes} mostraAlert={this.mostraAlert} onUpdate={this.props.onUpdate} onDelete={this.props.onDelete}/>
+				}else{
+					if(escritorio.status == this.props.status)
+						return  <Escritorio key={escritorio._links.self.href} escritorio={escritorio} attributes={this.props.attributes} mostraAlert={this.mostraAlert} onUpdate={this.props.onUpdate} onDelete={this.props.onDelete}/>
+				}
+
+		});
 		
 		return (
 				
