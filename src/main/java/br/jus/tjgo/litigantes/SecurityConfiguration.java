@@ -15,6 +15,7 @@ import org.springframework.security.web.authentication.SimpleUrlAuthenticationFa
 import org.springframework.security.web.authentication.SimpleUrlAuthenticationSuccessHandler;
 
 import br.jus.tjgo.litigantes.model.*;
+import br.jus.tjgo.litigantes.service.SpringDataJpaUserDetailsService;
 
 @Configuration
 @EnableWebSecurity

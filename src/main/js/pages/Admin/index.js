@@ -81,10 +81,7 @@ class AppAdmin extends React.Component {
 		this.loadFromServer(this.state.pageSize);
 	}
 	
-	
-	
 	buscarCampo(campo, busca) {
-		
 		
 		var field = campo.charAt(0).toLowerCase() + campo.slice(1)
 		
@@ -123,8 +120,6 @@ class AppAdmin extends React.Component {
 			this.buscarCampo(this.state.campo, busca);
 			this.setState({ validated: false });
 			this.setState({ alerta: true });
-
-
 		}
 		
 	}
@@ -139,8 +134,6 @@ class AppAdmin extends React.Component {
 		const { validated } = this.state;
 		const statusBaixadas = 'Baixado';
 		const statusEmAndamento = 'Em Andamento';
-
-		
 
 		return (
 			<div>
@@ -212,8 +205,6 @@ class AppAdmin extends React.Component {
 		            	attributes={this.state.attributes}  
 		            	status={statusBaixadas}
 		            	/>
-
-			          Baixadas
 			      	</Tab>
 			
 			    </Tabs>
@@ -239,10 +230,12 @@ class UpdateDialog extends React.Component {
 	
 	handleShow(e){
 		e.preventDefault();
-		let updatedEscritorio = {};
-		updatedEscritorio = this.props.escritorio;
-		updatedEscritorio['status'] = "Em análise";
-		this.props.onUpdate(this.props.escritorio, updatedEscritorio);
+		if(this.props.status != 'Baixado'){
+			let updatedEscritorio = {};
+			updatedEscritorio = this.props.escritorio;
+			updatedEscritorio['status'] = "Em análise";
+			this.props.onUpdate(this.props.escritorio, updatedEscritorio);
+		}
 		this.setState({ modal: true });
 	}
 
@@ -397,12 +390,11 @@ class EscritorioList extends React.Component {
 	render() {
 		const escritorios = this.props.escritorios.map(escritorio =>{
 				if(this.props.status == 'Em Andamento' && escritorio.status != 'Baixado'){
-					return  <Escritorio key={escritorio._links.self.href} escritorio={escritorio} attributes={this.props.attributes} mostraAlert={this.mostraAlert} onUpdate={this.props.onUpdate} onDelete={this.props.onDelete}/>
+					return  <Escritorio key={escritorio._links.self.href} escritorio={escritorio} attributes={this.props.attributes} mostraAlert={this.mostraAlert} onUpdate={this.props.onUpdate} onDelete={this.props.onDelete}  status={this.props.status} />
 				}else{
 					if(escritorio.status == this.props.status)
-						return  <Escritorio key={escritorio._links.self.href} escritorio={escritorio} attributes={this.props.attributes} mostraAlert={this.mostraAlert} onUpdate={this.props.onUpdate} onDelete={this.props.onDelete}/>
+						return  <Escritorio key={escritorio._links.self.href} escritorio={escritorio} attributes={this.props.attributes} mostraAlert={this.mostraAlert} onUpdate={this.props.onUpdate} onDelete={this.props.onDelete} status={this.props.status} />
 				}
-
 		});
 		
 		return (
@@ -420,7 +412,8 @@ class EscritorioList extends React.Component {
 							<th>Telefone</th>
 							<th>Status Solicitação</th>
 							<th>Detalhes</th>
-							<th>Baixar</th>
+							
+							{(this.props.status != 'Baixado') &&  <th>Baixar</th>}	
 						</tr>
 						{escritorios}
 					</tbody>
@@ -461,11 +454,14 @@ class Escritorio extends React.Component {
 	                <td>  
 						<UpdateDialog escritorio={this.props.escritorio}
 						  attributes={this.props.attributes}
-						  onUpdate={this.props.onUpdate}/>  
+						  onUpdate={this.props.onUpdate}
+						  status={this.props.status}
+						/>  
 	                </td>
-					<td>
-						<Button alt="Baixar" onClick={this.handleBaixar}> <i className="fas fa-check-square"></i> </Button>
-					</td>
+						
+					{(this.props.status != 'Baixado') && <td> <Button alt="Baixar" onClick={this.handleBaixar}> <i className="fas fa-check-square"></i> </Button> </td> }	
+					
+					
 				</tr>
 		)
 	}
