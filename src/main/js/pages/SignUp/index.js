@@ -52,14 +52,33 @@ class CreateDialog extends React.Component {
 	
 	constructor(props) {
 		super(props);
-		this.handleSubmit = this.handleSubmit.bind(this);    
-		this.state = { validated: false, alerta: false, possuiAdvogado: false, mostra: false };    
+		this.state = { validated: false, alerta: false, possuiAdvogado: false, mostra: false , escritorios: [], existe: false};    
 		this.onPossuiAdvogadoTrue = this.onPossuiAdvogadoTrue.bind(this);
 		this.onPossuiAdvogadoFalse = this.onPossuiAdvogadoFalse.bind(this);
 		this.handleUploadFile = this.handleUploadFile.bind(this);
+		this.verificaCnpj = this.verificaCnpj.bind(this);
+		this.handleSubmit = this.handleSubmit.bind(this);    
 
 	}
 	
+	verificaCnpj(cnpj) {
+		client({
+			method: 'GET',
+			path: 'api/escritorios/search/findBycnpj?cnpj='+cnpj,
+			headers: {'Content-Type': 'application/json'}
+		}).then(escritorioCollection => {
+			this.setState({
+				escritorios: escritorioCollection.entity._embedded.escritorios});
+			return escritorioCollection.entity._embedded.escritorios;
+		}).done( escritorios=>{			
+			if(escritorios.length == 0){
+				this.setState({ existe: false});
+			}else{
+				this.setState({ existe: true});
+			}
+		});	
+	}
+
 	onPossuiAdvogadoTrue()	{
 		this.setState({ possuiAdvogado: true });
 		this.setState({ mostra: true});
@@ -87,10 +106,8 @@ class CreateDialog extends React.Component {
         }).catch(function (error) {
             console.log(error);
             if (error.response) {
-                //HTTP error happened
                 console.log("Upload error. HTTP error/status code=",error.response.status);
             } else {
-                //some other error happened
                console.log("Upload error. HTTP error/status code=",error.message);
             }
         });
@@ -98,59 +115,69 @@ class CreateDialog extends React.Component {
 
 
 	handleSubmit(e) {
+		
+		e.preventDefault();
 		const form = e.currentTarget;
-		if (form.checkValidity() === false) {
-			e.preventDefault();
-			e.stopPropagation();
-			this.setState({ validated: true });
 
-		} else{
-			e.preventDefault();
-			const newEscritorio = {};
-
-			console.log(ReactDOM.findDOMNode(this.refs['recebeCitacao']).checked);
-			console.log(ReactDOM.findDOMNode(this.refs['possuiAdvogado']).value);
+		var cnpj = '';
+		cnpj = ReactDOM.findDOMNode(this.refs['cnpj']).value.trim();
+		this.verificaCnpj(cnpj);
+		
+		if(!this.state.existe){
 			
-			newEscritorio['manager'] = ReactDOM.findDOMNode(this.refs['manager']).value.trim();
-			newEscritorio['status'] = ReactDOM.findDOMNode(this.refs['status']).value.trim();
-			newEscritorio['cnpj'] = ReactDOM.findDOMNode(this.refs['cnpj']).value.trim();
-			newEscritorio['nome'] = ReactDOM.findDOMNode(this.refs['nome']).value.trim();
-			newEscritorio['endereco'] = ReactDOM.findDOMNode(this.refs['endereco']).value.trim();
-			newEscritorio['nomeRepresentante'] = ReactDOM.findDOMNode(this.refs['nomeRepresentante']).value.trim();
-			newEscritorio['vinculo'] = ReactDOM.findDOMNode(this.refs['vinculo']).value.trim();
-			newEscritorio['cpf'] = ReactDOM.findDOMNode(this.refs['cpf']).value.trim();
-			newEscritorio['celular'] = ReactDOM.findDOMNode(this.refs['celular']).value.trim();
-			newEscritorio['telefone'] = ReactDOM.findDOMNode(this.refs['telefone']).value.trim();
-			newEscritorio['email'] = ReactDOM.findDOMNode(this.refs['email']).value.trim();
-			newEscritorio['possuiAdvogado'] = ReactDOM.findDOMNode(this.refs['possuiAdvogado']).value.trim();
-			newEscritorio['advogadoMaster'] = ReactDOM.findDOMNode(this.refs['advogadoMaster']).value.trim();
-			newEscritorio['emailMaster'] = ReactDOM.findDOMNode(this.refs['emailMaster']).value.trim();
-			newEscritorio['identificacaoMaster'] = ReactDOM.findDOMNode(this.refs['identificacaoMaster']).value.trim();
-			newEscritorio['recebeCitacao'] = ReactDOM.findDOMNode(this.refs['recebeCitacao']).checked
-			
-			this.props.onCreate(newEscritorio);
+			if (form.checkValidity() === false) {
+				e.preventDefault();
+				e.stopPropagation();
+				this.setState({ validated: true });
 
-			this.setState({ validated: false });
-			this.setState({ alerta: true });
-			
-			ReactDOM.findDOMNode(this.refs['manager']).value = '';
-			ReactDOM.findDOMNode(this.refs['status']).value = '';
-			ReactDOM.findDOMNode(this.refs['cnpj']).value = '';
-			ReactDOM.findDOMNode(this.refs['nome']).value = '';
-			ReactDOM.findDOMNode(this.refs['endereco']).value = '';
-			ReactDOM.findDOMNode(this.refs['nomeRepresentante']).value = '';
-			ReactDOM.findDOMNode(this.refs['vinculo']).value = '';
-			ReactDOM.findDOMNode(this.refs['cpf']).value = '';
-			ReactDOM.findDOMNode(this.refs['celular']).value = '';
-			ReactDOM.findDOMNode(this.refs['telefone']).value = '';
-			ReactDOM.findDOMNode(this.refs['email']).value = '';
-			ReactDOM.findDOMNode(this.refs['possuiAdvogado']).value = '';
-			ReactDOM.findDOMNode(this.refs['advogadoMaster']).value = '';
-			ReactDOM.findDOMNode(this.refs['emailMaster']).value = '';
-			ReactDOM.findDOMNode(this.refs['identificacaoMaster']).value = '';
-			ReactDOM.findDOMNode(this.refs['recebeCitacao']).checked = false;
+			} else{
+				const newEscritorio = {};
 
+				console.log(ReactDOM.findDOMNode(this.refs['recebeCitacao']).checked);
+				console.log(ReactDOM.findDOMNode(this.refs['possuiAdvogado']).value);
+				
+				newEscritorio['manager'] = ReactDOM.findDOMNode(this.refs['manager']).value.trim();
+				newEscritorio['status'] = ReactDOM.findDOMNode(this.refs['status']).value.trim();
+				newEscritorio['cnpj'] = ReactDOM.findDOMNode(this.refs['cnpj']).value.trim();
+				newEscritorio['nome'] = ReactDOM.findDOMNode(this.refs['nome']).value.trim();
+				newEscritorio['endereco'] = ReactDOM.findDOMNode(this.refs['endereco']).value.trim();
+				newEscritorio['nomeRepresentante'] = ReactDOM.findDOMNode(this.refs['nomeRepresentante']).value.trim();
+				newEscritorio['vinculo'] = ReactDOM.findDOMNode(this.refs['vinculo']).value.trim();
+				newEscritorio['cpf'] = ReactDOM.findDOMNode(this.refs['cpf']).value.trim();
+				newEscritorio['celular'] = ReactDOM.findDOMNode(this.refs['celular']).value.trim();
+				newEscritorio['telefone'] = ReactDOM.findDOMNode(this.refs['telefone']).value.trim();
+				newEscritorio['email'] = ReactDOM.findDOMNode(this.refs['email']).value.trim();
+				newEscritorio['possuiAdvogado'] = ReactDOM.findDOMNode(this.refs['possuiAdvogado']).value.trim();
+				newEscritorio['advogadoMaster'] = ReactDOM.findDOMNode(this.refs['advogadoMaster']).value.trim();
+				newEscritorio['emailMaster'] = ReactDOM.findDOMNode(this.refs['emailMaster']).value.trim();
+				newEscritorio['identificacaoMaster'] = ReactDOM.findDOMNode(this.refs['identificacaoMaster']).value.trim();
+				newEscritorio['recebeCitacao'] = ReactDOM.findDOMNode(this.refs['recebeCitacao']).checked
+				
+				this.props.onCreate(newEscritorio);
+
+				this.setState({ validated: false });
+				this.setState({ alerta: true });
+				
+				ReactDOM.findDOMNode(this.refs['manager']).value = '';
+				ReactDOM.findDOMNode(this.refs['status']).value = '';
+				ReactDOM.findDOMNode(this.refs['cnpj']).value = '';
+				ReactDOM.findDOMNode(this.refs['nome']).value = '';
+				ReactDOM.findDOMNode(this.refs['endereco']).value = '';
+				ReactDOM.findDOMNode(this.refs['nomeRepresentante']).value = '';
+				ReactDOM.findDOMNode(this.refs['vinculo']).value = '';
+				ReactDOM.findDOMNode(this.refs['cpf']).value = '';
+				ReactDOM.findDOMNode(this.refs['celular']).value = '';
+				ReactDOM.findDOMNode(this.refs['telefone']).value = '';
+				ReactDOM.findDOMNode(this.refs['email']).value = '';
+				ReactDOM.findDOMNode(this.refs['possuiAdvogado']).value = '';
+				ReactDOM.findDOMNode(this.refs['advogadoMaster']).value = '';
+				ReactDOM.findDOMNode(this.refs['emailMaster']).value = '';
+				ReactDOM.findDOMNode(this.refs['identificacaoMaster']).value = '';
+				ReactDOM.findDOMNode(this.refs['recebeCitacao']).checked = false;
+
+			}
 		}
+
 
 
 
@@ -182,6 +209,9 @@ class CreateDialog extends React.Component {
 		            </Alert>
 		
 		        </div>
+		        
+			    {this.state.existe && <div className="alert alert-warning">CNPJ já possui solicitação de cadastro!</div>}
+
 
 
 				<Form
