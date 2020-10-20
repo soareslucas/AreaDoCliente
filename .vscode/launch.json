@@ -1,0 +1,24 @@
+{
+    "configurations": [
+        {
+            "type": "java",
+            "name": "Spring Boot-ReactAndSpringDataRestApplication<AreaDoCliente>",
+            "request": "launch",
+            "cwd": "${workspaceFolder}",
+            "console": "internalConsole",
+            "mainClass": "br.jus.tjgo.litigantes.ReactAndSpringDataRestApplication",
+            "projectName": "AreaDoCliente",
+            "args": ""
+        },
+        {
+            "type": "java",
+            "name": "Spring Boot-ReactAndSpringDataRestApplication<citacoes>",
+            "request": "launch",
+            "cwd": "${workspaceFolder}",
+            "console": "internalConsole",
+            "mainClass": "br.jus.tjgo.litigantes.ReactAndSpringDataRestApplication",
+            "projectName": "citacoes",
+            "args": ""
+        }
+    ]
+}

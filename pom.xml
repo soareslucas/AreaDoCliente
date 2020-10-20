@@ -12,10 +12,10 @@
 	</parent>
 	
 	<groupId>br.jus.tjgo</groupId>
-	<artifactId>sistemaDeCitacoes</artifactId>
+	<artifactId>AreaDoCliente</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
 	<packaging>war</packaging>
-	<name>Sistema de Citações</name>
+	<name>Area do Cliente</name>
 
 	<properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
@@ -109,25 +109,26 @@
 					<installDirectory>target</installDirectory>
 				</configuration>
 				<executions>
-<!-- 					<execution> -->
-<!-- 						<id>install node and npm</id> -->
-<!-- 						<goals> -->
-<!-- 							<goal>install-node-and-npm</goal> -->
-<!-- 						</goals> -->
-<!-- 						<configuration> -->
-<!-- 							<nodeVersion>v10.15.3</nodeVersion> -->
-<!-- 							<npmVersion>6.4.1</npmVersion> -->
-<!-- 						</configuration> -->
-<!-- 					</execution> -->
-<!-- 					<execution> -->
-<!-- 						<id>npm install</id> -->
-<!-- 						<goals> -->
-<!-- 							<goal>npm</goal> -->
-<!-- 						</goals> -->
-<!-- 						<configuration> -->
-<!-- 							<arguments>install</arguments> -->
-<!-- 						</configuration> -->
-<!-- 					</execution> -->
+ 					<execution>
+ 						<id>install node and npm</id>
+ 						<goals>
+ 							<goal>install-node-and-npm</goal> 
+ 						</goals>
+ 						<configuration> 
+ 							<nodeVersion>v10.15.3</nodeVersion>
+ 							<npmVersion>6.4.1</npmVersion> 
+ 						</configuration>
+ 					</execution> 
+ 					<execution> 
+ 						<id>npm install</id>
+ 						<goals>
+ 							<goal>npm</goal>
+ 						</goals>
+ 						<configuration>
+ 							<arguments>install</arguments>
+ 						</configuration> 
+ 					</execution> 
+					 
 					<execution>
 						<id>webpack build</id>
 						<goals>

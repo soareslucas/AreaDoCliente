@@ -5,6 +5,6 @@
         <wb-resource deploy-path="/WEB-INF/classes" source-path="/src/main/java"/>
         <wb-resource deploy-path="/WEB-INF/classes" source-path="/src/main/resources"/>
         <property name="java-output-path" value="/citacoes/target/classes"/>
-        <property name="context-root" value="sistemaDeCitacoes"/>
+        <property name="context-root" value="AreaDoCliente"/>
     </wb-module>
 </project-modules>
