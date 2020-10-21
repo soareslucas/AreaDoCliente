@@ -140,7 +140,7 @@
             <plugin>
                 <groupId>com.heroku.sdk</groupId>
                 <artifactId>heroku-maven-plugin</artifactId>
-                <version>{version}</version>
+                <version>3.0.4</version>
                 <configuration>
                     <appName>heroku-demo-stackabuse</appName>
                     <includeTarget>false</includeTarget>
@@ -148,10 +148,6 @@
                         <include>${project.build.directory}/${project.build.finalName}.jar</include>
                     </includes>
                     <jdkVersion>1.8</jdkVersion>
-                    <processTypes>
-                        <web>java $JAVA_OPTS -jar
-                            ${project.build.directory}/${project.build.finalName}.jar</web>
-                    </processTypes>
                 </configuration>
             </plugin>
 
