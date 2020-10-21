@@ -163,7 +163,7 @@
 			<artifactId>heroku-maven-plugin</artifactId>
 			<configuration>
 				<processTypes>
-				<web>mvn spring-boot:run
+				<web>mvn spring-boot:run </web>
 				</processTypes>
 			</configuration>
 			</plugin>
