@@ -92,7 +92,6 @@
 
 	<build>
 		<plugins>
-
 			<!-- tag::frontend-maven-plugin[] -->
 			<plugin>
 				<groupId>com.github.eirslett</groupId>
@@ -133,10 +132,16 @@
 			<!-- end::frontend-maven-plugin[] -->
 
 
+
 			<plugin>
-                <groupId>org.springframework.boot</groupId>
-                <artifactId>spring-boot-maven-plugin</artifactId>
-            </plugin>
+				<groupId>org.springframework.boot</groupId>
+				<artifactId>spring-boot-maven-plugin</artifactId>
+				<configuration>
+				    <addResources>true</addResources>
+				</configuration>
+			</plugin>
+
+
             <plugin>
                 <groupId>com.heroku.sdk</groupId>
                 <artifactId>heroku-maven-plugin</artifactId>
