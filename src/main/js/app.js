@@ -18,11 +18,7 @@ class Index extends React.Component {
 	render() {
 		return (
             <>
-                <div  className="bg-gray">
-                    <p>
-                        Este é o portal para solicitação de cadastro junto ao Tribunal de Justiça de Goiás para grandes litigantes e seus escritórios jurídicos. Inicie sua solicitação abaixo! 
-                    </p>
-                </div>
+
 
                 <div>
                     <div className="info-box">
@@ -39,7 +35,7 @@ class Index extends React.Component {
                             <i className="far fa-flag"></i>
                         </span>
                         <div className="info-box-content">
-                            <span className="info-box-number"><Link to="/consulta">Acompanhar Solicitação de Cadastro </Link> </span>
+                            <span className="info-box-number"><Link to="/consulta"> Entre em sua Conta </Link> </span>
                         </div>
                     </div>
                 </div>
