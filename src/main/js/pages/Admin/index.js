@@ -15,17 +15,18 @@ import Breadcrumb from 'react-bootstrap/Breadcrumb'
 import follow from '../../follow';
 import client from '../../client';
 import AuthenticationService from '../../service/AuthenticationService';
-import Header from '../../header';
+import Header from '../../common/header';
 import { Link } from "react-router-dom";
 const root = '/api';
 
 import { MDBTable, MDBTableBody, MDBTableHead, MDBDataTable } from 'mdbreact';
 
 import MaterialTable from 'material-table';
+import Wrapper from '../../common/wrapper';
 
 
 
-class AppAdmin extends React.Component {
+class App extends React.Component {
 
 	constructor(props) {
 		super(props);
@@ -473,9 +474,9 @@ class Admin extends Component {
 
   render() {
     return (
-                <Header>
-                    <AppAdmin/>
-                </Header>
+		<Wrapper>
+			<App/>
+		</Wrapper>
     );
   }
 }
