@@ -11,14 +11,15 @@ import MaskedFormControl from 'react-bootstrap-maskedinput';
 import follow from '../../follow';
 import client from '../../client';
 import { Link } from "react-router-dom";
-import Header from '../../header';
+import Header from '../../common/header';
 import Breadcrumb from 'react-bootstrap/Breadcrumb'
 import axios from 'axios'
+import Wrapper from "../../common/wrapper";
 
 
 const root = '/api';
 
-class AppSignUp extends React.Component {
+class App extends React.Component {
 
 	constructor(props) {
 		super(props);
@@ -453,9 +454,9 @@ class SignUp extends Component {
 
   render() {
     return (
-                <Header>
-                    <AppSignUp/>
-                </Header>
+                <Wrapper>
+                    <App/>
+                </Wrapper>
     );
   }
 }

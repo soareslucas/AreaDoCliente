@@ -16,12 +16,12 @@ const InputGroup = require("react-bootstrap/InputGroup")
 import follow from '../../follow';
 import client from '../../client';
 import { Link } from "react-router-dom";
-import Header from '../../header';
+import Header from '../../common/header';
 import Breadcrumb from 'react-bootstrap/Breadcrumb'
 
 
 const root = '/api';
-
+import Wrapper from '../../common/wrapper';
 
 class Escritorio extends React.Component {
 
@@ -218,9 +218,9 @@ class Consulta extends Component {
 
   render() {
     return (
-                <Header>
-                    <App/>
-                </Header>
+		<Wrapper>
+			<App/>
+		</Wrapper>
     );
   }
 }

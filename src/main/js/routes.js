@@ -3,7 +3,7 @@ import { BrowserRouter, Route, Switch, Redirect } from "react-router-dom";
 import SignUp from "./pages/SignUp";
 import Admin from "./pages/Admin";
 import Consulta from "./pages/Consulta";
-import Login from './login';
+import Login from "./pages/Login";
 import App from './app';
 import AuthenticatedRoute from './AuthenticatedRoute'
 
