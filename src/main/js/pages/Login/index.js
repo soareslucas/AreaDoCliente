@@ -4,11 +4,14 @@ import Breadcrumb from 'react-bootstrap/Breadcrumb';
 import Form from 'react-bootstrap/Form';
 import Col from 'react-bootstrap/Col';
 const Button = require("react-bootstrap/Button");
+//import { createBrowserHistory } from 'history'
+
+import { withRouter} from 'react-router-dom';
+
 
 import Wrapper from '../../common/wrapper';
 
-
-class App extends Component {
+class Login extends Component {
 
 	constructor(props) {
 		super(props)
@@ -22,6 +25,8 @@ class App extends Component {
 
 		this.handleChange = this.handleChange.bind(this)
 		this.loginClicked = this.loginClicked.bind(this)
+
+
 	}
 
 	handleChange(event) {
@@ -35,25 +40,43 @@ class App extends Component {
 
 	loginClicked() {
 
+
+		//const history = createBrowserHistory()
+
+		
 		AuthenticationService
 			.executeBasicAuthenticationService(this.state.username, this.state.password)
 			.then(response => {
-				console.log(response);
+
+				console.log(response)
+
 				AuthenticationService.registerSuccessfulLogin(this.state.username, this.state.password)
+
 				this.props.history.push('/admin')
+
 				this.setState({ showSuccessMessage: true })
 
-			}).catch(() => {
+
+			})
+			.catch(response =>{
+
+				console.log(response)
 				this.setState({ showSuccessMessage: false })
 				this.setState({ hasLoginFailed: true })
+				console.log('teste 3');
 			})
+
+
+
 
 
 	}
 
 	render() {
+
+
 		return (
-			<>
+			<Wrapper>
 				<Breadcrumb>
 					<Breadcrumb.Item href="/">Início</Breadcrumb.Item>
 					<Breadcrumb.Item active href="Login">Admin</Breadcrumb.Item>
@@ -122,31 +145,14 @@ class App extends Component {
 						</div>
 					</div>
 				</div>
-			</>
+			</Wrapper>
 		)
 	}
 }
 
 
-class Login extends Component {
-
-
-	render() {
-		return (
-
-
-			<Wrapper>
-				<App />
-			</Wrapper>
-
-
-
-		);
-	}
-}
 
 
 
 
-
-export default Login;
+export default withRouter(Login);

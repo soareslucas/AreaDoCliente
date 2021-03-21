@@ -18,8 +18,8 @@ public class SpringDataRestEventHandler {
 	@Autowired
 	private  HttpServletRequest request;
 	
-	@Autowired
-	private MailService notificationService;
+	//@Autowired
+	//private MailService notificationService;
 
 
 	@HandleBeforeCreate
@@ -31,7 +31,7 @@ public class SpringDataRestEventHandler {
 	}
 	
 	
-	@HandleAfterCreate
+/* 	@HandleAfterCreate
     public void handleEscritorioAfterCreate(Escritorio escritorio){
         
 		try {
@@ -40,7 +40,7 @@ public class SpringDataRestEventHandler {
 			System.out.println(mailException);
 		}
 		
-    }
+    } */
 	
 	
 }

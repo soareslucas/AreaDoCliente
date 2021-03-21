@@ -11,6 +11,8 @@ import Wrapper from './common/wrapper';
 import Menu from './common/menu';
 import Content from './common/content';
 import Footer from './common/footer';
+import Breadcrumb from 'react-bootstrap/Breadcrumb'
+
 
 
 
@@ -26,23 +28,11 @@ class Index extends React.Component {
         return (
 
             <div>
-                {/* Content Header (Page header) */}
-                <div className="content-header">
-                    <div className="container-fluid">
-                        <div className="row mb-2">
-                            <div className="col-sm-6">
-                                <h1 className="m-0 text-dark">Gerenciamento da Conta</h1>
-                            </div>{/* /.col */}
-                            <div className="col-sm-6">
-                                <ol className="breadcrumb float-sm-right">
-                                    <li className="breadcrumb-item"><a href="#">Home</a></li>
-                                    <li className="breadcrumb-item active">Área do Cliente</li>
-                                </ol>
-                            </div>{/* /.col */}
-                        </div>{/* /.row */}
-                    </div>{/* /.container-fluid */}
-                </div>
-                {/* /.content-header */}
+	            <Breadcrumb>
+		            <Breadcrumb.Item href="/">Home</Breadcrumb.Item>
+		            <Breadcrumb.Item active href="#">Início</Breadcrumb.Item>
+		        </Breadcrumb>
+		
 
 
                 {/* Main content */}

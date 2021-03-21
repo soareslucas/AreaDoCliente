@@ -21,10 +21,10 @@ class Footer extends Component {
     return (
       <footer className="main-footer">
         {/* To the right */}
-        <div className="float-right d-none d-sm-inline">Anything you want</div>
+        <div className="float-right d-none d-sm-inline">Gerenciamento de Conta</div>
         {/* Default to the left */}
         <strong>
-          Copyright © 2014-2019 <a href="https://adminlte.io">AdminLTE.io</a>.
+          Copyright © 2021 <a href="http://goinf.org">GOinf LTDA</a>.
         </strong>{" "}
         All rights reserved.
       </footer>
