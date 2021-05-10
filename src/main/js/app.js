@@ -50,7 +50,7 @@ class Index extends React.Component {
                                         <p className="card-text">Faça gestão dos serviços contratados e acompanhe o andamento dos projetos solicitados bem como as etapas de execução.</p>
 
                                         <div className="text-right">                                    
-                                            <Link to="/consulta" className="btn btn-primary text-right"> Entre em sua Conta </Link>
+                                            <Link to="/cliente" className="btn btn-primary text-right"> Entre em sua Conta </Link>
                                         </div>
 
                                     </div>
