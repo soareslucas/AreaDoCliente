@@ -12,7 +12,7 @@ import br.jus.tjgo.litigantes.model.*;
 import br.jus.tjgo.litigantes.service.*;
 
 @Component
-@RepositoryEventHandler(Escritorio.class)
+@RepositoryEventHandler(Cliente.class)
 public class SpringDataRestEventHandler {
 	
 	@Autowired
@@ -23,19 +23,19 @@ public class SpringDataRestEventHandler {
 
 
 	@HandleBeforeCreate
-	public void handleEscritorioBeforeCreate(Escritorio escritorio) {
+	public void handleClienteBeforeCreate(Cliente cliente) {
 		byte[] data = (byte[]) this.request.getSession().getAttribute("uploadedFiles");
 		
-		escritorio.setData(data);
-		escritorio.setStatus("Solicitado");
+		cliente.setData(data);
+		cliente.setStatus("Solicitado");
 	}
 	
 	
 /* 	@HandleAfterCreate
-    public void handleEscritorioAfterCreate(Escritorio escritorio){
+    public void handleClienteAfterCreate(Cliente cliente){
         
 		try {
-			this.notificationService.sendEmail(escritorio);
+			this.notificationService.sendEmail(cliente);
 		} catch (MailException mailException) {
 			System.out.println(mailException);
 		}
