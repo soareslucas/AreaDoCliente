@@ -38,7 +38,7 @@
     "history": "4.10.1"
   },
   "scripts": {
-    "watch": "webpack --watch -d",
+    "watch": "webpack --watch -d --output ./target/classes/static/built/bundle.js",
     "build": "webpack"
   },
   "devDependencies": {

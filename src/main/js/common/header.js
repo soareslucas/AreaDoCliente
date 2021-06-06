@@ -34,6 +34,15 @@ class Header extends Component {
 					<div className="collapse navbar-collapse order-3" id="navbarCollapse">
 						{/* Left navbar links */}
 						<ul className="navbar-nav">
+
+							{this.state.logado && 
+								<li className="nav-item">
+									<a className="nav-link" data-widget="pushmenu" href="#" role="button"><i className="fas fa-bars"></i></a>
+								</li>
+							}
+
+							
+
 							<li className="nav-item">
 								<a href="/" className="nav-link">Início</a>
 							</li>

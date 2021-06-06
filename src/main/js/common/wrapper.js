@@ -12,6 +12,8 @@ import Header from './header';
 import Menu from './menu';
 import Content from './content';
 import Footer from './footer';
+import SideBar from './sidebar';
+
 
 
 
@@ -35,6 +37,9 @@ class Wrapper extends Component {
             <Header/>
 
             <Menu/>
+
+            <SideBar/>
+
 
             <div className="content-wrapper">
 

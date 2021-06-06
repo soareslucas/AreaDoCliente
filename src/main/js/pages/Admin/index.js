@@ -30,7 +30,7 @@ class App extends React.Component {
 
 	constructor(props) {
 		super(props);
-		this.state = {campo:'', validated: false, alerta: false, escritorios: [], sucesso: false, falha: false, escritorios: [], attributes: [], pageSize: 50, links: {}};
+		this.state = {campo:'', validated: false, alerta: false, clientes: [], sucesso: false, falha: false, clientes: [], attributes: [], pageSize: 50, links: {}};
 		this.onDelete = this.onDelete.bind(this);
 		this.onUpdate = this.onUpdate.bind(this);
 		this.handleSubmit = this.handleSubmit.bind(this);    
@@ -40,36 +40,36 @@ class App extends React.Component {
 
 	loadFromServer(pageSize) {
 		follow(client, root, [
-			{rel: 'escritorios', params: {size: pageSize}}]
-		).then(escritorioCollection => {
+			{rel: 'clientes', params: {size: pageSize}}]
+		).then(clienteCollection => {
 			return client({
 				method: 'GET',
-				path: escritorioCollection.entity._links.profile.href,
+				path: clienteCollection.entity._links.profile.href,
 				headers: {'Accept': 'application/schema+json'}
 			}).then(schema => {
 				this.schema = schema.entity;
-				return escritorioCollection;
+				return clienteCollection;
 			});
-		}).done(escritorioCollection => {
+		}).done(clienteCollection => {
 			this.setState({
-				escritorios: escritorioCollection.entity._embedded.escritorios,
+				clientes: clienteCollection.entity._embedded.clientes,
 				attributes: Object.keys(this.schema.properties),
 				pageSize: pageSize,
-				links: escritorioCollection.entity._links});
+				links: clienteCollection.entity._links});
 		});
 	}
 
-	onDelete(escritorio) {
-		client({method: 'DELETE', path: escritorio._links.self.href}).done(response => {
+	onDelete(cliente) {
+		client({method: 'DELETE', path: cliente._links.self.href}).done(response => {
 			this.loadFromServer(this.state.pageSize);
 		});
 	}
 	
-	onUpdate(escritorio, updatedEscritorio) {
+	onUpdate(cliente, updatedCliente) {
 		client({
 			method: 'PUT',
-			path: escritorio._links.self.href,
-			entity: updatedEscritorio,
+			path: cliente._links.self.href,
+			entity: updatedCliente,
 			headers: {
 				'Content-Type': 'application/json'
 			}
@@ -80,6 +80,8 @@ class App extends React.Component {
 
 	componentDidMount() {
 		this.loadFromServer(this.state.pageSize);
+		document.body.classList.remove('sidebar-collapse'); 
+
 	}
 	
 	buscarCampo(campo, busca) {
@@ -88,14 +90,14 @@ class App extends React.Component {
 		
 		client({
 			method: 'GET',
-			path: 'api/escritorios/search/findBy'+campo+'ContainingIgnoreCase?'+field+'='+busca,
+			path: 'api/clientes/search/findBy'+campo+'ContainingIgnoreCase?'+field+'='+busca,
 			headers: {'Content-Type': 'application/json'}
-		}).then(escritorioCollection => {
+		}).then(clienteCollection => {
 			this.setState({
-				escritorios: escritorioCollection.entity._embedded.escritorios});
-			return escritorioCollection.entity._embedded.escritorios;
-		}).done( escritorios=>{			
-			if(escritorios.length == 0){
+				clientes: clienteCollection.entity._embedded.clientes});
+			return clienteCollection.entity._embedded.clientes;
+		}).done( clientes=>{			
+			if(clientes.length == 0){
 				this.setState({ falha: true});
 				this.setState({ sucesso: false});
 
@@ -139,76 +141,92 @@ class App extends React.Component {
 		return (
 			<div>
 
-                <Breadcrumb>
-                    <Breadcrumb.Item href="/">Início</Breadcrumb.Item>
-                    <Breadcrumb.Item active href="Admin">Admin</Breadcrumb.Item>
-                </Breadcrumb>
- 	            
-			    <Tabs defaultActiveKey="ativas" id="uncontrolled-tab-example">
-			        <Tab eventKey="ativas" title="Ativas">
-						<Form
-						noValidate
-						validated={validated}
-						onSubmit={e => this.handleSubmit(e)} >
-				
-				            <input ref="manager" type="hidden" name="manager" value="" />
-							<input ref="status" type="hidden" name="status" value="" />
-				
-							<Form.Row>
-								<Form.Group as={Col}  md="4" controlId="5">
-										<Form.Label>&nbsp; &nbsp;</Form.Label>
-										<div key="escolha">
-											<Form.Control as="select" onChange={this.handleChange} placeholder="Escolha o Campo de Busca"   ref="campo">
-												<option>Escolha o campo de busca...</option>
-												<option value="Nome" >Nome do escritório</option>		
-												<option value="Status" >Status</option>
-												<option value="NomeRepresentante" >Nome Representante Legal</option>
-											</Form.Control>
-										</div>
-								</Form.Group>
-								<Form.Group as={Col} md="7" controlId="2">
-									<Form.Label>&nbsp; &nbsp;</Form.Label>
-									<div key="busca">
-											<Form.Control placeholder="Escreva aqui sua pesquisa..." ref="busca"/>										
-									</div>
-								</Form.Group>
-								<Form.Group as={Col} md="1" controlId="4">
-									<Form.Label>&nbsp; &nbsp;</Form.Label>
-									<div key="botao">
-											<Button variant="primary" type="submit">
-											    Buscar
-											</Button>
-									</div>
-								</Form.Group>					
-							</Form.Row>
-			
-						</Form>
-			
-			            <EscritorioList escritorios={this.state.escritorios}
-			                links={this.state.links}
-			                pageSize={this.state.pageSize}
-			                onDelete={this.onDelete}
-			            	onUpdate={this.onUpdate} 
-			            	attributes={this.state.attributes}
-		            		status={statusEmAndamento}
+				<div className="content-header">
+                    <div className="container">
+                        <div className="row mb-2">
+                        <div className="col-sm-6">
+                            {/* <h1 className="m-0 text-dark"> Top Navigation <small>Example 3.0</small></h1> */}
+                        </div> {/* /.col */}
+                        <div className="col-sm-6">
+                            <ol className="breadcrumb float-sm-right">
+                            <li className="breadcrumb-item"><a href="/">Home</a></li>
+                            <li className="breadcrumb-item active">Admin</li>
+                            </ol>
+                        </div>{/* /.col */}
+                        </div> {/* /.row */}
+                    </div> {/* /.container-fluid */}
+                </div>
 
-			            />
-			        
-		            </Tab>
-			            
-		            <Tab eventKey="baixadas" title="Baixadas">
-		            
-			            <EscritorioList escritorios={this.state.escritorios}
-		                links={this.state.links}
-		                pageSize={this.state.pageSize}
-		                onDelete={this.onDelete}
-		            	onUpdate={this.onUpdate} 
-		            	attributes={this.state.attributes}  
-		            	status={statusBaixadas}
-		            	/>
-			      	</Tab>
-			
-			    </Tabs>
+
+				<div className="container">
+
+
+					<Tabs defaultActiveKey="ativas" id="uncontrolled-tab-example">
+						<Tab eventKey="ativas" title="Novos Clientes">
+							<Form
+							noValidate
+							validated={validated}
+							onSubmit={e => this.handleSubmit(e)} >
+					
+								<input ref="manager" type="hidden" name="manager" value="" />
+								<input ref="status" type="hidden" name="status" value="" />
+					
+								<Form.Row>
+									<Form.Group as={Col}  md="4" controlId="5">
+											<Form.Label>&nbsp; &nbsp;</Form.Label>
+											<div key="escolha">
+												<Form.Control as="select" onChange={this.handleChange} placeholder="Escolha o Campo de Busca"   ref="campo">
+													<option>Escolha o campo de busca...</option>
+													<option value="Nome" >Nome do escritório</option>		
+													<option value="Status" >Status</option>
+													<option value="NomeRepresentante" >Nome Representante Legal</option>
+												</Form.Control>
+											</div>
+									</Form.Group>
+									<Form.Group as={Col} md="7" controlId="2">
+										<Form.Label>&nbsp; &nbsp;</Form.Label>
+										<div key="busca">
+												<Form.Control placeholder="Escreva aqui sua pesquisa..." ref="busca"/>										
+										</div>
+									</Form.Group>
+									<Form.Group as={Col} md="1" controlId="4">
+										<Form.Label>&nbsp; &nbsp;</Form.Label>
+										<div key="botao">
+												<Button variant="primary" type="submit">
+													Buscar
+												</Button>
+										</div>
+									</Form.Group>					
+								</Form.Row>
+				
+							</Form>
+				
+							<ClienteList clientes={this.state.clientes}
+								links={this.state.links}
+								pageSize={this.state.pageSize}
+								onDelete={this.onDelete}
+								onUpdate={this.onUpdate} 
+								attributes={this.state.attributes}
+								status={statusEmAndamento}
+
+							/>
+						
+						</Tab>
+							
+						<Tab eventKey="baixadas" title="Contratos em Andamento">
+						
+							<ClienteList clientes={this.state.clientes}
+							links={this.state.links}
+							pageSize={this.state.pageSize}
+							onDelete={this.onDelete}
+							onUpdate={this.onUpdate} 
+							attributes={this.state.attributes}  
+							status={statusBaixadas}
+							/>
+						</Tab>
+				
+					</Tabs>
+				</div>
 			    
             </div>
 		)
@@ -232,10 +250,10 @@ class UpdateDialog extends React.Component {
 	handleShow(e){
 		e.preventDefault();
 		if(this.props.status != 'Baixado'){
-			let updatedEscritorio = {};
-			updatedEscritorio = this.props.escritorio;
-			updatedEscritorio['status'] = "Em análise";
-			this.props.onUpdate(this.props.escritorio, updatedEscritorio);
+			let updatedCliente = {};
+			updatedCliente = this.props.cliente;
+			updatedCliente['status'] = "Em análise";
+			this.props.onUpdate(this.props.cliente, updatedCliente);
 		}
 		this.setState({ modal: true });
 	}
@@ -243,7 +261,7 @@ class UpdateDialog extends React.Component {
 
 	render() {
 
-		const dialogId = "updateEscritorio-" + this.props.escritorio._links.self.href;
+		const dialogId = "updateCliente-" + this.props.cliente._links.self.href;
 		const { modal } = this.state;
 		
 		return (
@@ -262,79 +280,79 @@ class UpdateDialog extends React.Component {
 							<Form.Row>
 								<Form.Group as={Col}  md="4" controlId="1">
 									<Form.Label>CNPJ</Form.Label>
-									<h5> {this.props.escritorio['cnpj']} </h5> 			
+									<h5> {this.props.cliente['cnpj']} </h5> 			
 								</Form.Group>
 								<Form.Group as={Col} md="8" controlId="2">
 									<Form.Label>Nome do Órgão ou Empresa</Form.Label>
-									<h5> {this.props.escritorio['nome']} </h5> 			
+									<h5> {this.props.cliente['nome']} </h5> 			
 								</Form.Group>
 							</Form.Row>
 							
 							<Form.Row>
 								<Form.Group as={Col}   md="12" controlId="3">
 									<Form.Label>Endereço</Form.Label>
-									<h5> {this.props.escritorio['endereco']} </h5> 			
+									<h5> {this.props.cliente['endereco']} </h5> 			
 								</Form.Group>
 							</Form.Row>
 						
 							<Form.Row>
 								<Form.Group as={Col}  md="6" controlId="4">
 									<Form.Label>Nome do Representante Legal</Form.Label>
-									<h5> {this.props.escritorio['nomeRepresentante']} </h5> 			
+									<h5> {this.props.cliente['nomeRepresentante']} </h5> 			
 								</Form.Group>
 								<Form.Group as={Col}  md="6" controlId="5">
 									<Form.Label>Vínculo do Representante Legal</Form.Label>
-									<h5> {this.props.escritorio['vinculo']} </h5> 			
+									<h5> {this.props.cliente['vinculo']} </h5> 			
 								</Form.Group>
 							</Form.Row>
 									
 							<Form.Row>
 								<Form.Group as={Col}  md="4" controlId="1">
 									<Form.Label>CPF do Representante Legal</Form.Label>
-									<h5> {this.props.escritorio['cpf']} </h5> 			
+									<h5> {this.props.cliente['cpf']} </h5> 			
 								</Form.Group>
 								<Form.Group as={Col}  md="4" controlId="6">
 									<Form.Label>Telefone</Form.Label>
-									<h5> {this.props.escritorio['telefone']} </h5> 			
+									<h5> {this.props.cliente['telefone']} </h5> 			
 								</Form.Group>
 								<Form.Group as={Col}   md="4" controlId="7">
 									<Form.Label>Celular</Form.Label>
-									<h5> {this.props.escritorio['celular']} </h5> 			
+									<h5> {this.props.cliente['celular']} </h5> 			
 								</Form.Group>
 							</Form.Row>
 							
 							<Form.Row>
 								<Form.Group as={Col}  md="4" controlId="formGridEmail">
 									<Form.Label>E-mail</Form.Label>
-									<h5> {this.props.escritorio['email']} </h5> 			
+									<h5> {this.props.cliente['email']} </h5> 			
 								</Form.Group>
 								<Form.Group as={Col}  md="4">
 									<Form.Label> Arquivo Comprobatório </Form.Label>
 									<h5>
-										<a href={'/downloadFile/'+this.props.escritorio['id'] }> Download Arquivo </a>
+										<a href={'/downloadFile/'+this.props.cliente['id'] }> Download Arquivo </a>
 									</h5> 
 								</Form.Group>								
 						
 								<Form.Group as={Col}  md="4">
 									<Form.Label> Possui Advogado Estabelecido? </Form.Label>
 									<h5> 
-								     	{this.props.escritorio['possuiAdvogado'] ? 'Sim' : 'Não'}						
+								     	{this.props.cliente['possuiAdvogado'] ? 'Sim' : 'Não'}						
 									</h5> 			
 								</Form.Group>
 							
 							</Form.Row>
 							
 							
-							<div style={{display: this.props.escritorio['possuiAdvogado'] ? 'block' : 'none' }} > 
+							<div style={{display: this.props.cliente['possuiAdvogado'] ? 'block' : 'none' }} > 
 
 								<Form.Row> 
 									<Form.Group as={Col} md="8" controlId="9">
 										<Form.Label>Nome do Advogado Principal</Form.Label>
-										<h5> {this.props.escritorio['advogadoMaster']} </h5> 			
+										<h5> {this.props.cliente['advogadoMaster']} </h5> 			
 									</Form.Group>
 									<Form.Group as={Col} md="4" controlId="formGridEmail">
 										<Form.Label>E-mail do Advogado Principal</Form.Label>
-										<h5> {this.props.escritorio['emailMaster']} </h5> 			
+										<h5> {this.props.cliente['emailMaster']} </h5> 			
 									</Form.Group>
 								</Form.Row>
 							
@@ -343,14 +361,14 @@ class UpdateDialog extends React.Component {
 									<Form.Group as={Col}  md="4" controlId="6">
 										<Form.Label>OAB ou Matrícula</Form.Label>
 										<div key="identificacaoMaster">
-											<h5> {this.props.escritorio['identificacaoMaster']} </h5> 		
+											<h5> {this.props.cliente['identificacaoMaster']} </h5> 		
 										</div>
 									</Form.Group>
 									<Form.Group controlId="formBasicChecbox">
 										<Form.Label>Recebe Citação?</Form.Label>
 										<div key="recebeCitacao">
 											<h5>
-												{this.props.escritorio['recebeCitacao'] ? 'Sim' : 'Não'}
+												{this.props.cliente['recebeCitacao'] ? 'Sim' : 'Não'}
 											</h5> 		
 										</div>
 									</Form.Group>
@@ -375,7 +393,7 @@ class UpdateDialog extends React.Component {
 
 
 
-class EscritorioList extends React.Component {
+class ClienteList extends React.Component {
 
 	constructor(props) {
 		super(props);		
@@ -389,12 +407,12 @@ class EscritorioList extends React.Component {
 	}
 
 	render() {
-		const escritorios = this.props.escritorios.map(escritorio =>{
-				if(this.props.status == 'Em Andamento' && escritorio.status != 'Baixado'){
-					return  <Escritorio key={escritorio._links.self.href} escritorio={escritorio} attributes={this.props.attributes} mostraAlert={this.mostraAlert} onUpdate={this.props.onUpdate} onDelete={this.props.onDelete}  status={this.props.status} />
+		const clientes = this.props.clientes.map(cliente =>{
+				if(this.props.status == 'Em Andamento' && cliente.status != 'Baixado'){
+					return  <Cliente key={cliente._links.self.href} cliente={cliente} attributes={this.props.attributes} mostraAlert={this.mostraAlert} onUpdate={this.props.onUpdate} onDelete={this.props.onDelete}  status={this.props.status} />
 				}else{
-					if(escritorio.status == this.props.status)
-						return  <Escritorio key={escritorio._links.self.href} escritorio={escritorio} attributes={this.props.attributes} mostraAlert={this.mostraAlert} onUpdate={this.props.onUpdate} onDelete={this.props.onDelete} status={this.props.status} />
+					if(cliente.status == this.props.status)
+						return  <Cliente key={cliente._links.self.href} cliente={cliente} attributes={this.props.attributes} mostraAlert={this.mostraAlert} onUpdate={this.props.onUpdate} onDelete={this.props.onDelete} status={this.props.status} />
 				}
 		});
 		
@@ -409,14 +427,14 @@ class EscritorioList extends React.Component {
 						<tr>
                             <th>#</th>
 							<th>CNPJ</th>
-							<th>Nome do Órgão/Empresa</th>
+							<th>Nome do Pessoa/Empresa</th>
 							<th>Telefone</th>
 							<th>Status Solicitação</th>
 							<th>Detalhes</th>
 							
-							{(this.props.status != 'Baixado') &&  <th>Baixar</th>}	
+							{(this.props.status != 'Baixado') &&  <th>Aprovar</th>}	
 						</tr>
-						{escritorios}
+						{clientes}
 					</tbody>
 				</Table>
 			</div>
@@ -425,7 +443,7 @@ class EscritorioList extends React.Component {
 }
 
 
-class Escritorio extends React.Component {
+class Cliente extends React.Component {
 
 	constructor(props) {
 		super(props);
@@ -434,10 +452,10 @@ class Escritorio extends React.Component {
 	
 	
 	handleBaixar() {
-		let updatedEscritorio = {};
-		updatedEscritorio = this.props.escritorio;
-		updatedEscritorio['status'] = "Baixado";
-		this.props.onUpdate(this.props.escritorio, updatedEscritorio);		
+		let updatedCliente = {};
+		updatedCliente = this.props.cliente;
+		updatedCliente['status'] = "Baixado";
+		this.props.onUpdate(this.props.cliente, updatedCliente);		
 		this.props.mostraAlert();
 	}
 
@@ -447,13 +465,13 @@ class Escritorio extends React.Component {
 				
 				<tr>
 	
-	                <td>{this.props.escritorio.id}</td>
-					<td>{this.props.escritorio.cnpj}</td>
-	                <td>{this.props.escritorio.nome}</td>
-	                <td>{this.props.escritorio.telefone}</td>
-	                <td>{this.props.escritorio.status}</td>
+	                <td>{this.props.cliente.id}</td>
+					<td>{this.props.cliente.cnpj}</td>
+	                <td>{this.props.cliente.nome}</td>
+	                <td>{this.props.cliente.telefone}</td>
+	                <td>{this.props.cliente.status}</td>
 	                <td>  
-						<UpdateDialog escritorio={this.props.escritorio}
+						<UpdateDialog cliente={this.props.cliente}
 						  attributes={this.props.attributes}
 						  onUpdate={this.props.onUpdate}
 						  status={this.props.status}

@@ -28,16 +28,28 @@ class Index extends React.Component {
         return (
 
             <div>
-	            <Breadcrumb>
-		            <Breadcrumb.Item href="/">Home</Breadcrumb.Item>
-		            <Breadcrumb.Item active href="#">Início</Breadcrumb.Item>
-		        </Breadcrumb>
-		
+
+
+                <div className="content-header">
+                    <div className="container">
+                        <div className="row mb-2">
+                        <div className="col-sm-6">
+                            {/* <h1 className="m-0 text-dark"> Top Navigation <small>Example 3.0</small></h1> */}
+                        </div> {/* /.col */}
+                        <div className="col-sm-6">
+                            <ol className="breadcrumb float-sm-right">
+                            <li className="breadcrumb-item"><a href="/">Home</a></li>
+                            <li className="breadcrumb-item active">início</li>
+                            </ol>
+                        </div>{/* /.col */}
+                        </div> {/* /.row */}
+                    </div> {/* /.container-fluid */}
+                </div>
 
 
                 {/* Main content */}
                 <div className="content">
-                    <div className="container-fluid">
+                    <div className="container">
                         <div className="row">
 
                             <div className="col-lg-6">

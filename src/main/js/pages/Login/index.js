@@ -40,30 +40,19 @@ class Login extends Component {
 
 	loginClicked() {
 
-
-		//const history = createBrowserHistory()
-
 		
 		AuthenticationService
 			.executeBasicAuthenticationService(this.state.username, this.state.password)
 			.then(response => {
-
-				console.log(response)
-
 				AuthenticationService.registerSuccessfulLogin(this.state.username, this.state.password)
-
 				this.props.history.push('/admin')
-
 				this.setState({ showSuccessMessage: true })
-
 
 			})
 			.catch(response =>{
 
-				console.log(response)
 				this.setState({ showSuccessMessage: false })
 				this.setState({ hasLoginFailed: true })
-				console.log('teste 3');
 			})
 
 
@@ -77,10 +66,21 @@ class Login extends Component {
 
 		return (
 			<Wrapper>
-				<Breadcrumb>
-					<Breadcrumb.Item href="/">Início</Breadcrumb.Item>
-					<Breadcrumb.Item active href="Login">Admin</Breadcrumb.Item>
-				</Breadcrumb>
+				<div className="content-header">
+                    <div className="container">
+                        <div className="row mb-2">
+                        <div className="col-sm-6">
+                            {/* <h1 className="m-0 text-dark"> Top Navigation <small>Example 3.0</small></h1> */}
+                        </div> {/* /.col */}
+                        <div className="col-sm-6">
+                            <ol className="breadcrumb float-sm-right">
+                            <li className="breadcrumb-item"><a href="/">Home</a></li>
+                            <li className="breadcrumb-item active">Login Admin</li>
+                            </ol>
+                        </div>{/* /.col */}
+                        </div> {/* /.row */}
+                    </div> {/* /.container-fluid */}
+                </div>
 
 				{/*<ShowInvalidCredentials hasLoginFailed={this.state.hasLoginFailed}/>*/}
 

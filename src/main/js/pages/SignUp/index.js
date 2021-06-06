@@ -23,15 +23,15 @@ class App extends React.Component {
 
 	constructor(props) {
 		super(props);
-		this.state = {escritorios: [], attributes: [], pageSize: 2, links: {}};
+		this.state = {clientes: [], attributes: [], pageSize: 2, links: {}};
 		this.onCreate = this.onCreate.bind(this);
 	}
 
-	onCreate(newEscritorio) {     
+	onCreate(newCliente) {     
 			client({
 				method: 'POST',
-				path: 'api/escritorios',
-				entity: newEscritorio,
+				path: 'api/clientes',
+				entity: newCliente,
 				headers: {'Content-Type': 'application/json'}
 			});
 	}
@@ -53,7 +53,7 @@ class CreateDialog extends React.Component {
 	
 	constructor(props) {
 		super(props);
-		this.state = { validated: false, alerta: false, possuiAdvogado: false, mostra: false , escritorios: [], existe: false};    
+		this.state = { validated: false, alerta: false, possuiAdvogado: false, mostra: false , clientes: [], existe: false};    
 		this.onPossuiAdvogadoTrue = this.onPossuiAdvogadoTrue.bind(this);
 		this.onPossuiAdvogadoFalse = this.onPossuiAdvogadoFalse.bind(this);
 		this.handleUploadFile = this.handleUploadFile.bind(this);
@@ -65,14 +65,14 @@ class CreateDialog extends React.Component {
 	verificaCnpj(cnpj) {
 		client({
 			method: 'GET',
-			path: 'api/escritorios/search/findBycnpj?cnpj='+cnpj,
+			path: 'api/clientes/search/findBycnpj?cnpj='+cnpj,
 			headers: {'Content-Type': 'application/json'}
-		}).then(escritorioCollection => {
+		}).then(clienteCollection => {
 			this.setState({
-				escritorios: escritorioCollection.entity._embedded.escritorios});
-			return escritorioCollection.entity._embedded.escritorios;
-		}).done( escritorios=>{			
-			if(escritorios.length == 0){
+				clientes: clienteCollection.entity._embedded.clientes});
+			return clienteCollection.entity._embedded.clientes;
+		}).done( clientes=>{			
+			if(clientes.length == 0){
 				this.setState({ existe: false});
 			}else{
 				this.setState({ existe: true});
@@ -132,29 +132,29 @@ class CreateDialog extends React.Component {
 				this.setState({ validated: true });
 
 			} else{
-				const newEscritorio = {};
+				const newCliente = {};
 
 				console.log(ReactDOM.findDOMNode(this.refs['recebeCitacao']).checked);
 				console.log(ReactDOM.findDOMNode(this.refs['possuiAdvogado']).value);
 				
-				newEscritorio['manager'] = ReactDOM.findDOMNode(this.refs['manager']).value.trim();
-				newEscritorio['status'] = ReactDOM.findDOMNode(this.refs['status']).value.trim();
-				newEscritorio['cnpj'] = ReactDOM.findDOMNode(this.refs['cnpj']).value.trim();
-				newEscritorio['nome'] = ReactDOM.findDOMNode(this.refs['nome']).value.trim();
-				newEscritorio['endereco'] = ReactDOM.findDOMNode(this.refs['endereco']).value.trim();
-				newEscritorio['nomeRepresentante'] = ReactDOM.findDOMNode(this.refs['nomeRepresentante']).value.trim();
-				newEscritorio['vinculo'] = ReactDOM.findDOMNode(this.refs['vinculo']).value.trim();
-				newEscritorio['cpf'] = ReactDOM.findDOMNode(this.refs['cpf']).value.trim();
-				newEscritorio['celular'] = ReactDOM.findDOMNode(this.refs['celular']).value.trim();
-				newEscritorio['telefone'] = ReactDOM.findDOMNode(this.refs['telefone']).value.trim();
-				newEscritorio['email'] = ReactDOM.findDOMNode(this.refs['email']).value.trim();
-				newEscritorio['possuiAdvogado'] = ReactDOM.findDOMNode(this.refs['possuiAdvogado']).value.trim();
-				newEscritorio['advogadoMaster'] = ReactDOM.findDOMNode(this.refs['advogadoMaster']).value.trim();
-				newEscritorio['emailMaster'] = ReactDOM.findDOMNode(this.refs['emailMaster']).value.trim();
-				newEscritorio['identificacaoMaster'] = ReactDOM.findDOMNode(this.refs['identificacaoMaster']).value.trim();
-				newEscritorio['recebeCitacao'] = ReactDOM.findDOMNode(this.refs['recebeCitacao']).checked
+				newCliente['manager'] = ReactDOM.findDOMNode(this.refs['manager']).value.trim();
+				newCliente['status'] = ReactDOM.findDOMNode(this.refs['status']).value.trim();
+				newCliente['cnpj'] = ReactDOM.findDOMNode(this.refs['cnpj']).value.trim();
+				newCliente['nome'] = ReactDOM.findDOMNode(this.refs['nome']).value.trim();
+				newCliente['endereco'] = ReactDOM.findDOMNode(this.refs['endereco']).value.trim();
+				newCliente['nomeRepresentante'] = ReactDOM.findDOMNode(this.refs['nomeRepresentante']).value.trim();
+				newCliente['vinculo'] = ReactDOM.findDOMNode(this.refs['vinculo']).value.trim();
+				newCliente['cpf'] = ReactDOM.findDOMNode(this.refs['cpf']).value.trim();
+				newCliente['celular'] = ReactDOM.findDOMNode(this.refs['celular']).value.trim();
+				newCliente['telefone'] = ReactDOM.findDOMNode(this.refs['telefone']).value.trim();
+				newCliente['email'] = ReactDOM.findDOMNode(this.refs['email']).value.trim();
+				newCliente['possuiAdvogado'] = ReactDOM.findDOMNode(this.refs['possuiAdvogado']).value.trim();
+				newCliente['advogadoMaster'] = ReactDOM.findDOMNode(this.refs['advogadoMaster']).value.trim();
+				newCliente['emailMaster'] = ReactDOM.findDOMNode(this.refs['emailMaster']).value.trim();
+				newCliente['identificacaoMaster'] = ReactDOM.findDOMNode(this.refs['identificacaoMaster']).value.trim();
+				newCliente['recebeCitacao'] = ReactDOM.findDOMNode(this.refs['recebeCitacao']).checked
 				
-				this.props.onCreate(newEscritorio);
+				this.props.onCreate(newCliente);
 
 				this.setState({ validated: false });
 				this.setState({ alerta: true });
@@ -194,14 +194,31 @@ class CreateDialog extends React.Component {
 
 			<div>
 			
-	            <Breadcrumb>
-		            <Breadcrumb.Item href="/">Início</Breadcrumb.Item>
-		            <Breadcrumb.Item active href="SignUp">Inscrição</Breadcrumb.Item>
-		        </Breadcrumb>
+			<div className="content-header">
+                    <div className="container">
+                        <div className="row mb-2">
+                        <div className="col-sm-6">
+                            {/* <h1 className="m-0 text-dark"> Top Navigation <small>Example 3.0</small></h1> */}
+                        </div> {/* /.col */}
+                        <div className="col-sm-6">
+                            <ol className="breadcrumb float-sm-right">
+                            <li className="breadcrumb-item"><a href="/">Home</a></li>
+                            <li className="breadcrumb-item active">Cadastro</li>
+                            </ol>
+                        </div>{/* /.col */}
+                        </div> {/* /.row */}
+                    </div> {/* /.container-fluid */}
+                </div>
 		
-		
-		
-		        <div> 
+		        
+
+
+                <div className="content">
+                    <div className="container">
+
+					{this.state.existe && <div className="alert alert-warning">CNPJ já possui solicitação de cadastro!</div>}
+
+					<div> 
 		            <Alert show={alerta} variant="success">
 		                <Alert.Heading>Solicitação realizada com sucesso!</Alert.Heading>
 		                <p>
@@ -210,236 +227,237 @@ class CreateDialog extends React.Component {
 		            </Alert>
 		
 		        </div>
-		        
-			    {this.state.existe && <div className="alert alert-warning">CNPJ já possui solicitação de cadastro!</div>}
 
 
 
-				<Form
-					noValidate
-					validated={validated}
-					onSubmit={e => this.handleSubmit(e)} >
+							<Form
+								noValidate
+								validated={validated}
+								onSubmit={e => this.handleSubmit(e)} >
 
-			            <input ref="manager" type="hidden" name="manager" value="" />
-						<input ref="status" type="hidden" name="status" value="" />
+									<input ref="manager" type="hidden" name="manager" value="" />
+									<input ref="status" type="hidden" name="status" value="" />
 
-						{/* <input ref="" type="hidden" name="possuiAdvogado" value="" /> */}
+									{/* <input ref="" type="hidden" name="possuiAdvogado" value="" /> */}
 
-					<Form.Row>
-						<Form.Group as={Col}  md="4" controlId="1">
-							<Form.Label>CNPJ</Form.Label>
-							<div key="cnpj">
-								<MaskedFormControl required placeholder="xx.xxx.xxx/xxxx-xx"  ref="cnpj" mask='11.111.111/1111-11' />
-								<Form.Control.Feedback type="invalid">
-									Por favor escreva o CNPJ da Empresa/Órgão.
-								</Form.Control.Feedback>
+								<Form.Row>
+									<Form.Group as={Col}  md="4" controlId="1">
+										<Form.Label>CNPJ</Form.Label>
+										<div key="cnpj">
+											<MaskedFormControl required placeholder="xx.xxx.xxx/xxxx-xx"  ref="cnpj" mask='11.111.111/1111-11' />
+											<Form.Control.Feedback type="invalid">
+												Por favor escreva o CNPJ da Empresa/Órgão.
+											</Form.Control.Feedback>
+											
+										</div>
+									</Form.Group>
+
+									<Form.Group as={Col} md="8" controlId="2">
+										<Form.Label>Nome da Empresa</Form.Label>
+										<div key="nome">
+											<Form.Control required type="text"   placeholder="Nome da Empresa" ref="nome" />
+											<Form.Control.Feedback type="invalid">
+												Por favor escreva o Nome do Escritório Jurídico.
+											</Form.Control.Feedback>
+										</div>
+									</Form.Group>
+								</Form.Row>
+
+								<Form.Row>
 								
-							</div>
-						</Form.Group>
-
-						<Form.Group as={Col} md="8" controlId="2">
-							<Form.Label>Nome do Órgão ou Empresa</Form.Label>
-							<div key="nome">
-								<Form.Control required type="text"   placeholder="Nome do Órgão ou Empresa" ref="nome" />
-								<Form.Control.Feedback type="invalid">
-									Por favor escreva o Nome do Escritório Jurídico.
-								</Form.Control.Feedback>
-							</div>
-						</Form.Group>
-					</Form.Row>
-
-					<Form.Row>
-					
-						<Form.Group as={Col}   md="12" controlId="3">
-							<Form.Label>Endereço</Form.Label>
-							<div key="endereco">
-								<Form.Control required placeholder="Endereço do Órgão ou Empresa" ref="endereco"/>
-								<Form.Control.Feedback type="invalid">
-									Por favor escreva o endereço do Escritório Jurídico.
-								</Form.Control.Feedback>
-							</div>
-						</Form.Group>
-					</Form.Row>
+									<Form.Group as={Col}   md="12" controlId="3">
+										<Form.Label>Endereço</Form.Label>
+										<div key="endereco">
+											<Form.Control required placeholder="Endereço da Empresa" ref="endereco"/>
+											<Form.Control.Feedback type="invalid">
+												Por favor escreva o endereço do Escritório Jurídico.
+											</Form.Control.Feedback>
+										</div>
+									</Form.Group>
+								</Form.Row>
 
 
-					<Form.Row>
+								<Form.Row>
 
-						<Form.Group as={Col}  md="6" controlId="4">
-							<Form.Label>Nome do Representante Legal</Form.Label>
-							<div key="nomeRepresentante">
-								<Form.Control required placeholder="Nome do Representante Legal"   ref="nomeRepresentante"/>
-								<Form.Control.Feedback type="invalid">
-									Por favor escreva o Nome do Representante Legal.
-								</Form.Control.Feedback>
-							</div>
-						</Form.Group>
+									<Form.Group as={Col}  md="6" controlId="4">
+										<Form.Label>Nome do Representante Legal</Form.Label>
+										<div key="nomeRepresentante">
+											<Form.Control required placeholder="Nome do Representante Legal"   ref="nomeRepresentante"/>
+											<Form.Control.Feedback type="invalid">
+												Por favor escreva o Nome do Representante Legal.
+											</Form.Control.Feedback>
+										</div>
+									</Form.Group>
 
-						<Form.Group as={Col}  md="6" controlId="5">
-							<Form.Label>Vínculo do Representante Legal</Form.Label>
-							<div key="vinculo">
-								<Form.Control as="select" required placeholder="Vínculo"   ref="vinculo">
-									<option>Escolha...</option>
-									<option>Advogado</option>
-									<option>Gestor</option>		
-									<option>Procurador</option>
-									<option>Proprietário</option>
-
-
-								</Form.Control>
-								<Form.Control.Feedback type="invalid">
-									Por favor selecione qual o vínculo do responsável com o órgão.
-								</Form.Control.Feedback>
-							</div>
-						</Form.Group>
-					</Form.Row>
+									<Form.Group as={Col}  md="6" controlId="5">
+										<Form.Label>Vínculo do Representante Legal</Form.Label>
+										<div key="vinculo">
+											<Form.Control as="select" required placeholder="Vínculo"   ref="vinculo">
+												<option>Escolha...</option>
+												<option>Advogado</option>
+												<option>Gestor</option>		
+												<option>Procurador</option>
+												<option>Proprietário</option>
 
 
-							
-					<Form.Row>
-					
-					
-						<Form.Group as={Col}  md="4" controlId="1">
-							<Form.Label>CPF do Representante Legal</Form.Label>
-							<div key="cpf">
-								<MaskedFormControl required placeholder="xxx.xxx.xxx-xx"  ref="cpf" mask='111.111.111-11' />
-								<Form.Control.Feedback type="invalid">
-									Por favor escreva o CPF do Representante Legal.
-								</Form.Control.Feedback>
+											</Form.Control>
+											<Form.Control.Feedback type="invalid">
+												Por favor selecione qual o vínculo do responsável com o órgão.
+											</Form.Control.Feedback>
+										</div>
+									</Form.Group>
+								</Form.Row>
+
+
+										
+								<Form.Row>
 								
-							</div>
-						</Form.Group>
-
-						<Form.Group as={Col}  md="4" controlId="6">
-							<Form.Label>Telefone</Form.Label>
-							<div key="telefone">
-								<MaskedFormControl required placeholder="(XX)-XXXXX-XXXX" ref="telefone" mask='11-11111-1111' />
-								<Form.Control.Feedback type="invalid">
-									Por favor escreva pelo menos um telefone de contato com o responsável.
-								</Form.Control.Feedback>
-							</div>
-						</Form.Group>
-
-						<Form.Group as={Col}   md="4" controlId="7">
-							<Form.Label>Celular</Form.Label>
-							<div key="celular">
-								<MaskedFormControl placeholder="(XX)-XXXXX-XXXX" ref="celular" mask='11-11111-1111' />
-							</div>
-						</Form.Group>
-					</Form.Row>
-					
-					<Form.Row>
-						<Form.Group as={Col}  md="4" controlId="formGridEmail">
-							<Form.Label>E-mail</Form.Label>
-							<div key="email">
-								<Form.Control required type="email" placeholder="E-mail" ref="email" />      
-								<Form.Control.Feedback type="invalid">
-									Por favor escreva o e-mail com o padrão email@dominio.com
-								</Form.Control.Feedback>                                                                      
-							</div>
-						</Form.Group>
-						
-						<Form.Group as={Col}  md="4" controlId="file">
-							<Form.Label>Anexar Arquivo Comprobatório</Form.Label>
-							<div key="file">
-								<Form.Control required type="file"  onChange={this.handleUploadFile} />                                                                     
-								<Form.Control.Feedback type="invalid">
-									Por favor insira um arquivo comprobatório da representação legal.
-								</Form.Control.Feedback>   
-							</div>
-						</Form.Group>
-							
-						
-						<Form.Group as={Col}  md="4">
-							<Form.Label> Possui Advogado Estabelecido? </Form.Label>
 								
-			                <input ref="possuiAdvogado" type="hidden" name="possuiAdvogado" value={possuiAdvogado} />
+									<Form.Group as={Col}  md="4" controlId="1">
+										<Form.Label>CPF do Representante Legal</Form.Label>
+										<div key="cpf">
+											<MaskedFormControl required placeholder="xxx.xxx.xxx-xx"  ref="cpf" mask='111.111.111-11' />
+											<Form.Control.Feedback type="invalid">
+												Por favor escreva o CPF do Representante Legal.
+											</Form.Control.Feedback>
+											
+										</div>
+									</Form.Group>
 
-							<Col sm={10}>
-								<div key="possuiAdvogado">
-									<Form.Check
-									type="radio"
-									label="Sim"
-									name="formHorizontalRadios1"
-									id="formHorizontalRadios1"
-									onClick={this.onPossuiAdvogadoTrue}
-									/>
-									<Form.Check
-									type="radio"
-									label="Não"
-									name="formHorizontalRadios1"
-									id="formHorizontalRadios2"
-									onClick={this.onPossuiAdvogadoFalse}
-									/>
+									<Form.Group as={Col}  md="4" controlId="6">
+										<Form.Label>Telefone</Form.Label>
+										<div key="telefone">
+											<MaskedFormControl required placeholder="(XX)-XXXXX-XXXX" ref="telefone" mask='11-11111-1111' />
+											<Form.Control.Feedback type="invalid">
+												Por favor escreva pelo menos um telefone de contato com o responsável.
+											</Form.Control.Feedback>
+										</div>
+									</Form.Group>
+
+									<Form.Group as={Col}   md="4" controlId="7">
+										<Form.Label>Celular</Form.Label>
+										<div key="celular">
+											<MaskedFormControl placeholder="(XX)-XXXXX-XXXX" ref="celular" mask='11-11111-1111' />
+										</div>
+									</Form.Group>
+								</Form.Row>
+								
+								<Form.Row>
+									<Form.Group as={Col}  md="4" controlId="formGridEmail">
+										<Form.Label>E-mail</Form.Label>
+										<div key="email">
+											<Form.Control required type="email" placeholder="E-mail" ref="email" />      
+											<Form.Control.Feedback type="invalid">
+												Por favor escreva o e-mail com o padrão email@dominio.com
+											</Form.Control.Feedback>                                                                      
+										</div>
+									</Form.Group>
+									
+									<Form.Group as={Col}  md="4" controlId="file">
+										<Form.Label>Anexar Arquivo Comprobatório</Form.Label>
+										<div key="file">
+											<Form.Control required type="file"  onChange={this.handleUploadFile} />                                                                     
+											<Form.Control.Feedback type="invalid">
+												Por favor insira um arquivo comprobatório da representação legal.
+											</Form.Control.Feedback>   
+										</div>
+									</Form.Group>
+										
+									
+									<Form.Group as={Col}  md="4">
+										<Form.Label> Possui Advogado Estabelecido? </Form.Label>
+											
+										<input ref="possuiAdvogado" type="hidden" name="possuiAdvogado" value={possuiAdvogado} />
+
+										<Col sm={10}>
+											<div key="possuiAdvogado">
+												<Form.Check
+												type="radio"
+												label="Sim"
+												name="formHorizontalRadios1"
+												id="formHorizontalRadios1"
+												onClick={this.onPossuiAdvogadoTrue}
+												/>
+												<Form.Check
+												type="radio"
+												label="Não"
+												name="formHorizontalRadios1"
+												id="formHorizontalRadios2"
+												onClick={this.onPossuiAdvogadoFalse}
+												/>
+											</div>
+										</Col>
+									</Form.Group>
+								
+								</Form.Row>
+								
+								
+								
+								
+								<div style={{display: mostra ? 'block' : 'none' }} > 
+								
+									<Form.Row> 
+										<Form.Group as={Col} md="8" controlId="9">
+											<Form.Label>Nome do Advogado Principal</Form.Label>
+											<div key="advogadoMaster">
+												<Form.Control  type="text"  placeholder="Advogado Master" ref="advogadoMaster"/>
+												<Form.Control.Feedback type="invalid">
+													Por favor escreva o nome do Advogado Principal.
+												</Form.Control.Feedback>
+											</div>
+										</Form.Group>
+					
+					
+										<Form.Group as={Col} md="4" controlId="formGridEmail">
+											<Form.Label>E-mail do Advogado Principal</Form.Label>
+											<div key="emailMaster">
+												<Form.Control  type="email" placeholder="E-mail do Master" ref="emailMaster" />      
+												<Form.Control.Feedback type="invalid">
+													Por favor escreva o e-mail do Master com o padrão email@dominio.com
+												</Form.Control.Feedback>                                                                      
+											</div>
+										</Form.Group>
+									</Form.Row>
+					
+					
+									<Form.Row>
+					
+										<Form.Group as={Col}  md="4" controlId="6">
+											<Form.Label>OAB ou Matrícula</Form.Label>
+											<div key="identificacaoMaster">
+												<Form.Control  placeholder="Número da Identificação do Advogado Principal" ref="identificacaoMaster" />
+												<Form.Control.Feedback type="invalid">
+													Por favor escreva uma identificação do Advogado Principal.
+												</Form.Control.Feedback>
+											</div>
+										</Form.Group>
+					
+										<Form.Group controlId="formBasicChecbox">
+											<div key="recebeCitacao">
+												<Form.Check id="recebeCitacao" ref="recebeCitacao" type="checkbox" label="Recebe Intimação?" />
+											</div>
+										</Form.Group>
+									</Form.Row>
+								
+								
 								</div>
-							</Col>
-						</Form.Group>
-					
-					</Form.Row>
-					
-					
-					
-					
-					<div style={{display: mostra ? 'block' : 'none' }} > 
-					
-						<Form.Row> 
-							<Form.Group as={Col} md="8" controlId="9">
-								<Form.Label>Nome do Advogado Principal</Form.Label>
-								<div key="advogadoMaster">
-									<Form.Control  type="text"  placeholder="Advogado Master" ref="advogadoMaster"/>
-									<Form.Control.Feedback type="invalid">
-										Por favor escreva o nome do Advogado Principal.
-									</Form.Control.Feedback>
-								</div>
-							</Form.Group>
-		
-		
-							<Form.Group as={Col} md="4" controlId="formGridEmail">
-								<Form.Label>E-mail do Advogado Principal</Form.Label>
-								<div key="emailMaster">
-									<Form.Control  type="email" placeholder="E-mail do Master" ref="emailMaster" />      
-									<Form.Control.Feedback type="invalid">
-										Por favor escreva o e-mail do Master com o padrão email@dominio.com
-									</Form.Control.Feedback>                                                                      
-								</div>
-							</Form.Group>
-						</Form.Row>
-		
-		
-						<Form.Row>
-		
-							<Form.Group as={Col}  md="4" controlId="6">
-								<Form.Label>OAB ou Matrícula</Form.Label>
-								<div key="identificacaoMaster">
-									<Form.Control  placeholder="Número da Identificação do Advogado Principal" ref="identificacaoMaster" />
-									<Form.Control.Feedback type="invalid">
-										Por favor escreva uma identificação do Advogado Principal.
-									</Form.Control.Feedback>
-								</div>
-							</Form.Group>
-		
-							<Form.Group controlId="formBasicChecbox">
-								<div key="recebeCitacao">
-									<Form.Check id="recebeCitacao" ref="recebeCitacao" type="checkbox" label="Recebe Intimação?" />
-								</div>
-							</Form.Group>
-						</Form.Row>
-					
-					
+								
+
+
+								<Row>
+									<Col md="10">
+									</Col>
+									<Col md="2">
+										<Button variant="primary"  type="submit">
+											Gravar pré-cadastro 
+										</Button>
+									</Col>
+								</Row>
+							</Form>
+
+						</div>
 					</div>
-					
-
-
-					<Row>
-						<Col md="10">
-						</Col>
-						<Col md="2">
-							<Button variant="primary"  type="submit">
-								Gravar pré-cadastro 
-							</Button>
-						</Col>
-					</Row>
-				</Form>
-			</div>
+				</div>
 		)
 	}
 
@@ -462,47 +480,3 @@ class SignUp extends Component {
 }
 
 export default SignUp;
-
-
-
-
-
-<div className="card card-primary">
-  <div className="card-header">
-    <h3 className="card-title">Quick Example</h3>
-  </div>
-  {/* /.card-header */}
-  {/* form start */}
-  <form role="form">
-    <div className="card-body">
-      <div className="form-group">
-        <label htmlFor="exampleInputEmail1">Email address</label>
-        <input type="email" className="form-control" id="exampleInputEmail1" placeholder="Enter email" />
-      </div>
-      <div className="form-group">
-        <label htmlFor="exampleInputPassword1">Password</label>
-        <input type="password" className="form-control" id="exampleInputPassword1" placeholder="Password" />
-      </div>
-      <div className="form-group">
-        <label htmlFor="exampleInputFile">File input</label>
-        <div className="input-group">
-          <div className="custom-file">
-            <input type="file" className="custom-file-input" id="exampleInputFile" />
-            <label className="custom-file-label" htmlFor="exampleInputFile">Choose file</label>
-          </div>
-          <div className="input-group-append">
-            <span className="input-group-text" id>Upload</span>
-          </div>
-        </div>
-      </div>
-      <div className="form-check">
-        <input type="checkbox" className="form-check-input" id="exampleCheck1" />
-        <label className="form-check-label" htmlFor="exampleCheck1">Check me out</label>
-      </div>
-    </div>
-    {/* /.card-body */}
-    <div className="card-footer">
-      <button type="submit" className="btn btn-primary">Submit</button>
-    </div>
-  </form>
-</div>
