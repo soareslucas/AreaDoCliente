@@ -14,17 +14,17 @@ import br.jus.tjgo.litigantes.model.*;
 @Component
 public class SpringDataJpaUserDetailsService implements UserDetailsService {
 
-	private final ManagerRepository repository;
+	private final UsuarioRepository repository;
 
 	@Autowired
-	public SpringDataJpaUserDetailsService(ManagerRepository repository) {
+	public SpringDataJpaUserDetailsService(UsuarioRepository repository) {
 		this.repository = repository;
 	}
 
 	@Override
 	public UserDetails loadUserByUsername(String name) throws UsernameNotFoundException {
-		Manager manager = this.repository.findByName(name);
-		return new User(manager.getName(), manager.getPassword(), AuthorityUtils.createAuthorityList(manager.getRoles()));
+		Usuario usuario = this.repository.findByName(name);
+		return new User(usuario.getName(), usuario.getPassword(), AuthorityUtils.createAuthorityList(usuario.getRoles()));
 	}
 
 }

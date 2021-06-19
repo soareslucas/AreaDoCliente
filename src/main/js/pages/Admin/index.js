@@ -450,7 +450,6 @@ class Cliente extends React.Component {
 		this.handleBaixar = this.handleBaixar.bind(this);
 	}
 	
-	
 	handleBaixar() {
 		let updatedCliente = {};
 		updatedCliente = this.props.cliente;
@@ -459,12 +458,10 @@ class Cliente extends React.Component {
 		this.props.mostraAlert();
 	}
 
-
 	render() {
 		return (
 				
 				<tr>
-	
 	                <td>{this.props.cliente.id}</td>
 					<td>{this.props.cliente.cnpj}</td>
 	                <td>{this.props.cliente.nome}</td>

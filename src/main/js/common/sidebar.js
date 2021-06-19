@@ -64,7 +64,7 @@ class SideBar extends Component {
                 <ul className="nav nav-pills nav-sidebar flex-column" data-widget="treeview" role="menu" data-accordion="false">
 
                     <li className="nav-item">
-                      <Link className="nav-link" to="/signup" >
+                      <Link className="nav-link" to="/usuarios" >
                             <i className="nav-icon fas fa-user" />
                             <p>
                                 Usuários
@@ -73,7 +73,7 @@ class SideBar extends Component {
                     </li>
 
                     <li className="nav-item">
-                        <Link className="nav-link" to="/signup" >
+                        <Link className="nav-link" to="/planos" >
                             <i className="nav-icon fas fa-comments-dollar" />
                             <p>
                                 Planos
@@ -82,7 +82,7 @@ class SideBar extends Component {
                     </li>
 
                     <li className="nav-item">
-                        <Link className="nav-link" to="/signup" >
+                        <Link className="nav-link" to="/seguimentos" >
                             <i className="nav-icon fas fa-funnel-dollar" />
                             <p>
                                 Seguimentos
@@ -91,7 +91,7 @@ class SideBar extends Component {
                     </li>
 
                     <li className="nav-item">
-                        <Link className="nav-link" to="/signup" >
+                        <Link className="nav-link" to="/clientes" >
                                 <i className="nav-icon fas fa-users" />
                                 <p>
                                     Clientes
@@ -100,7 +100,7 @@ class SideBar extends Component {
                     </li>
 
                     <li className="nav-item">
-                        <Link className="nav-link" to="/signup" >
+                        <Link className="nav-link" to="/pagamentos" >
                             <i className="nav-icon fas fa-money-bill" />
                             <p>
                                 Pagamentos

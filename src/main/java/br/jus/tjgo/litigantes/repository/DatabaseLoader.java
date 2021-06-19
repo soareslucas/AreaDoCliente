@@ -12,18 +12,18 @@ import br.jus.tjgo.litigantes.repository.*;
  @Component
  public class DatabaseLoader implements CommandLineRunner {
 
- 	private final ManagerRepository managers;
+ 	private final UsuarioRepository usuarios;
 
  	@Autowired
- 	public DatabaseLoader(ManagerRepository managerRepository) {
- 		this.managers = managerRepository;
+ 	public DatabaseLoader(UsuarioRepository usuarioRepository) {
+ 		this.usuarios = usuarioRepository;
  	}
 
  	@Override
  	public void run(String... strings) throws Exception {
 
-/*   		this.managers.save(new Manager("admin", "123456",
- 							"ROLE_MANAGER"));  */
+/*   		this.usuarios.save(new Usuario("admin", "123456",
+ 							"ROLE_MANAGER")); */
  		
 
  	}
