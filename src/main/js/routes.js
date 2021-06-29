@@ -9,6 +9,8 @@ import Planos from "./pages/Planos";
 import Seguimentos from "./pages/Seguimentos";
 import Clientes from "./pages/Clientes";
 import Pagamentos from "./pages/Pagamentos";
+import Servicos from "./pages/Servicos";
+
 
 
 import App from './app';
@@ -28,6 +30,8 @@ const Routes = () => (
         <Route path="/seguimentos" component={Seguimentos} />
         <Route path="/clientes" component={Clientes} />
         <Route path="/pagamentos" component={Pagamentos} />
+        <Route path="/servicos" component={Servicos} />
+
 
 
 

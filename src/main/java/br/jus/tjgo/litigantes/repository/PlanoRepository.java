@@ -13,7 +13,7 @@ import org.springframework.data.repository.PagingAndSortingRepository;
  * @author Lucas Soares
  */
 @RepositoryRestResource(collectionResourceRel = "planos", path = "planos", exported = true)
-public interface PlanoRepository extends  JpaSpecificationExecutor<Cliente>, PagingAndSortingRepository<Plano, Long> {
+public interface PlanoRepository extends  JpaSpecificationExecutor<Plano>, PagingAndSortingRepository<Plano, Long> {
 
 
 	Plano save(Plano plano);

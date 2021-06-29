@@ -73,6 +73,15 @@ class SideBar extends Component {
                     </li>
 
                     <li className="nav-item">
+                        <Link className="nav-link" to="/servicos" >
+                            <i className="nav-icon fas fa-comments-dollar" />
+                            <p>
+                                Serviços
+                            </p>
+                        </Link>
+                    </li>
+
+                    <li className="nav-item">
                         <Link className="nav-link" to="/planos" >
                             <i className="nav-icon fas fa-comments-dollar" />
                             <p>

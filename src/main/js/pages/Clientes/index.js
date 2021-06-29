@@ -283,7 +283,7 @@ class UpdateDialog extends React.Component {
 									<h5> {this.props.cliente['cnpj']} </h5> 			
 								</Form.Group>
 								<Form.Group as={Col} md="8" controlId="2">
-									<Form.Label>Nome do Órgão ou Empresa</Form.Label>
+									<Form.Label>Nome da Empresa</Form.Label>
 									<h5> {this.props.cliente['nome']} </h5> 			
 								</Form.Group>
 							</Form.Row>
@@ -333,48 +333,8 @@ class UpdateDialog extends React.Component {
 									</h5> 
 								</Form.Group>								
 						
-								<Form.Group as={Col}  md="4">
-									<Form.Label> Possui Advogado Estabelecido? </Form.Label>
-									<h5> 
-								     	{this.props.cliente['possuiAdvogado'] ? 'Sim' : 'Não'}						
-									</h5> 			
-								</Form.Group>
 							
-							</Form.Row>
-							
-							
-							<div style={{display: this.props.cliente['possuiAdvogado'] ? 'block' : 'none' }} > 
-
-								<Form.Row> 
-									<Form.Group as={Col} md="8" controlId="9">
-										<Form.Label>Nome do Advogado Principal</Form.Label>
-										<h5> {this.props.cliente['advogadoMaster']} </h5> 			
-									</Form.Group>
-									<Form.Group as={Col} md="4" controlId="formGridEmail">
-										<Form.Label>E-mail do Advogado Principal</Form.Label>
-										<h5> {this.props.cliente['emailMaster']} </h5> 			
-									</Form.Group>
-								</Form.Row>
-							
-							
-								<Form.Row>
-									<Form.Group as={Col}  md="4" controlId="6">
-										<Form.Label>OAB ou Matrícula</Form.Label>
-										<div key="identificacaoMaster">
-											<h5> {this.props.cliente['identificacaoMaster']} </h5> 		
-										</div>
-									</Form.Group>
-									<Form.Group controlId="formBasicChecbox">
-										<Form.Label>Recebe Citação?</Form.Label>
-										<div key="recebeCitacao">
-											<h5>
-												{this.props.cliente['recebeCitacao'] ? 'Sim' : 'Não'}
-											</h5> 		
-										</div>
-									</Form.Group>
-								</Form.Row>
-								
-							</div>							
+							</Form.Row>				
 						</Modal.Body>
 						
 						<Modal.Footer>

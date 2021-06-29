@@ -31,7 +31,7 @@ class App extends React.Component {
 	constructor(props) {
 		super(props);
 		this.state = {campo:'', validated: false, alerta: false, planos: [], sucesso: false, falha: false, 
-		planos: [], attributes: [], pageSize: 50, links: {}, showMessageDelete:  false, showMessageAdd:  false, success:  false};
+		planos: [], servicos: [], attributes: [], pageSize: 50, links: {}, showMessageDelete:  false, showMessageAdd:  false, success:  false};
 		this.onDelete = this.onDelete.bind(this);
 		this.onUpdate = this.onUpdate.bind(this);
 		this.onCreate = this.onCreate.bind(this);    
@@ -101,8 +101,30 @@ class App extends React.Component {
 			});
 	}
 
+
+
+
+	loadServicos() {
+		follow(client, root, [
+			{rel: 'servicos'}]
+		).then(servicoCollection => {
+			return client({
+				method: 'GET',
+				path: servicoCollection.entity._links.profile.href,
+				headers: {'Accept': 'application/schema+json'}
+			}).then(schema => {
+				this.schema = schema.entity;
+				return servicoCollection;
+			});
+		}).done(servicoCollection => {
+			this.setState({
+				servicos: servicoCollection.entity._embedded.planos});
+		});
+	}
+
 	componentDidMount() {
 		this.loadFromServer(this.state.pageSize);
+		this.loadServicos();
 		document.body.classList.remove('sidebar-collapse'); 
 
 	}
@@ -179,6 +201,10 @@ class App extends React.Component {
 
 
 								<AddDialog
+									planos={this.state.planos}
+
+									servicos={this.props.servicos}
+
 									attributes={this.props.attributes}
 									onUpdate={this.props.onUpdate}
 									onCreate={this.onCreate}
@@ -265,6 +291,44 @@ class UpdateDialog extends React.Component {
 	}
 
 };
+
+
+
+class ServicosOptions extends React.Component {
+
+	constructor(props) {
+		super(props);		
+    }
+
+	render() {
+		const servicos = this.props.servicos.map(servico =>{
+			return  <option>  servico._links.self.href</option>
+		});
+		
+		return (
+				
+			<div>				
+				<Form.Group as={Col}  md="6" controlId="5">
+					<Form.Label>Serviços </Form.Label>
+					<div key="servicos">
+						<Form.Control as="select" required placeholder="Serviços"   ref="servicos">
+							<option>Escolha...</option>
+
+							{servicos}
+
+
+
+						</Form.Control>
+						<Form.Control.Feedback type="invalid">
+							Por favor selecione qual o vínculo do responsável com o órgão.
+						</Form.Control.Feedback>
+					</div>
+				</Form.Group>
+			</div>
+		)
+	}
+}
+
 
 
 class AddDialog extends React.Component {
@@ -361,7 +425,7 @@ class AddDialog extends React.Component {
 
 								<Form.Row>
 									<Form.Group as={Col} md="8" controlId="1">
-										<Form.Label>Nome do Plano</Form.Label>
+										<Form.Label>Nome</Form.Label>
 										<div key="name">
 											<Form.Control required type="text"   placeholder="Nome do Plano" ref="name" />
 											<Form.Control.Feedback type="invalid">
@@ -370,6 +434,31 @@ class AddDialog extends React.Component {
 										</div>
 									</Form.Group>
 								</Form.Row>
+
+
+								<Form.Row>
+									<Form.Group as={Col} md="8" controlId="1">
+										<Form.Label>Vigência (Meses)</Form.Label>
+										<div key="vigencia">
+											<Form.Control required type="text"   placeholder="Quantidade de Meses da Vigência" ref="vigencia" />
+											<Form.Control.Feedback type="invalid">
+												Por favor escreva a Vigência do Plano.
+											</Form.Control.Feedback>
+										</div>
+									</Form.Group>
+								</Form.Row>
+
+								<Form.Row>
+
+									<ServicosOptions
+										
+
+										servicos={this.props.servicos}
+									/>	
+										
+								</Form.Row>
+
+
 
 
 							<Modal.Footer>
