@@ -17,12 +17,16 @@ import java.util.ArrayList;
 
  	private final PlanoRepository planos;
 	private final ServicoRepository servicos;
+	private final UsuarioRepository usuarios;
+
 
 
  	@Autowired
- 	public DatabaseLoader(PlanoRepository planoRepository, ServicoRepository servicoRepository) {
+ 	public DatabaseLoader(PlanoRepository planoRepository, ServicoRepository servicoRepository, UsuarioRepository usuarioRepository) {
  		this.planos = planoRepository;
-		 this.servicos = servicoRepository;
+		this.servicos = servicoRepository;
+		this.usuarios = usuarioRepository;
+
 
  	}
 
