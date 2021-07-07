@@ -159,10 +159,7 @@ class CreateDialog extends React.Component {
 			} else{
 				const newCliente = {};
 
-				console.log(ReactDOM.findDOMNode(this.refs['recebeCitacao']).checked);
-				console.log(ReactDOM.findDOMNode(this.refs['possuiAdvogado']).value);
 				
-				newCliente['manager'] = ReactDOM.findDOMNode(this.refs['manager']).value.trim();
 				newCliente['status'] = ReactDOM.findDOMNode(this.refs['status']).value.trim();
 				newCliente['cnpj'] = ReactDOM.findDOMNode(this.refs['cnpj']).value.trim();
 				newCliente['nome'] = ReactDOM.findDOMNode(this.refs['nome']).value.trim();
@@ -173,18 +170,14 @@ class CreateDialog extends React.Component {
 				newCliente['celular'] = ReactDOM.findDOMNode(this.refs['celular']).value.trim();
 				newCliente['telefone'] = ReactDOM.findDOMNode(this.refs['telefone']).value.trim();
 				newCliente['email'] = ReactDOM.findDOMNode(this.refs['email']).value.trim();
-				newCliente['possuiAdvogado'] = ReactDOM.findDOMNode(this.refs['possuiAdvogado']).value.trim();
-				newCliente['advogadoMaster'] = ReactDOM.findDOMNode(this.refs['advogadoMaster']).value.trim();
-				newCliente['emailMaster'] = ReactDOM.findDOMNode(this.refs['emailMaster']).value.trim();
-				newCliente['identificacaoMaster'] = ReactDOM.findDOMNode(this.refs['identificacaoMaster']).value.trim();
-				newCliente['recebeCitacao'] = ReactDOM.findDOMNode(this.refs['recebeCitacao']).checked
+				newCliente['seguimento']  = ReactDOM.findDOMNode(this.refs['seguimento']).value.trim();
+
 				
 				this.props.onCreate(newCliente);
 
 				this.setState({ validated: false });
 				this.setState({ alerta: true });
 				
-				ReactDOM.findDOMNode(this.refs['manager']).value = '';
 				ReactDOM.findDOMNode(this.refs['status']).value = '';
 				ReactDOM.findDOMNode(this.refs['cnpj']).value = '';
 				ReactDOM.findDOMNode(this.refs['nome']).value = '';
@@ -195,11 +188,8 @@ class CreateDialog extends React.Component {
 				ReactDOM.findDOMNode(this.refs['celular']).value = '';
 				ReactDOM.findDOMNode(this.refs['telefone']).value = '';
 				ReactDOM.findDOMNode(this.refs['email']).value = '';
-				ReactDOM.findDOMNode(this.refs['possuiAdvogado']).value = '';
-				ReactDOM.findDOMNode(this.refs['advogadoMaster']).value = '';
-				ReactDOM.findDOMNode(this.refs['emailMaster']).value = '';
-				ReactDOM.findDOMNode(this.refs['identificacaoMaster']).value = '';
-				ReactDOM.findDOMNode(this.refs['recebeCitacao']).checked = false;
+				ReactDOM.findDOMNode(this.refs['seguimento']).value = '';
+
 
 			}
 		}
@@ -261,7 +251,6 @@ class CreateDialog extends React.Component {
 							validated={validated}
 							onSubmit={e => this.handleSubmit(e)} >
 
-								<input ref="manager" type="hidden" name="manager" value="" />
 								<input ref="status" type="hidden" name="status" value="" />
 
 								{/* <input ref="" type="hidden" name="possuiAdvogado" value="" /> */}
