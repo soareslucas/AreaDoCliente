@@ -36,6 +36,9 @@ import java.util.ArrayList;
 		list.add( servico);
 
    		this.planos.save(new Plano("Básico", new Long(2) , list, new Float(500), false ) );  */
+		
+		
+		this.usuarios.save(new Usuario("admin", "123456", "ROLE_MANAGER"));
  		
 
  	}
