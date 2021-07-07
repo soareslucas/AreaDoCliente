@@ -53,7 +53,7 @@ class CreateDialog extends React.Component {
 	
 	constructor(props) {
 		super(props);
-		this.state = { validated: false, alerta: false, possuiAdvogado: false, mostra: false , clientes: [], existe: false};    
+		this.state = { validated: false, alerta: false, possuiAdvogado: false, mostra: false , clientes: [], seguimentos:[], existe: false};    
 		this.onPossuiAdvogadoTrue = this.onPossuiAdvogadoTrue.bind(this);
 		this.onPossuiAdvogadoFalse = this.onPossuiAdvogadoFalse.bind(this);
 		this.handleUploadFile = this.handleUploadFile.bind(this);
@@ -62,6 +62,31 @@ class CreateDialog extends React.Component {
 
 	}
 	
+
+
+	loadSeguimentos() {
+		follow(client, root, [
+			{rel: 'seguimentos'}]
+		).then(seguimentoCollection => {
+			return client({
+				method: 'GET',
+				path: seguimentoCollection.entity._links.profile.href,
+				headers: {'Accept': 'application/schema+json'}
+			}).then(schema => {
+				this.schema = schema.entity;
+				return seguimentoCollection;
+			});
+		}).done(seguimentoCollection => {
+			this.setState({
+				seguimentos: seguimentoCollection.entity._embedded.seguimentos});
+		});
+	}
+
+	componentDidMount() {
+		this.loadSeguimentos();
+	}
+
+
 	verificaCnpj(cnpj) {
 		client({
 			method: 'GET',
@@ -190,6 +215,10 @@ class CreateDialog extends React.Component {
 		const { alerta } = this.state;
 		const { mostra } = this.state;
 
+		const seguimentos = this.state.seguimentos.map( seguimento => {
+			return  <option key={seguimento.name} value={seguimento._links.self.href}> {seguimento.name}</option>
+		});
+
 		return (
 
 			<div>
@@ -262,12 +291,28 @@ class CreateDialog extends React.Component {
 
 							<Form.Row>
 							
-								<Form.Group as={Col}   md="12" controlId="3">
+								<Form.Group as={Col}   md="6" controlId="3">
 									<Form.Label>Endereço</Form.Label>
 									<div key="endereco">
 										<Form.Control required placeholder="Endereço da Empresa" ref="endereco"/>
 										<Form.Control.Feedback type="invalid">
 											Por favor escreva o endereço do Escritório Jurídico.
+										</Form.Control.Feedback>
+									</div>
+								</Form.Group>
+
+								
+								<Form.Group as={Col}  md="6" controlId="5">
+									<Form.Label>Seguimento</Form.Label>
+									<div key="seguimento">
+										<Form.Control as="select" required placeholder="Seguimento"   ref="seguimento">
+											<option>Escolha...</option>
+												{seguimentos}
+
+
+										</Form.Control>
+										<Form.Control.Feedback type="invalid">
+											Por favor selecione qual o vínculo do responsável com o órgão.
 										</Form.Control.Feedback>
 									</div>
 								</Form.Group>
@@ -359,97 +404,17 @@ class CreateDialog extends React.Component {
 										</Form.Control.Feedback>   
 									</div>
 								</Form.Group>
-									
-								
-								<Form.Group as={Col}  md="4">
-									<Form.Label> Possui Advogado Estabelecido? </Form.Label>
-										
-									<input ref="possuiAdvogado" type="hidden" name="possuiAdvogado" value={possuiAdvogado} />
+							
 
-									<Col sm={10}>
-										<div key="possuiAdvogado">
-											<Form.Check
-											type="radio"
-											label="Sim"
-											name="formHorizontalRadios1"
-											id="formHorizontalRadios1"
-											onClick={this.onPossuiAdvogadoTrue}
-											/>
-											<Form.Check
-											type="radio"
-											label="Não"
-											name="formHorizontalRadios1"
-											id="formHorizontalRadios2"
-											onClick={this.onPossuiAdvogadoFalse}
-											/>
-										</div>
-									</Col>
-								</Form.Group>
-							
-							</Form.Row>
-							
-							
-							
-							
-							<div style={{display: mostra ? 'block' : 'none' }} > 
-							
-								<Form.Row> 
-									<Form.Group as={Col} md="8" controlId="9">
-										<Form.Label>Nome do Advogado Principal</Form.Label>
-										<div key="advogadoMaster">
-											<Form.Control  type="text"  placeholder="Advogado Master" ref="advogadoMaster"/>
-											<Form.Control.Feedback type="invalid">
-												Por favor escreva o nome do Advogado Principal.
-											</Form.Control.Feedback>
-										</div>
-									</Form.Group>
-				
-				
-									<Form.Group as={Col} md="4" controlId="formGridEmail">
-										<Form.Label>E-mail do Advogado Principal</Form.Label>
-										<div key="emailMaster">
-											<Form.Control  type="email" placeholder="E-mail do Master" ref="emailMaster" />      
-											<Form.Control.Feedback type="invalid">
-												Por favor escreva o e-mail do Master com o padrão email@dominio.com
-											</Form.Control.Feedback>                                                                      
-										</div>
-									</Form.Group>
-								</Form.Row>
-				
-				
-								<Form.Row>
-				
-									<Form.Group as={Col}  md="4" controlId="6">
-										<Form.Label>OAB ou Matrícula</Form.Label>
-										<div key="identificacaoMaster">
-											<Form.Control  placeholder="Número da Identificação do Advogado Principal" ref="identificacaoMaster" />
-											<Form.Control.Feedback type="invalid">
-												Por favor escreva uma identificação do Advogado Principal.
-											</Form.Control.Feedback>
-										</div>
-									</Form.Group>
-				
-									<Form.Group controlId="formBasicChecbox">
-										<div key="recebeCitacao">
-											<Form.Check id="recebeCitacao" ref="recebeCitacao" type="checkbox" label="Recebe Intimação?" />
-										</div>
-									</Form.Group>
-								</Form.Row>
-							
-							
-							</div>
-						
-
-
-							<Row>
-								<Col md="10">
-								</Col>
-								<Col md="2">
+								<Form.Group as={Col}  md="4" controlId="botao">
 									<Button variant="primary"  type="submit">
 										Gravar pré-cadastro 
 									</Button>
-								</Col>
-							</Row>
+								</Form.Group>
+
+							
+							</Form.Row>
+
 						</Form>
 
 					</div> {/* /.container */}

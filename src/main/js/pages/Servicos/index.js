@@ -370,7 +370,7 @@ class AddDialog extends React.Component {
 								onSubmit={e => this.handleSubmit(e)} >
 
 								<Form.Row>
-									<Form.Group as={Col} md="8" controlId="1">
+									<Form.Group as={Col} md="6" controlId="1">
 										<Form.Label>Nome do Servico</Form.Label>
 										<div key="name">
 											<Form.Control required type="text"   placeholder="Nome do Servico" ref="name" />
@@ -382,7 +382,7 @@ class AddDialog extends React.Component {
 
 
 
-									<Form.Group as={Col} md="8" controlId="1">
+									<Form.Group as={Col} md="6" controlId="1">
 										<Form.Label>Valor Individual do Servico</Form.Label>
 										<div key="valor">
 											<Form.Control required type="text"   placeholder="Valor do Serviço" ref="valor" />

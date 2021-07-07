@@ -20,4 +20,5 @@ public interface PlanoRepository extends  JpaSpecificationExecutor<Plano>, Pagin
 
 	Plano findByName(String name);
 
+
 }

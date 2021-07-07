@@ -174,10 +174,6 @@ class App extends React.Component {
 						<Tabs defaultActiveKey="ativas" id="uncontrolled-tab-example">
 							<Tab eventKey="ativas" title="Usuários">
 
-
-
-
-
 								<AddDialog
 									attributes={this.props.attributes}
 									onUpdate={this.props.onUpdate}
@@ -367,7 +363,8 @@ class AddDialog extends React.Component {
 								onSubmit={e => this.handleSubmit(e)} >
 
 								<Form.Row>
-									<Form.Group as={Col} md="8" controlId="1">
+
+									<Form.Group as={Col} md="4" controlId="1">
 										<Form.Label>Nome do Usuário</Form.Label>
 										<div key="name">
 											<Form.Control required type="text"   placeholder="Nome do Usuário" ref="name" />
@@ -376,10 +373,8 @@ class AddDialog extends React.Component {
 											</Form.Control.Feedback>
 										</div>
 									</Form.Group>
-								</Form.Row>
 
-								<Form.Row>
-									<Form.Group as={Col} md="8" controlId="2">
+									<Form.Group as={Col} md="4" controlId="2">
 										<Form.Label>Senha</Form.Label>
 										<div key="password">
 											<Form.Control required type="password"   placeholder="Senha" ref="password" />
@@ -388,18 +383,16 @@ class AddDialog extends React.Component {
 											</Form.Control.Feedback>
 										</div>
 									</Form.Group>
-								</Form.Row>
 
-								<Form.Row>
 
-									<Form.Group as={Col}  md="6" controlId="3">
+									<Form.Group as={Col}  md="4" controlId="3">
 										<Form.Label>Role</Form.Label>
 										<div key="roles">
 											<Form.Control as="select" required placeholder="Perfil de Acesso"   ref="roles">
 												<option>Escolha...</option>
 												<option>ROLE_ADMIN</option>
 												<option>ROLE_MANAGER</option>		
-												<option>ROLE_INTERNE</option>
+												<option>ROLE_INTERN</option>
 
 
 											</Form.Control>
@@ -408,16 +401,9 @@ class AddDialog extends React.Component {
 											</Form.Control.Feedback>
 										</div>
 									</Form.Group>
-								</Form.Row>							
+								</Form.Row>
+								
 
-{/* 
-								<Row>
-									<Col md="10">
-									</Col>
-									<Col md="2">
-
-									</Col>
-								</Row> */}
 							
 							<Modal.Footer>
 								<Button variant="secondary" onClick={this.handleClose}>

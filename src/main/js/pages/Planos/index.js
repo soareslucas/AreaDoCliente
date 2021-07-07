@@ -18,6 +18,8 @@ import AuthenticationService from '../../service/AuthenticationService';
 import Header from '../../common/header';
 import { Link } from "react-router-dom";
 const root = '/api';
+import axios from 'axios'
+
 
 import { MDBTable, MDBTableBody, MDBTableHead, MDBDataTable } from 'mdbreact';
 
@@ -118,7 +120,7 @@ class App extends React.Component {
 			});
 		}).done(servicoCollection => {
 			this.setState({
-				servicos: servicoCollection.entity._embedded.planos});
+				servicos: servicoCollection.entity._embedded.servicos});
 		});
 	}
 
@@ -196,14 +198,10 @@ class App extends React.Component {
 						<Tabs defaultActiveKey="ativas" id="uncontrolled-tab-example">
 							<Tab eventKey="ativas" title="Planos">
 
-
-
-
-
 								<AddDialog
 									planos={this.state.planos}
 
-									servicos={this.props.servicos}
+									servicos={this.state.servicos}
 
 									attributes={this.props.attributes}
 									onUpdate={this.props.onUpdate}
@@ -235,7 +233,7 @@ class UpdateDialog extends React.Component {
 
 	constructor(props) {
 		super(props);
-		this.state = {modal:  false};
+		this.state = {modal:  false, servicosPlano: []};
 		this.handleClose = this.handleClose.bind(this);
 		this.handleShow = this.handleShow.bind(this);
 	}
@@ -245,12 +243,45 @@ class UpdateDialog extends React.Component {
 	}
 	
 	handleShow(e){
+
 		e.preventDefault();
+
+		var personal = this.props.plano['personalizado'];
+
+		
+				
+		
+		this.loadServicosPlano(this.props.plano._links.servicos.href);
+
 		this.setState({ modal: true });
 	}
 
+	loadServicosPlano(url) {
+
+		client({
+			method: 'GET',
+			path: url,
+			headers: {'Accept': 'application/hal+json'}
+		}).then(response => {
+			var listaServicos = response.entity._embedded.servicos;
+			console.log(listaServicos);
+			return listaServicos;
+		}).done(listaServicos => {
+		this.setState({
+			servicosPlano: listaServicos});
+		});
+
+}
+
+
 
 	render() {
+
+		const { servicosPlano } = this.state;
+		
+		const servicos = servicosPlano.map(servico =>{
+			return  <p key={servico.id} > {servico.name}</p>
+		});
 
 		const dialogId = "updatePlano-" + this.props.plano._links.self.href;
 		const { modal } = this.state;
@@ -269,10 +300,39 @@ class UpdateDialog extends React.Component {
 						<Modal.Body>
 
 							<Form.Row>
-								<Form.Group as={Col}  md="4" controlId="1">
+								<Form.Group as={Col}  md="6" controlId="1">
 									<Form.Label>Nome</Form.Label>
 									<h5> {this.props.plano['name']} </h5> 			
 								</Form.Group>
+
+
+								<Form.Group as={Col}  md="6" controlId="2">
+									<Form.Label>Vigência</Form.Label>
+									<h5> {this.props.plano['vigencia']} </h5> 			
+								</Form.Group>
+
+
+							</Form.Row>
+
+
+							<Form.Row>
+								<Form.Group as={Col}  md="4" controlId="3">
+									<Form.Label>Serviços</Form.Label>
+									<h5> {servicos} </h5> 			
+								</Form.Group>
+
+
+								<Form.Group as={Col}  md="4" controlId="4">
+									<Form.Label>Vigência</Form.Label>
+									<h5> {this.props.plano['valor']} </h5> 			
+								</Form.Group>
+
+								<Form.Group as={Col}  md="4" controlId="5">
+									<Form.Label>Personalizado?</Form.Label>
+									<h5> {  String(this.props.plano['personalizado']) } </h5> 			
+								</Form.Group>
+
+
 							</Form.Row>
 							
 						
@@ -292,42 +352,6 @@ class UpdateDialog extends React.Component {
 
 };
 
-
-
-class ServicosOptions extends React.Component {
-
-	constructor(props) {
-		super(props);		
-    }
-
-	render() {
-		const servicos = this.props.servicos.map(servico =>{
-			return  <option>  servico._links.self.href</option>
-		});
-		
-		return (
-				
-			<div>				
-				<Form.Group as={Col}  md="6" controlId="5">
-					<Form.Label>Serviços </Form.Label>
-					<div key="servicos">
-						<Form.Control as="select" required placeholder="Serviços"   ref="servicos">
-							<option>Escolha...</option>
-
-							{servicos}
-
-
-
-						</Form.Control>
-						<Form.Control.Feedback type="invalid">
-							Por favor selecione qual o vínculo do responsável com o órgão.
-						</Form.Control.Feedback>
-					</div>
-				</Form.Group>
-			</div>
-		)
-	}
-}
 
 
 
@@ -366,6 +390,12 @@ class AddDialog extends React.Component {
 			const newPlano = {};
 			
 			newPlano['name'] = ReactDOM.findDOMNode(this.refs['name']).value.trim();
+			newPlano['vigencia'] = ReactDOM.findDOMNode(this.refs['vigencia']).value.trim();
+			newPlano['valor'] = ReactDOM.findDOMNode(this.refs['valor']).value.trim();
+
+			
+			newPlano['servicos']  = [ReactDOM.findDOMNode(this.refs['servicos']).value.trim()];
+
 
 			this.props.onCreate(newPlano);
 
@@ -374,6 +404,10 @@ class AddDialog extends React.Component {
 
 			
 			ReactDOM.findDOMNode(this.refs['name']).value = '';
+			ReactDOM.findDOMNode(this.refs['vigencia']).value = '';
+			ReactDOM.findDOMNode(this.refs['servicos']).value = '';
+			ReactDOM.findDOMNode(this.refs['valor']).value = '';
+
 
 
 		}
@@ -387,6 +421,10 @@ class AddDialog extends React.Component {
 		const { validated } = this.state;
 		const dialogId = "addPlano";
 		const { modal } = this.state;
+
+		const servicos = this.props.servicos.map(servico =>{
+			return  <option key={servico.name} value={servico._links.self.href}> {servico.name}</option>
+		});
 		
 		return (
 			<div key={dialogId}>
@@ -433,11 +471,8 @@ class AddDialog extends React.Component {
 											</Form.Control.Feedback>
 										</div>
 									</Form.Group>
-								</Form.Row>
 
-
-								<Form.Row>
-									<Form.Group as={Col} md="8" controlId="1">
+									<Form.Group as={Col} md="4" controlId="1">
 										<Form.Label>Vigência (Meses)</Form.Label>
 										<div key="vigencia">
 											<Form.Control required type="text"   placeholder="Quantidade de Meses da Vigência" ref="vigencia" />
@@ -448,13 +483,34 @@ class AddDialog extends React.Component {
 									</Form.Group>
 								</Form.Row>
 
+
 								<Form.Row>
 
-									<ServicosOptions
-										
+									<Form.Group as={Col}  md="8" controlId="5">
+										<Form.Label>Serviços </Form.Label>
+										<div key="servicos">
+											<Form.Control as="select" required placeholder="Serviços"   ref="servicos">
+												<option>Escolha...</option>
 
-										servicos={this.props.servicos}
-									/>	
+												{servicos}
+
+											</Form.Control>
+											<Form.Control.Feedback type="invalid">
+												Por favor selecione qual o vínculo do responsável com o órgão.
+											</Form.Control.Feedback>
+										</div>
+										
+									</Form.Group>
+									
+									<Form.Group as={Col} md="4" controlId="1">
+										<Form.Label>Valor Total do Plano</Form.Label>
+										<div key="valor">
+											<Form.Control required type="text"   placeholder="Valor do Plano" ref="valor" />
+											<Form.Control.Feedback type="invalid">
+												Por favor escreva o Valor do Plano.
+											</Form.Control.Feedback>
+										</div>
+									</Form.Group>
 										
 								</Form.Row>
 

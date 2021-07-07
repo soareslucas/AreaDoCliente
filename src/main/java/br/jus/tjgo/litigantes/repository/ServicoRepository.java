@@ -6,6 +6,9 @@ import org.springframework.data.repository.Repository;
 import org.springframework.data.rest.core.annotation.RepositoryRestResource;
 import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 import org.springframework.data.repository.PagingAndSortingRepository;
+import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
+
 
 
 
@@ -19,5 +22,9 @@ public interface ServicoRepository extends  JpaSpecificationExecutor<Servico>, P
 	Servico save(Servico servico);
 
 	Servico findByName(String name);
+
+	@Query("SELECT u FROM Servico u WHERE u.id = :id ")
+	Servico findServicoById(@Param("id") Long id);
+
 
 }

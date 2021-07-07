@@ -30,7 +30,7 @@ class App extends React.Component {
 
 	constructor(props) {
 		super(props);
-		this.state = {campo:'', validated: false, alerta: false, pagamentos: [], sucesso: false, falha: false, 
+		this.state = {campo:'', validated: false, alerta: false, pagamentos: [], clientes: [], planos: [],  sucesso: false, falha: false, 
 		pagamentos: [], attributes: [], pageSize: 50, links: {}, showMessageDelete:  false, showMessageAdd:  false, success:  false};
 		this.onDelete = this.onDelete.bind(this);
 		this.onUpdate = this.onUpdate.bind(this);
@@ -101,7 +101,48 @@ class App extends React.Component {
 			});
 	}
 
+
+	loadClientes() {
+		follow(client, root, [
+			{rel: 'clientes'}]
+		).then(clienteCollection => {
+			return client({
+				method: 'GET',
+				path: clienteCollection.entity._links.profile.href,
+				headers: {'Accept': 'application/schema+json'}
+			}).then(schema => {
+				this.schema = schema.entity;
+				return clienteCollection;
+			});
+		}).done(clienteCollection => {
+			this.setState({
+				clientes: clienteCollection.entity._embedded.clientes});
+		});
+	}
+
+	loadPlanos() {
+		follow(client, root, [
+			{rel: 'planos'}]
+		).then(planoCollection => {
+			return client({
+				method: 'GET',
+				path: planoCollection.entity._links.profile.href,
+				headers: {'Accept': 'application/schema+json'}
+			}).then(schema => {
+				this.schema = schema.entity;
+				return planoCollection;
+			});
+		}).done(planoCollection => {
+			this.setState({
+				planos: planoCollection.entity._embedded.planos});
+		});
+	}
+
+
+
 	componentDidMount() {
+		this.loadClientes();
+		this.loadPlanos();
 		this.loadFromServer(this.state.pageSize);
 		document.body.classList.remove('sidebar-collapse'); 
 
@@ -179,6 +220,9 @@ class App extends React.Component {
 
 
 								<AddDialog
+
+									clientes={this.state.clientes}
+									planos={this.state.planos}
 									attributes={this.props.attributes}
 									onUpdate={this.props.onUpdate}
 									onCreate={this.onCreate}
@@ -209,7 +253,7 @@ class UpdateDialog extends React.Component {
 
 	constructor(props) {
 		super(props);
-		this.state = {modal:  false};
+		this.state = {modal:  false, clientePagamento: '', planoPagamento: ''};
 		this.handleClose = this.handleClose.bind(this);
 		this.handleShow = this.handleShow.bind(this);
 	}
@@ -220,7 +264,45 @@ class UpdateDialog extends React.Component {
 	
 	handleShow(e){
 		e.preventDefault();
+
+		this.loadClientePagamento(this.props.pagamento._links.cliente.href);
+		this.loadPlanoPagamento(this.props.pagamento._links.plano.href);
+
+
 		this.setState({ modal: true });
+	}
+
+
+	loadClientePagamento(url) {
+
+		client({
+			method: 'GET',
+			path: url,
+			headers: {'Accept': 'application/hal+json'}
+		}).then(response => {
+			var cliente = response.entity;
+			return cliente;
+		}).done(cliente => {
+		this.setState({
+			clientePagamento: cliente.nome});
+		});
+
+	}
+
+	loadPlanoPagamento(url) {
+
+		client({
+			method: 'GET',
+			path: url,
+			headers: {'Accept': 'application/hal+json'}
+		}).then(response => {
+			var plano = response.entity;
+			return plano;
+		}).done(plano => {
+		this.setState({
+			planoPagamento: plano.name});
+		});
+
 	}
 
 
@@ -228,6 +310,10 @@ class UpdateDialog extends React.Component {
 
 		const dialogId = "updatePagamento-" + this.props.pagamento._links.self.href;
 		const { modal } = this.state;
+		const { planoPagamento } = this.state;
+		const { clientePagamento } = this.state;
+
+
 		
 		return (
 			<div key={dialogId}>
@@ -242,11 +328,46 @@ class UpdateDialog extends React.Component {
 						
 						<Modal.Body>
 
-							<Form.Row>
-								<Form.Group as={Col}  md="4" controlId="1">
+
+						<Form.Row>
+						<Form.Group as={Col}  md="4" controlId="3">
 									<Form.Label>Nome</Form.Label>
 									<h5> {this.props.pagamento['name']} </h5> 			
 								</Form.Group>
+
+
+								<Form.Group as={Col}  md="4" controlId="3">
+									<Form.Label>Data</Form.Label>
+									<h5> {this.props.pagamento['data']} </h5> 			
+								</Form.Group>
+
+								<Form.Group as={Col}  md="4" controlId="3">
+									<Form.Label>Valor</Form.Label>
+									<h5> {this.props.pagamento['valor']} </h5> 			
+								</Form.Group>
+
+
+							</Form.Row>
+
+
+							<Form.Row>
+								<Form.Group as={Col}  md="4" controlId="3">
+									<Form.Label>Status</Form.Label>
+									<h5> {this.props.pagamento['status']} </h5> 			
+								</Form.Group>
+
+
+								<Form.Group as={Col}  md="4" controlId="4">
+									<Form.Label>Plano</Form.Label>
+									<h5>  { planoPagamento }</h5> 			
+								</Form.Group>
+
+								<Form.Group as={Col}  md="4" controlId="5">
+									<Form.Label>Cliente</Form.Label>
+									<h5>  { clientePagamento } </h5> 			
+								</Form.Group>
+
+
 							</Form.Row>
 							
 						
@@ -302,6 +423,14 @@ class AddDialog extends React.Component {
 			const newPagamento = {};
 			
 			newPagamento['name'] = ReactDOM.findDOMNode(this.refs['name']).value.trim();
+			newPagamento['data'] = ReactDOM.findDOMNode(this.refs['data']).value.trim();
+			newPagamento['valor'] = ReactDOM.findDOMNode(this.refs['valor']).value.trim();
+			newPagamento['status'] = ReactDOM.findDOMNode(this.refs['status']).value.trim();
+			newPagamento['plano']  = ReactDOM.findDOMNode(this.refs['plano']).value.trim();
+			newPagamento['cliente']  = ReactDOM.findDOMNode(this.refs['cliente']).value.trim();
+
+
+
 
 			this.props.onCreate(newPagamento);
 
@@ -310,6 +439,13 @@ class AddDialog extends React.Component {
 
 			
 			ReactDOM.findDOMNode(this.refs['name']).value = '';
+			ReactDOM.findDOMNode(this.refs['data']).value = '';
+			ReactDOM.findDOMNode(this.refs['valor']).value = '';
+			ReactDOM.findDOMNode(this.refs['status']).value = '';
+			ReactDOM.findDOMNode(this.refs['plano']).value = '';
+			ReactDOM.findDOMNode(this.refs['cliente']).value = '';
+
+
 
 
 		}
@@ -323,6 +459,14 @@ class AddDialog extends React.Component {
 		const { validated } = this.state;
 		const dialogId = "addPagamento";
 		const { modal } = this.state;
+
+		const clientes = this.props.clientes.map(cliente =>{
+			return  <option key={cliente.name} value={cliente._links.self.href}> {cliente.nome}</option>
+		});
+
+		const planos = this.props.planos.map(plano =>{
+			return  <option key={plano.name} value={plano._links.self.href}> {plano.name}</option>
+		});
 		
 		return (
 			<div key={dialogId}>
@@ -369,6 +513,90 @@ class AddDialog extends React.Component {
 											</Form.Control.Feedback>
 										</div>
 									</Form.Group>
+
+
+									<Form.Group as={Col} md="4" controlId="1">
+										<Form.Label>Data</Form.Label>
+										<div key="data">
+											<MaskedFormControl required placeholder="DD/MM/AAAA"  ref="data" mask='11-11-1111' />
+
+											<Form.Control.Feedback type="invalid">
+												Por favor escreva a Data do Pagamento.
+											</Form.Control.Feedback>
+										</div>
+									</Form.Group>
+								</Form.Row>
+
+
+								<Form.Row>
+									<Form.Group as={Col} md="6" controlId="1">
+										<Form.Label>Valor do Pagamento (R$)</Form.Label>
+										<div key="valor">
+											<MaskedFormControl required  placeholder="R$ - Valor do Pagamento" ref="valor" mask='1111.1111'/>
+											<Form.Control.Feedback type="invalid">
+												Por favor escreva o Valor do Pagamento.
+											</Form.Control.Feedback>
+										</div>
+									</Form.Group>
+
+
+									<Form.Group as={Col}  md="6" controlId="5">
+									<Form.Label>Status do Pagamento</Form.Label>
+									<div key="status">
+										<Form.Control as="select" required placeholder="Status do Pagameno"   ref="status">
+											<option>Escolha o status...</option>
+
+											<option>Aguardando</option>
+											<option>Em Andamento</option>		
+											<option>Confirmando</option>
+											<option>Efetuado</option>
+
+
+										</Form.Control>
+										<Form.Control.Feedback type="invalid">
+										Por favor escreva o Status do Pagamento.
+										</Form.Control.Feedback>
+									</div>
+								</Form.Group>
+								</Form.Row>
+
+
+								<Form.Row>
+
+								<Form.Group as={Col}  md="6" controlId="5">
+										<Form.Label>Plano</Form.Label>
+										<div key="plano">
+											<Form.Control as="select" required placeholder="Plano do Pagamento"   ref="plano">
+											<option>Escolha o plano...</option>
+
+												{planos}
+
+
+											</Form.Control>
+											<Form.Control.Feedback type="invalid">
+												 Por favor escolha o Plano.
+											</Form.Control.Feedback>
+										</div>
+									</Form.Group>
+
+
+
+									<Form.Group as={Col}  md="6" controlId="5">
+										<Form.Label>Cliente</Form.Label>
+										<div key="cliente">
+											<Form.Control as="select" required placeholder="Cliente do Pagamento"   ref="cliente">
+											<option>Escolha o cliente...</option>
+
+												{clientes}
+
+
+											</Form.Control>
+											<Form.Control.Feedback type="invalid">
+												 Por favor escolha o Cliente.
+											</Form.Control.Feedback>
+										</div>
+									</Form.Group>
+
 								</Form.Row>
 
 
@@ -385,12 +613,12 @@ class AddDialog extends React.Component {
 
 
 						
-							</Form>
+						</Form>
 
-						</Modal.Body>
+					</Modal.Body>
 						
 
-				      </Modal>
+				</Modal>
 
 
 								

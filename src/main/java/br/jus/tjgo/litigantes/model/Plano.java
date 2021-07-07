@@ -8,6 +8,7 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.ManyToMany;
+import javax.persistence.OneToMany;
 import javax.persistence.JoinTable;
 import javax.persistence.JoinColumn;
 
@@ -30,6 +31,9 @@ public class Plano {
 	private Float valor;
 	private boolean personalizado;
 
+	@OneToMany(mappedBy = "plano")
+    private List<Pagamento> pagamentos;
+
 
 	public Plano() {}
 
@@ -38,8 +42,17 @@ public class Plano {
 		this.vigencia = vigencia;
 		this.servicos = servicos;
 		this.valor = valor;
-		this.personalizado = personalizado;
+		this.personalizado = false;
 
+	}
+
+
+	public List<Servico> getServicos(){
+		return this.servicos;
+	}
+
+	public void setServicos(List<Servico> servicos){
+		this.servicos = servicos;
 	}
 	
 
