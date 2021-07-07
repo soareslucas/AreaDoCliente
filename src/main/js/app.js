@@ -11,6 +11,8 @@ import Wrapper from './common/wrapper';
 import Menu from './common/menu';
 import Content from './common/content';
 import Footer from './common/footer';
+import Breadcrumb from 'react-bootstrap/Breadcrumb'
+
 
 
 
@@ -26,28 +28,28 @@ class Index extends React.Component {
         return (
 
             <div>
-                {/* Content Header (Page header) */}
+
+
                 <div className="content-header">
-                    <div className="container-fluid">
+                    <div className="container">
                         <div className="row mb-2">
-                            <div className="col-sm-6">
-                                <h1 className="m-0 text-dark">Gerenciamento da Conta</h1>
-                            </div>{/* /.col */}
-                            <div className="col-sm-6">
-                                <ol className="breadcrumb float-sm-right">
-                                    <li className="breadcrumb-item"><a href="#">Home</a></li>
-                                    <li className="breadcrumb-item active">Área do Cliente</li>
-                                </ol>
-                            </div>{/* /.col */}
-                        </div>{/* /.row */}
-                    </div>{/* /.container-fluid */}
+                        <div className="col-sm-6">
+                            {/* <h1 className="m-0 text-dark"> Top Navigation <small>Example 3.0</small></h1> */}
+                        </div> {/* /.col */}
+                        <div className="col-sm-6">
+                            <ol className="breadcrumb float-sm-right">
+                            <li className="breadcrumb-item"><a href="/">Home</a></li>
+                            <li className="breadcrumb-item active">início</li>
+                            </ol>
+                        </div>{/* /.col */}
+                        </div> {/* /.row */}
+                    </div> {/* /.container-fluid */}
                 </div>
-                {/* /.content-header */}
 
 
                 {/* Main content */}
                 <div className="content">
-                    <div className="container-fluid">
+                    <div className="container">
                         <div className="row">
 
                             <div className="col-lg-6">
@@ -60,7 +62,7 @@ class Index extends React.Component {
                                         <p className="card-text">Faça gestão dos serviços contratados e acompanhe o andamento dos projetos solicitados bem como as etapas de execução.</p>
 
                                         <div className="text-right">                                    
-                                            <Link to="/consulta" className="btn btn-primary text-right"> Entre em sua Conta </Link>
+                                            <Link to="/cliente" className="btn btn-primary text-right"> Entre em sua Conta </Link>
                                         </div>
 
                                     </div>

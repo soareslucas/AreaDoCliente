@@ -26,7 +26,10 @@ class AuthenticationService {
     }
 
     registerSuccessfulLogin(username, password) {
+        console.log('register')
         sessionStorage.setItem(USER_NAME_SESSION_ATTRIBUTE_NAME, username)
+        var response = 'ok'
+        return response;
     }
     
     

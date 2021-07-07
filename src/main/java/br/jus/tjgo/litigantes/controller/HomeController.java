@@ -17,15 +17,15 @@ import org.springframework.core.io.Resource;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
-import br.jus.tjgo.litigantes.model.Escritorio;
-import br.jus.tjgo.litigantes.repository.EscritorioRepository;
+import br.jus.tjgo.litigantes.model.Cliente;
+import br.jus.tjgo.litigantes.repository.ClienteRepository;
 
 @Controller
 public class HomeController {
 	
 	
 	@Autowired
-    private EscritorioRepository escritorioRepository;
+    private ClienteRepository clienteRepository;
 
 	@RequestMapping(value = "/")
 	public String index() {
@@ -49,12 +49,12 @@ public class HomeController {
     
     @GetMapping("/downloadFile/{fileId}")
     public ResponseEntity<Resource> downloadFile(@PathVariable String fileId) {
-        Escritorio escritorio = escritorioRepository.findEscritorioById(Long.valueOf(fileId));
+        Cliente cliente = clienteRepository.findClienteById(Long.valueOf(fileId));
         		
         return ResponseEntity.ok()
                 .contentType(MediaType.APPLICATION_PDF)
                 .header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=\"" + "arquivo.pdf" + "\"")
-                .body(new ByteArrayResource(escritorio.getData()));
+                .body(new ByteArrayResource(cliente.getData()));
     }
 
 }
