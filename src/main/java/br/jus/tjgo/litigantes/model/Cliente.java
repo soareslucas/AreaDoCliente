@@ -33,7 +33,7 @@ public class Cliente {
 	private String status;
     private byte[] data;
 	
-	@ManyToOne(fetch = FetchType.LAZY)
+	@ManyToOne
     @JoinColumn(name="seguimento_id")
 	private Seguimento seguimento;
 

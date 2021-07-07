@@ -238,7 +238,7 @@ class UpdateDialog extends React.Component {
 
 	constructor(props) {
 		super(props);
-		this.state = {modal:  false};
+		this.state = {modal:  false, seguimentoCliente: ''};
 		this.handleClose = this.handleClose.bind(this);
 		this.handleShow = this.handleShow.bind(this);
 	}
@@ -246,9 +246,29 @@ class UpdateDialog extends React.Component {
 	handleClose(){
 		 this.setState({ modal: false });
 	}
+
+	loadSeguimentoCliente(url) {
+
+		client({
+			method: 'GET',
+			path: url,
+			headers: {'Accept': 'application/hal+json'}
+		}).then(response => {
+			var seguimento = response.entity;
+			return seguimento;
+		}).done(seguimento => {
+		this.setState({
+			seguimentoCliente: seguimento.name});
+		});
+
+	}
 	
 	handleShow(e){
 		e.preventDefault();
+
+		this.loadSeguimentoCliente(this.props.cliente._links.seguimento.href);
+
+
 		if(this.props.status != 'Baixado'){
 			let updatedCliente = {};
 			updatedCliente = this.props.cliente;
@@ -263,6 +283,8 @@ class UpdateDialog extends React.Component {
 
 		const dialogId = "updateCliente-" + this.props.cliente._links.self.href;
 		const { modal } = this.state;
+		const { seguimentoCliente } = this.state;
+
 		
 		return (
 			<div key={dialogId}>
@@ -331,7 +353,12 @@ class UpdateDialog extends React.Component {
 									<h5>
 										<a href={'/downloadFile/'+this.props.cliente['id'] }> Download Arquivo </a>
 									</h5> 
-								</Form.Group>								
+								</Form.Group>	
+
+									<Form.Group as={Col}   md="4" controlId="7">
+									<Form.Label>Seguimento</Form.Label>
+									<h5> {seguimentoCliente} </h5> 			
+								</Form.Group>							
 						
 							
 							</Form.Row>				
