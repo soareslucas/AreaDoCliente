@@ -654,6 +654,12 @@ class PagamentoList extends React.Component {
 						<tr>
                             <th>#</th>
 							<th>Nome</th>
+							<th>Data</th>
+							<th>Status</th>
+							<th>Valor</th>
+							<th>Cliente</th>
+							<th>Plano</th>
+
 							<th>Detalhes</th>
 							<th>Excluir</th>	
 						</tr>
@@ -670,16 +676,73 @@ class Pagamento extends React.Component {
 
 	constructor(props) {
 		super(props);
+		this.state = {clientePagamento:  "", planoPagamento: ""};
+
+	}
+
+
+
+	loadClientePagamento(url) {
+
+		client({
+			method: 'GET',
+			path: url,
+			headers: {'Accept': 'application/hal+json'}
+		}).then(response => {
+			var cliente = response.entity;
+			return cliente;
+		}).done(cliente => {
+		this.setState({
+			clientePagamento: cliente.nome});
+		});
+
+	}
+
+	loadPlanoPagamento(url) {
+
+		client({
+			method: 'GET',
+			path: url,
+			headers: {'Accept': 'application/hal+json'}
+		}).then(response => {
+			var plano = response.entity;
+			return plano;
+		}).done(plano => {
+		this.setState({
+			planoPagamento: plano.name});
+		});
+
+	}
+
+
+	componentDidMount(){
+
+		this.loadClientePagamento(this.props.pagamento._links.cliente.href);
+		this.loadPlanoPagamento(this.props.pagamento._links.plano.href);
+
 	}
 	
 
 	render() {
+
+
+		const { planoPagamento } = this.state;
+		const { clientePagamento } = this.state;
+
 		return (
 				
 				<tr>
 	
 	                <td>{this.props.pagamento.id}</td>
 					<td>{this.props.pagamento.name}</td>
+					<td>{this.props.pagamento.data}</td>
+					<td>{this.props.pagamento.status}</td>
+					<td>{this.props.pagamento.valor}</td>
+					<td>{ clientePagamento }</td>
+					<td>{ planoPagamento }</td>
+
+
+
 
 	                <td>  
 						<UpdateDialog pagamento={this.props.pagamento}

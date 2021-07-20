@@ -3,6 +3,7 @@ package br.jus.tjgo.litigantes;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpStatus;
+import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
@@ -16,6 +17,10 @@ import org.springframework.security.web.authentication.SimpleUrlAuthenticationSu
 
 import br.jus.tjgo.litigantes.model.*;
 import br.jus.tjgo.litigantes.service.SpringDataJpaUserDetailsService;
+import br.jus.tjgo.litigantes.service.SpringDataJpaUserDetailsPasswordService;
+
+
+
 
 @Configuration
 @EnableWebSecurity
@@ -25,11 +30,21 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
 	@Autowired
 	private SpringDataJpaUserDetailsService userDetailsService;
 
+	@Autowired
+	private SpringDataJpaUserDetailsPasswordService userDetailsPasswordService;
+
+
 	@Override
 	protected void configure(AuthenticationManagerBuilder auth) throws Exception {
-		auth
-			.userDetailsService(this.userDetailsService)
-				.passwordEncoder(Usuario.PASSWORD_ENCODER);
+
+		DaoAuthenticationProvider provider = new DaoAuthenticationProvider();
+
+		provider.setPasswordEncoder(Usuario.PASSWORD_ENCODER);
+		provider.setUserDetailsService(this.userDetailsService);
+
+
+		auth.authenticationProvider(provider);	
+
 	}
 
 	@Override

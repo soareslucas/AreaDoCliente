@@ -31,7 +31,7 @@ class App extends React.Component {
 	constructor(props) {
 		super(props);
 		this.state = {campo:'', validated: false, alerta: false, servicos: [], sucesso: false, falha: false, 
-		servicos: [], attributes: [], pageSize: 50, links: {}, showMessageDelete:  false, showMessageAdd:  false, success:  false};
+		servicos: [], attributes: [], pageSize: 50, links: {}, showMessageDelete:  false, showMessageAdd:  false, showMessageUpdate: false, success:  false};
 		this.onDelete = this.onDelete.bind(this);
 		this.onUpdate = this.onUpdate.bind(this);
 		this.onCreate = this.onCreate.bind(this);    
@@ -63,9 +63,7 @@ class App extends React.Component {
 		client({method: 'DELETE', path: servico._links.self.href})
 		.done(response => {
 			this.setState({ showMessageAdd: false });
-
 			this.setState({ showMessageDelete: true });
-
 			this.setState({ success: true });
 			this.loadFromServer(this.state.pageSize);
 
@@ -83,6 +81,9 @@ class App extends React.Component {
 			}
 		}).done(response => {
 			this.loadFromServer(this.state.pageSize);
+			this.setState({ showMessageUpdate: true });
+			this.setState({ success: true });
+
 		});
 	}
 
@@ -164,10 +165,12 @@ class App extends React.Component {
 
 					<div className="container">
 
-						{this.state.showMessageAdd == true && this.state.success == true && <div className="form-group alert alert-success " >Servico adicionado!</div>}
-						{this.state.showMessageAdd == true && this.state.success == false && <div className="form-group alert alert-warning " >Ocorreu um problema. O Servico não pôde ser adicionado!</div>}
-						{this.state.showMessageDelete == true && this.state.success == true && <div className="form-group alert alert-success " >Servico excluído!</div>}
-						{this.state.showMessageDelete == true && this.state.success == false && <div className="form-group alert alert-warning " >Ocorreu um problema. O Servico não pôde ser excluído!</div>}
+						{this.state.showMessageUpdate == true && this.state.success == true && <div className="form-group alert alert-success " >Serviço alterado!</div>}
+
+						{this.state.showMessageAdd == true && this.state.success == true && <div className="form-group alert alert-success " >Serviço adicionado!</div>}
+						{this.state.showMessageAdd == true && this.state.success == false && <div className="form-group alert alert-warning " >Ocorreu um problema. O Serviço não pôde ser adicionado!</div>}
+						{this.state.showMessageDelete == true && this.state.success == true && <div className="form-group alert alert-success " >Serviço excluído!</div>}
+						{this.state.showMessageDelete == true && this.state.success == false && <div className="form-group alert alert-warning " >Ocorreu um problema. O Serviço não pôde ser excluído!</div>}
 
 
 
@@ -209,13 +212,24 @@ class UpdateDialog extends React.Component {
 
 	constructor(props) {
 		super(props);
-		this.state = {modal:  false};
+		this.state = {modal:  false, editar: false, detalhes: true};
 		this.handleClose = this.handleClose.bind(this);
 		this.handleShow = this.handleShow.bind(this);
+		this.handleEdit = this.handleEdit.bind(this);
+		this.handleUpdate = this.handleUpdate.bind(this);
+		this.handleTemplateChange = this.handleTemplateChange.bind(this);
+
+
+	}
+
+	handleTemplateChange(){
 	}
 	
 	handleClose(){
 		 this.setState({ modal: false });
+		 this.setState({ editar: false });
+		 this.setState({ detalhes: true });
+ 
 	}
 	
 	handleShow(e){
@@ -223,12 +237,49 @@ class UpdateDialog extends React.Component {
 		this.setState({ modal: true });
 	}
 
+	handleEdit(e){
+
+		if (this.state.editar == false){
+			this.setState({ editar: true });
+			this.setState({ detalhes: false });
+		}else{
+			this.setState({ editar: false });
+			this.setState({ detalhes: true });
+		}
+
+		e.preventDefault();
+	}
+
+
+	handleUpdate(){
+
+		let updatedServico = {};
+		updatedServico = this.props.servico;
+
+		updatedServico['name'] = ReactDOM.findDOMNode(this.refs['name']).value.trim();
+		updatedServico['valor'] =  ReactDOM.findDOMNode(this.refs['valor']).value.trim();
+		
+		this.props.onUpdate(this.props.servico, updatedServico);
+
+		this.setState({ modal: false });
+
+		
+		ReactDOM.findDOMNode(this.refs['name']).value = '';
+		ReactDOM.findDOMNode(this.refs['valor']).value = '';
+
+		this.setState({ editar: false });
+		this.setState({ detalhes: true });
+
+
+	}
+
 
 	render() {
 
 		const dialogId = "updateServico-" + this.props.servico._links.self.href;
 		const { modal } = this.state;
-		
+		const { detalhes } = this.state;
+		const { editar } = this.state;		
 		return (
 			<div key={dialogId}>
 			
@@ -237,31 +288,67 @@ class UpdateDialog extends React.Component {
 				<form>
 					<Modal show={modal} onHide={this.handleClose} size="lg">
 				        <Modal.Header closeButton>
-				          <Modal.Title>Detalhes</Modal.Title>
+							<Modal.Title>
+								<div style={{display: detalhes ? 'block' : 'none' }} > 
+									Detalhes <Button title="Editar" variant="secondary" onClick={this.handleEdit}><i className="fas fa-edit"></i></Button> 
+								</div>
+								<div style={{display: editar ? 'block' : 'none' }} > 
+									Detalhes <Button title="Editar" variant="primary" onClick={this.handleEdit}><i className="fas fa-edit"></i></Button> 
+								</div>
+							</Modal.Title>
 				        </Modal.Header>
 						
 						<Modal.Body>
+							<div style={{display: detalhes ? 'block' : 'none' }} > 
+								<Form.Row>
+									<Form.Group as={Col}  md="8" controlId="1">
+										<Form.Label>Nome do Serviço</Form.Label>
+										<h5> {this.props.servico['name']} </h5> 			
+									</Form.Group>
 
-							<Form.Row>
-								<Form.Group as={Col}  md="8" controlId="1">
-									<Form.Label>Nome</Form.Label>
-									<h5> {this.props.servico['name']} </h5> 			
-								</Form.Group>
+
+									<Form.Group as={Col}  md="4" controlId="1">
+										<Form.Label>Valor do Serviço</Form.Label>
+										<h5> {this.props.servico['valor']} </h5> 			
+									</Form.Group>
+								</Form.Row>
+							</div>
 
 
-								<Form.Group as={Col}  md="4" controlId="1">
-									<Form.Label>Valor</Form.Label>
-									<h5> {this.props.servico['valor']} </h5> 			
-								</Form.Group>
-							</Form.Row>
-							
-						
+							<div style={{display: editar ? 'block' : 'none' }} > 
+								<Form.Row>
+									<Form.Group as={Col} md="8" controlId="1">
+										<Form.Label>Nome do Serviço</Form.Label>
+										<div key="name">
+											<Form.Control required type="text"  onChange={this.handleTemplateChange}  defaultValue={this.props.servico['name']}   placeholder="Nome do Usuário" ref="name" />
+											<Form.Control.Feedback type="invalid">
+												Por favor escreva o Nome do Serviço.
+											</Form.Control.Feedback>
+										</div>
+									</Form.Group>
+
+									<Form.Group as={Col} md="4" controlId="2">
+										<Form.Label>Valor do Serviço</Form.Label>
+										<div key="valor">
+											<Form.Control required type="valor"  onChange={this.handleTemplateChange} defaultValue= {this.props.servico['valor']}  placeholder="Valor" ref="valor" />
+											<Form.Control.Feedback type="invalid">
+												Por favor escreva o Valor.
+											</Form.Control.Feedback>
+										</div>
+									</Form.Group>
+								</Form.Row>
+							</div>		
 						</Modal.Body>
 						
 						<Modal.Footer>
-				          <Button variant="secondary" onClick={this.handleClose}>
-				            Fechar
-				          </Button>
+							<div style={{display: editar ? 'block' : 'none' }} > 
+								<Button variant="primary" onClick={this.handleUpdate}>
+									Concluir
+								</Button>
+							</div>
+							<Button variant="secondary" onClick={this.handleClose}>
+								Fechar
+							</Button>
 				        </Modal.Footer>
 				      </Modal>
 			      </form>
@@ -349,7 +436,7 @@ class AddDialog extends React.Component {
 							<Form.Label>&nbsp; &nbsp;</Form.Label>
 							<div key="botao">
 								<Button onClick={this.handleShow} variant="primary" type="button">
-									Adicionar Servico <i className="fas fa-plus-square"></i>
+									Adicionar Serviço <i className="fas fa-plus-square"></i>
 								</Button>	
 							</div>
 						</Form.Group>			
@@ -359,7 +446,7 @@ class AddDialog extends React.Component {
 
 					<Modal show={modal} onHide={this.handleClose} size="lg">
 				        <Modal.Header closeButton>
-				          <Modal.Title>Adicionar Servico</Modal.Title>
+				          <Modal.Title>Adicionar Serviço</Modal.Title>
 				        </Modal.Header>
 						
 						<Modal.Body>
@@ -371,11 +458,11 @@ class AddDialog extends React.Component {
 
 								<Form.Row>
 									<Form.Group as={Col} md="6" controlId="1">
-										<Form.Label>Nome do Servico</Form.Label>
+										<Form.Label>Nome do Serviço</Form.Label>
 										<div key="name">
 											<Form.Control required type="text"   placeholder="Nome do Servico" ref="name" />
 											<Form.Control.Feedback type="invalid">
-												Por favor escreva o Nome do Servico.
+												Por favor escreva o Nome do Serviço.
 											</Form.Control.Feedback>
 										</div>
 									</Form.Group>
@@ -383,11 +470,11 @@ class AddDialog extends React.Component {
 
 
 									<Form.Group as={Col} md="6" controlId="1">
-										<Form.Label>Valor Individual do Servico</Form.Label>
+										<Form.Label>Valor Individual do Serviço</Form.Label>
 										<div key="valor">
 											<Form.Control required type="text"   placeholder="Valor do Serviço" ref="valor" />
 											<Form.Control.Feedback type="invalid">
-												Por favor escreva o Valor do Servico.
+												Por favor escreva o Valor do Serviço.
 											</Form.Control.Feedback>
 										</div>
 									</Form.Group>

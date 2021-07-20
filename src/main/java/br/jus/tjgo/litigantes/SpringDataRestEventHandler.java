@@ -1,46 +1,68 @@
 package br.jus.tjgo.litigantes;
 
+import java.util.Optional;
+
 import javax.servlet.http.HttpServletRequest;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.rest.core.annotation.HandleAfterCreate;
 import org.springframework.data.rest.core.annotation.HandleBeforeCreate;
+import org.springframework.data.rest.core.annotation.HandleBeforeSave;
+
 import org.springframework.data.rest.core.annotation.RepositoryEventHandler;
-import org.springframework.mail.MailException;
 import org.springframework.stereotype.Component;
 import br.jus.tjgo.litigantes.model.*;
-import br.jus.tjgo.litigantes.service.*;
+import br.jus.tjgo.litigantes.repository.*;
+
 
 @Component
-@RepositoryEventHandler(Cliente.class)
+@RepositoryEventHandler(Usuario.class)
 public class SpringDataRestEventHandler {
 	
+	private UsuarioRepository usuarioRepository;
+
 	@Autowired
-	private  HttpServletRequest request;
-	
-	//@Autowired
-	//private MailService notificationService;
-
-
-	@HandleBeforeCreate
-	public void handleClienteBeforeCreate(Cliente cliente) {
-		byte[] data = (byte[]) this.request.getSession().getAttribute("uploadedFiles");
-		
-		cliente.setData(data);
-		cliente.setStatus("Solicitado");
+	public SpringDataRestEventHandler(UsuarioRepository usuarioRepository) {
+		this.usuarioRepository = usuarioRepository;
 	}
-	
-	
-/* 	@HandleAfterCreate
-    public void handleClienteAfterCreate(Cliente cliente){
-        
-		try {
-			this.notificationService.sendEmail(cliente);
-		} catch (MailException mailException) {
-			System.out.println(mailException);
+
+
+	@HandleBeforeSave
+	public void handleUsuarioBeforeSave(Usuario usuario) {
+
+
+
+		if(Usuario.PASSWORD_ENCODER.matches("", usuario.getPassword() )){
+
+
+			System.out.println("senha vazia");
+
+			usuario.setPasswordEncoded(usuario.getPreviousState().getPassword());
+
+
 		}
-		
-    } */
+
+
+/* 		System.out.println("senha vazia");
+			
+		Usuario user = new Usuario (usuario.getPreviousState());
+
+		System.out.println(usuario.getPassword().equals(user.getPassword()) );
+
+		user.setName("testeForcado");
+		user.setRoles(usuario.getRoles());
+
+		usuario = new Usuario (user);
+
+		usuario.setName("testeForcado");
+
+
+		System.out.println(usuario.getPassword());
+
+		System.out.println(user.getPassword());
+
+		System.out.println(usuario.getPassword().equals(user.getPassword()) ); */
+
+	}
 	
 	
 }
