@@ -31,7 +31,7 @@ class App extends React.Component {
 	constructor(props) {
 		super(props);
 		this.state = {campo:'', validated: false, alerta: false, seguimentos: [], sucesso: false, falha: false, 
-		seguimentos: [], attributes: [], pageSize: 50, links: {}, showMessageDelete:  false, showMessageAdd:  false, success:  false};
+		seguimentos: [], attributes: [], pageSize: 50, links: {}, showMessageDelete:  false, showMessageAdd:  false, showMessageUpdate: false, success:  false};
 		this.onDelete = this.onDelete.bind(this);
 		this.onUpdate = this.onUpdate.bind(this);
 		this.onCreate = this.onCreate.bind(this);    
@@ -83,6 +83,9 @@ class App extends React.Component {
 			}
 		}).done(response => {
 			this.loadFromServer(this.state.pageSize);
+			this.setState({ showMessageUpdate: true });
+			this.setState({ success: true });
+
 		});
 	}
 
@@ -164,6 +167,9 @@ class App extends React.Component {
 
 					<div className="container">
 
+						{this.state.showMessageUpdate == true && this.state.success == true && <div className="form-group alert alert-success " >Serviço alterado!</div>}
+
+
 						{this.state.showMessageAdd == true && this.state.success == true && <div className="form-group alert alert-success " >Seguimento adicionado!</div>}
 						{this.state.showMessageAdd == true && this.state.success == false && <div className="form-group alert alert-warning " >Ocorreu um problema. O Seguimento não pôde ser adicionado!</div>}
 						{this.state.showMessageDelete == true && this.state.success == true && <div className="form-group alert alert-success " >Seguimento excluído!</div>}
@@ -209,13 +215,24 @@ class UpdateDialog extends React.Component {
 
 	constructor(props) {
 		super(props);
-		this.state = {modal:  false};
+		this.state = {modal:  false, editar: false, detalhes: true};
 		this.handleClose = this.handleClose.bind(this);
 		this.handleShow = this.handleShow.bind(this);
+		this.handleEdit = this.handleEdit.bind(this);
+		this.handleUpdate = this.handleUpdate.bind(this);
+		this.handleTemplateChange = this.handleTemplateChange.bind(this);
+
+
+	}
+
+	handleTemplateChange(){
 	}
 	
 	handleClose(){
 		 this.setState({ modal: false });
+		 this.setState({ editar: false });
+		 this.setState({ detalhes: true });
+ 
 	}
 	
 	handleShow(e){
@@ -223,12 +240,47 @@ class UpdateDialog extends React.Component {
 		this.setState({ modal: true });
 	}
 
+	handleEdit(e){
+
+		if (this.state.editar == false){
+			this.setState({ editar: true });
+			this.setState({ detalhes: false });
+		}else{
+			this.setState({ editar: false });
+			this.setState({ detalhes: true });
+		}
+
+		e.preventDefault();
+	}
+
+
+	handleUpdate(){
+
+		let updatedSeguimento = {};
+		updatedSeguimento = this.props.seguimento;
+
+		updatedSeguimento['name'] = ReactDOM.findDOMNode(this.refs['name']).value.trim();
+		
+		this.props.onUpdate(this.props.seguimento, updatedSeguimento);
+
+		this.setState({ modal: false });
+
+		
+		ReactDOM.findDOMNode(this.refs['name']).value = '';
+
+		this.setState({ editar: false });
+		this.setState({ detalhes: true });
+
+
+	}
 
 	render() {
 
 		const dialogId = "updateSeguimento-" + this.props.seguimento._links.self.href;
 		const { modal } = this.state;
-		
+		const { detalhes } = this.state;
+		const { editar } = this.state;		
+
 		return (
 			<div key={dialogId}>
 			
@@ -237,25 +289,57 @@ class UpdateDialog extends React.Component {
 				<form>
 					<Modal show={modal} onHide={this.handleClose} size="lg">
 				        <Modal.Header closeButton>
-				          <Modal.Title>Detalhes</Modal.Title>
-				        </Modal.Header>
+							<Modal.Title>
+								<div style={{display: detalhes ? 'block' : 'none' }} > 
+									Detalhes <Button title="Editar" variant="secondary" onClick={this.handleEdit}><i className="fas fa-edit"></i></Button> 
+								</div>
+								<div style={{display: editar ? 'block' : 'none' }} > 
+									Detalhes <Button title="Editar" variant="primary" onClick={this.handleEdit}><i className="fas fa-edit"></i></Button> 
+								</div>
+							</Modal.Title>
+						</Modal.Header>
 						
 						<Modal.Body>
 
+						<div style={{display: detalhes ? 'block' : 'none' }} > 
 							<Form.Row>
-								<Form.Group as={Col}  md="4" controlId="1">
-									<Form.Label>Nome</Form.Label>
+								<Form.Group as={Col}  md="8" controlId="1">
+									<Form.Label>Nome do Seguimento</Form.Label>
 									<h5> {this.props.seguimento['name']} </h5> 			
 								</Form.Group>
 							</Form.Row>
+						</div>
+
+						<div style={{display: editar ? 'block' : 'none' }} > 
+							<Form.Row>
+								<Form.Group as={Col} md="8" controlId="1">
+									<Form.Label>Nome do Seguimento</Form.Label>
+									<div key="name">
+										<Form.Control required type="text"  onChange={this.handleTemplateChange}  defaultValue={this.props.seguimento['name']}   placeholder="Nome do Usuário" ref="name" />
+										<Form.Control.Feedback type="invalid">
+											Por favor escreva o Nome do Seguimento.
+										</Form.Control.Feedback>
+									</div>
+								</Form.Group>
+							</Form.Row>
+						</div>		
+
 							
 						
 						</Modal.Body>
 						
 						<Modal.Footer>
-				          <Button variant="secondary" onClick={this.handleClose}>
-				            Fechar
-				          </Button>
+
+							<div style={{display: editar ? 'block' : 'none' }} > 
+								<Button variant="primary" onClick={this.handleUpdate}>
+									Concluir
+								</Button>
+							</div>
+
+							<Button variant="secondary" onClick={this.handleClose}>
+								Fechar
+							</Button>
+
 				        </Modal.Footer>
 				      </Modal>
 			      </form>

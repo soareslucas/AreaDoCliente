@@ -33,7 +33,7 @@ class App extends React.Component {
 	constructor(props) {
 		super(props);
 		this.state = {campo:'', validated: false, alerta: false, planos: [], sucesso: false, falha: false, 
-		planos: [], servicos: [], attributes: [], pageSize: 50, links: {}, showMessageDelete:  false, showMessageAdd:  false, success:  false};
+		planos: [], servicos: [], attributes: [], pageSize: 50, links: {}, showMessageDelete:  false, showMessageAdd:  false, showMessageUpdate: false, success:  false};
 		this.onDelete = this.onDelete.bind(this);
 		this.onUpdate = this.onUpdate.bind(this);
 		this.onCreate = this.onCreate.bind(this);    
@@ -85,6 +85,9 @@ class App extends React.Component {
 			}
 		}).done(response => {
 			this.loadFromServer(this.state.pageSize);
+			this.setState({ showMessageUpdate: true });
+			this.setState({ success: true });
+
 		});
 	}
 
@@ -188,6 +191,7 @@ class App extends React.Component {
 
 					<div className="container">
 
+						{this.state.showMessageUpdate == true && this.state.success == true && <div className="form-group alert alert-success " >Serviço alterado!</div>}
 						{this.state.showMessageAdd == true && this.state.success == true && <div className="form-group alert alert-success " >Plano adicionado!</div>}
 						{this.state.showMessageAdd == true && this.state.success == false && <div className="form-group alert alert-warning " >Ocorreu um problema. O Plano não pôde ser adicionado!</div>}
 						{this.state.showMessageDelete == true && this.state.success == true && <div className="form-group alert alert-success " >Plano excluído!</div>}
@@ -210,6 +214,8 @@ class App extends React.Component {
 					
 								<PlanoList
 									planos={this.state.planos}
+									servicos={this.state.servicos}
+
 									links={this.state.links}
 									pageSize={this.state.pageSize}
 									onDelete={this.onDelete}
@@ -233,28 +239,66 @@ class UpdateDialog extends React.Component {
 
 	constructor(props) {
 		super(props);
-		this.state = {modal:  false, servicosPlano: []};
+		this.state = {modal:  false, editar: false, detalhes: true, servicosPlano : []};
 		this.handleClose = this.handleClose.bind(this);
 		this.handleShow = this.handleShow.bind(this);
+		this.handleEdit = this.handleEdit.bind(this);
+		this.handleUpdate = this.handleUpdate.bind(this);
+		this.handleTemplateChange = this.handleTemplateChange.bind(this);
+
+
+	}
+
+	handleTemplateChange(){
 	}
 	
 	handleClose(){
 		 this.setState({ modal: false });
+		 this.setState({ editar: false });
+		 this.setState({ detalhes: true });
+ 
 	}
 	
-	handleShow(e){
+	handleShow(e){		
+		this.loadServicosPlano(this.props.plano._links.servicos.href);
+		this.setState({ modal: true });
+		e.preventDefault();
+	}
+
+	handleEdit(e){
+
+		if (this.state.editar == false){
+			this.setState({ editar: true });
+			this.setState({ detalhes: false });
+		}else{
+			this.setState({ editar: false });
+			this.setState({ detalhes: true });
+		}
 
 		e.preventDefault();
-
-		var personal = this.props.plano['personalizado'];
-
-		
-				
-		
-		this.loadServicosPlano(this.props.plano._links.servicos.href);
-
-		this.setState({ modal: true });
 	}
+
+
+	handleUpdate(){
+
+		let updatedPlano = {};
+		updatedPlano = this.props.plano;
+
+		updatedPlano['name'] = ReactDOM.findDOMNode(this.refs['name']).value.trim();
+		
+		this.props.onUpdate(this.props.plano, updatedPlano);
+
+		this.setState({ modal: false });
+
+		
+		ReactDOM.findDOMNode(this.refs['name']).value = '';
+
+		this.setState({ editar: false });
+		this.setState({ detalhes: true });
+
+
+	}
+
 
 	loadServicosPlano(url) {
 
@@ -279,13 +323,19 @@ class UpdateDialog extends React.Component {
 
 		const { servicosPlano } = this.state;
 		
-		const servicos = servicosPlano.map(servico =>{
+		const servicosPlanoLista = servicosPlano.map(servico =>{
 			return  <p key={servico.id} > {servico.name}</p>
+		});
+
+		const servicos = this.props.servicos.map(servico =>{
+			return  <option key={servico.name} value={servico._links.self.href}> {servico.name}</option>
 		});
 
 		const dialogId = "updatePlano-" + this.props.plano._links.self.href;
 		const { modal } = this.state;
-		
+		const { detalhes } = this.state;
+		const { editar } = this.state;	
+
 		return (
 			<div key={dialogId}>
 			
@@ -294,54 +344,133 @@ class UpdateDialog extends React.Component {
 				<form>
 					<Modal show={modal} onHide={this.handleClose} size="lg">
 				        <Modal.Header closeButton>
-				          <Modal.Title>Detalhes</Modal.Title>
-				        </Modal.Header>
+
+							<div style={{display: detalhes ? 'block' : 'none' }} > 
+								Detalhes <Button title="Editar" variant="secondary" onClick={this.handleEdit}><i className="fas fa-edit"></i></Button> 
+							</div>
+							<div style={{display: editar ? 'block' : 'none' }} > 
+								Detalhes <Button title="Editar" variant="primary" onClick={this.handleEdit}><i className="fas fa-edit"></i></Button> 
+							</div>
+								
+						</Modal.Header>
 						
 						<Modal.Body>
 
-							<Form.Row>
-								<Form.Group as={Col}  md="6" controlId="1">
-									<Form.Label>Nome</Form.Label>
-									<h5> {this.props.plano['name']} </h5> 			
-								</Form.Group>
+							<div style={{display: detalhes ? 'block' : 'none' }} > 
+								<Form.Row>
+									<Form.Group as={Col}  md="6" controlId="1">
+										<Form.Label>Nome</Form.Label>
+										<h5> {this.props.plano['name']} </h5> 			
+									</Form.Group>
 
 
-								<Form.Group as={Col}  md="6" controlId="2">
-									<Form.Label>Vigência</Form.Label>
-									<h5> {this.props.plano['vigencia']} </h5> 			
-								</Form.Group>
+									<Form.Group as={Col}  md="6" controlId="2">
+										<Form.Label>Vigência</Form.Label>
+										<h5> {this.props.plano['vigencia']} </h5> 			
+									</Form.Group>
 
 
-							</Form.Row>
+								</Form.Row>
 
 
-							<Form.Row>
-								<Form.Group as={Col}  md="4" controlId="3">
-									<Form.Label>Serviços</Form.Label>
-									<h5> {servicos} </h5> 			
-								</Form.Group>
+								<Form.Row>
+									<Form.Group as={Col}  md="4" controlId="3">
+										<Form.Label>Serviços</Form.Label>
+										<h5> {servicosPlanoLista} </h5> 			
+									</Form.Group>
 
 
-								<Form.Group as={Col}  md="4" controlId="4">
-									<Form.Label>Vigência</Form.Label>
-									<h5> {this.props.plano['valor']} </h5> 			
-								</Form.Group>
+									<Form.Group as={Col}  md="4" controlId="4">
+										<Form.Label>Vigência</Form.Label>
+										<h5> {this.props.plano['valor']} </h5> 			
+									</Form.Group>
 
-								<Form.Group as={Col}  md="4" controlId="5">
-									<Form.Label>Personalizado?</Form.Label>
-									<h5> {  String(this.props.plano['personalizado']) } </h5> 			
-								</Form.Group>
+									<Form.Group as={Col}  md="4" controlId="5">
+										<Form.Label>Personalizado?</Form.Label>
+										<h5> {  String(this.props.plano['personalizado']) } </h5> 			
+									</Form.Group>
 
 
-							</Form.Row>
+								</Form.Row>
+							</div>		
+
+
+
+							<div style={{display: editar ? 'block' : 'none' }} > 
+								<Form.Row>
+										<Form.Group as={Col} md="8" controlId="1">
+											<Form.Label>Nome</Form.Label>
+											<div key="name">
+												<Form.Control required type="text" onChange={this.handleTemplateChange}  defaultValue={this.props.plano['name']}  placeholder="Nome do Plano" ref="name" />
+												<Form.Control.Feedback type="invalid">
+													Por favor escreva o Nome do Plano.
+												</Form.Control.Feedback>
+											</div>
+										</Form.Group>
+
+										<Form.Group as={Col} md="4" controlId="1">
+											<Form.Label>Vigência (Meses)</Form.Label>
+											<div key="vigencia">
+												<Form.Control required type="text"  onChange={this.handleTemplateChange}  defaultValue={this.props.plano['vigencia']} placeholder="Quantidade de Meses da Vigência" ref="vigencia" />
+												<Form.Control.Feedback type="invalid">
+													Por favor escreva a Vigência do Plano.
+												</Form.Control.Feedback>
+											</div>
+										</Form.Group>
+									</Form.Row>
+
+
+									<Form.Row>
+
+										<Form.Group as={Col}  md="8" controlId="5">
+											<Form.Label>Serviços </Form.Label>
+											<div key="servicos">
+												<Form.Control as="select" required placeholder="Serviços" onChange={this.handleTemplateChange}  defaultValue="" ref="servicos">
+													<option>Escolha...</option>
+
+													{servicos}
+
+												</Form.Control>
+												<Form.Control.Feedback type="invalid">
+													Por favor selecione qual o vínculo do responsável com o órgão.
+												</Form.Control.Feedback>
+											</div>
+											
+										</Form.Group>
+										
+										<Form.Group as={Col} md="4" controlId="1">
+											<Form.Label>Valor Total do Plano</Form.Label>
+											<div key="valor">
+												<Form.Control required type="text"  onChange={this.handleTemplateChange}  defaultValue={this.props.plano['valor']} placeholder="Valor do Plano" ref="valor" />
+												<Form.Control.Feedback type="invalid">
+													Por favor escreva o Valor do Plano.
+												</Form.Control.Feedback>
+											</div>
+										</Form.Group>
+											
+									</Form.Row>
+
+
+
+							</div>		
+
+
 							
 						
 						</Modal.Body>
 						
 						<Modal.Footer>
-				          <Button variant="secondary" onClick={this.handleClose}>
-				            Fechar
-				          </Button>
+
+							<div style={{display: editar ? 'block' : 'none' }} > 
+								<Button variant="primary" onClick={this.handleUpdate}>
+									Concluir
+								</Button>
+							</div>
+
+							<Button variant="secondary" onClick={this.handleClose}>
+								Fechar
+							</Button>
+							
 				        </Modal.Footer>
 				      </Modal>
 			      </form>
@@ -558,7 +687,7 @@ class PlanoList extends React.Component {
 	render() {
 		const planos = this.props.planos.map(plano =>{
 			return  <Plano key={plano._links.self.href} plano={plano} state={this.state} attributes={this.props.attributes} 
-			 onUpdate={this.props.onUpdate} onDelete={this.props.onDelete}  status={this.props.status} />
+			 onUpdate={this.props.onUpdate} onDelete={this.props.onDelete}  status={this.props.status}  servicos={this.props.servicos}/>
 		});
 
 
@@ -599,10 +728,13 @@ class Plano extends React.Component {
 					<td>{this.props.plano.name}</td>
 
 	                <td>  
-						<UpdateDialog plano={this.props.plano}
-						  attributes={this.props.attributes}
-						  onUpdate={this.props.onUpdate}
-						  status={this.props.status}
+						<UpdateDialog 
+							servicos={this.props.servicos}
+
+							plano={this.props.plano}
+							attributes={this.props.attributes}
+							onUpdate={this.props.onUpdate}
+							status={this.props.status}
 						/>  
 	                </td>
 						
