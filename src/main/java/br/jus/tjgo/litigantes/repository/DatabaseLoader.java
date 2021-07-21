@@ -19,25 +19,22 @@ import java.util.ArrayList;
 
  	private final PlanoRepository planos;
 	private final ServicoRepository servicos;
-
 	private final UsuarioRepository usuarios;
 
-
  	@Autowired
- 	public DatabaseLoader(UsuarioRepository usuarioRepository, PlanoRepository planoRepository, ServicoRepository servicoRepository) {
+
+ 	public DatabaseLoader(PlanoRepository planoRepository, ServicoRepository servicoRepository, UsuarioRepository usuarioRepository) {
  		this.planos = planoRepository;
-		 this.servicos = servicoRepository;
-		 this.usuarios = usuarioRepository;
-
-
- 	}
+		this.servicos = servicoRepository;
+		this.usuarios = usuarioRepository; 	}
 
  	@Override
  	public void run(String... strings) throws Exception {
 
 
 
-   		//this.usuarios.save(new Usuario("teste2", "123456", "ROLE_MANAGER") );  
+   		//this.planos.save(new Plano("Básico", new Long(2) , list, new Float(500), false ) ); 
+		//this.usuarios.save(new Usuario("admin", "123456", "ROLE_MANAGER"));
  		
 
  	}
