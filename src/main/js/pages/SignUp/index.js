@@ -256,6 +256,19 @@ class CreateDialog extends React.Component {
 								{/* <input ref="" type="hidden" name="possuiAdvogado" value="" /> */}
 
 							<Form.Row>
+
+
+								
+							<Form.Group as={Col} md="8" controlId="2">
+									<Form.Label>Nome da Empresa</Form.Label>
+									<div key="nome">
+										<Form.Control required type="text"   placeholder="Nome da Empresa" ref="nome" />
+										<Form.Control.Feedback type="invalid">
+											Por favor escreva o Nome do Escritório Jurídico.
+										</Form.Control.Feedback>
+									</div>
+								</Form.Group>
+
 								<Form.Group as={Col}  md="4" controlId="1">
 									<Form.Label>CNPJ</Form.Label>
 									<div key="cnpj">
@@ -267,45 +280,76 @@ class CreateDialog extends React.Component {
 									</div>
 								</Form.Group>
 
-								<Form.Group as={Col} md="8" controlId="2">
-									<Form.Label>Nome da Empresa</Form.Label>
-									<div key="nome">
-										<Form.Control required type="text"   placeholder="Nome da Empresa" ref="nome" />
-										<Form.Control.Feedback type="invalid">
-											Por favor escreva o Nome do Escritório Jurídico.
-										</Form.Control.Feedback>
-									</div>
-								</Form.Group>
 							</Form.Row>
 
 							<Form.Row>
 							
-								<Form.Group as={Col}   md="6" controlId="3">
-									<Form.Label>Endereço</Form.Label>
-									<div key="endereco">
-										<Form.Control required placeholder="Endereço da Empresa" ref="endereco"/>
-										<Form.Control.Feedback type="invalid">
-											Por favor escreva o endereço do Escritório Jurídico.
-										</Form.Control.Feedback>
-									</div>
-								</Form.Group>
+							<Form.Group as={Col}   md="8" controlId="3">
+								<Form.Label>Endereço</Form.Label>
+								<div key="endereco">
+									<Form.Control required placeholder="Rua, bairro, complemento, cidade e estado" ref="endereco"/>
+									<Form.Control.Feedback type="invalid">
+										Por favor escreva o endereço do Escritório Jurídico.
+									</Form.Control.Feedback>
+								</div>
+							</Form.Group>
 
-								
-								<Form.Group as={Col}  md="6" controlId="5">
-									<Form.Label>Seguimento</Form.Label>
-									<div key="seguimento">
-										<Form.Control as="select" required placeholder="Seguimento"   ref="seguimento">
+
+							<Form.Group as={Col}   md="4" controlId="3">
+								<Form.Label>CEP</Form.Label>
+								<div key="cep">
+									<MaskedFormControl required placeholder="xx.xxx-xxx"  ref="cep" mask='11.111-111' />
+
+									<Form.Control.Feedback type="invalid">
+										Por favor escreva o endereço do Escritório Jurídico.
+									</Form.Control.Feedback>
+								</div>
+							</Form.Group>
+
+						
+						</Form.Row>
+
+
+							<Form.Row>
+							
+							<Form.Group as={Col}   md="6" controlId="3">
+								<Form.Label>Natureza Jurídica</Form.Label>
+								<div key="natureza">
+									<Form.Control as="select" required placeholder="Natureza Jurídica"   ref="natureza">
 											<option>Escolha...</option>
-												{seguimentos}
+											<option>MEI</option>
+											<option>EI</option>		
+											<option>EIRELI</option>
+											<option>Sociedade Anônima</option>
+											<option>Sociedade Simples Limitada</option>
+											<option>Sociedade Limitada Unipessoal</option>
 
+										</Form.Control>							
 
-										</Form.Control>
 										<Form.Control.Feedback type="invalid">
-											Por favor selecione qual o vínculo do responsável com o órgão.
+											Por favor selecione a Natureza Jurídica da empresa.
 										</Form.Control.Feedback>
-									</div>
-								</Form.Group>
-							</Form.Row>
+								</div>
+							</Form.Group>
+
+							
+							<Form.Group as={Col}  md="6" controlId="5">
+								<Form.Label>Seguimento</Form.Label>
+								<div key="seguimento">
+									<Form.Control as="select" required placeholder="Seguimento"   ref="seguimento">
+										<option>Escolha...</option>
+											{seguimentos}
+
+
+									</Form.Control>
+									<Form.Control.Feedback type="invalid">
+										Por favor selecione qual o seguimento em que a empresa atua.
+									</Form.Control.Feedback>
+								</div>
+							</Form.Group>
+						</Form.Row>
+
+
 
 
 							<Form.Row>
