@@ -1,5 +1,4 @@
 import React, { Component } from "react";
-import { useState } from 'react';	
 const ReactDOM = require('react-dom');
 const Button = require("react-bootstrap/Button")
 const Form = require("react-bootstrap/Form")
@@ -10,12 +9,8 @@ const Alert = require("react-bootstrap/Alert")
 import MaskedFormControl from 'react-bootstrap-maskedinput';
 import follow from '../../follow';
 import client from '../../client';
-import { Link } from "react-router-dom";
-import Header from '../../common/header';
-import Breadcrumb from 'react-bootstrap/Breadcrumb'
 import axios from 'axios'
 import Wrapper from "../../common/wrapper";
-
 
 const root = '/api';
 
@@ -140,6 +135,25 @@ class CreateDialog extends React.Component {
     };
 
 
+	nextStep = () => {
+        const { step } = this.state
+        this.setState({
+            step : step + 1
+        })
+    }
+
+    prevStep = () => {
+        const { step } = this.state
+        this.setState({
+            step : step - 1
+        })
+    }
+
+    handleChange = (event) => {
+        this.setState({[event.target.name]: event.target.value})
+    }
+
+
 	handleSubmit(e) {
 		
 		e.preventDefault();
@@ -253,200 +267,7 @@ class CreateDialog extends React.Component {
 
 								<input ref="status" type="hidden" name="status" value="" />
 
-								{/* <input ref="" type="hidden" name="possuiAdvogado" value="" /> */}
 
-							<Form.Row>
-
-
-								
-							<Form.Group as={Col} md="8" controlId="2">
-									<Form.Label>Nome da Empresa</Form.Label>
-									<div key="nome">
-										<Form.Control required type="text"   placeholder="Nome da Empresa" ref="nome" />
-										<Form.Control.Feedback type="invalid">
-											Por favor escreva o Nome do Escritório Jurídico.
-										</Form.Control.Feedback>
-									</div>
-								</Form.Group>
-
-								<Form.Group as={Col}  md="4" controlId="1">
-									<Form.Label>CNPJ</Form.Label>
-									<div key="cnpj">
-										<MaskedFormControl required placeholder="xx.xxx.xxx/xxxx-xx"  ref="cnpj" mask='11.111.111/1111-11' />
-										<Form.Control.Feedback type="invalid">
-											Por favor escreva o CNPJ da Empresa/Órgão.
-										</Form.Control.Feedback>
-										
-									</div>
-								</Form.Group>
-
-							</Form.Row>
-
-							<Form.Row>
-							
-							<Form.Group as={Col}   md="8" controlId="3">
-								<Form.Label>Endereço</Form.Label>
-								<div key="endereco">
-									<Form.Control required placeholder="Rua, bairro, complemento, cidade e estado" ref="endereco"/>
-									<Form.Control.Feedback type="invalid">
-										Por favor escreva o endereço do Escritório Jurídico.
-									</Form.Control.Feedback>
-								</div>
-							</Form.Group>
-
-
-							<Form.Group as={Col}   md="4" controlId="3">
-								<Form.Label>CEP</Form.Label>
-								<div key="cep">
-									<MaskedFormControl required placeholder="xx.xxx-xxx"  ref="cep" mask='11.111-111' />
-
-									<Form.Control.Feedback type="invalid">
-										Por favor escreva o endereço do Escritório Jurídico.
-									</Form.Control.Feedback>
-								</div>
-							</Form.Group>
-
-						
-						</Form.Row>
-
-
-							<Form.Row>
-							
-							<Form.Group as={Col}   md="6" controlId="3">
-								<Form.Label>Natureza Jurídica</Form.Label>
-								<div key="natureza">
-									<Form.Control as="select" required placeholder="Natureza Jurídica"   ref="natureza">
-											<option>Escolha...</option>
-											<option>MEI</option>
-											<option>EI</option>		
-											<option>EIRELI</option>
-											<option>Sociedade Anônima</option>
-											<option>Sociedade Simples Limitada</option>
-											<option>Sociedade Limitada Unipessoal</option>
-
-										</Form.Control>							
-
-										<Form.Control.Feedback type="invalid">
-											Por favor selecione a Natureza Jurídica da empresa.
-										</Form.Control.Feedback>
-								</div>
-							</Form.Group>
-
-							
-							<Form.Group as={Col}  md="6" controlId="5">
-								<Form.Label>Seguimento</Form.Label>
-								<div key="seguimento">
-									<Form.Control as="select" required placeholder="Seguimento"   ref="seguimento">
-										<option>Escolha...</option>
-											{seguimentos}
-
-
-									</Form.Control>
-									<Form.Control.Feedback type="invalid">
-										Por favor selecione qual o seguimento em que a empresa atua.
-									</Form.Control.Feedback>
-								</div>
-							</Form.Group>
-						</Form.Row>
-
-
-
-
-							<Form.Row>
-
-								<Form.Group as={Col}  md="6" controlId="4">
-									<Form.Label>Nome do Representante Legal</Form.Label>
-									<div key="nomeRepresentante">
-										<Form.Control required placeholder="Nome do Representante Legal"   ref="nomeRepresentante"/>
-										<Form.Control.Feedback type="invalid">
-											Por favor escreva o Nome do Representante Legal.
-										</Form.Control.Feedback>
-									</div>
-								</Form.Group>
-
-								<Form.Group as={Col}  md="6" controlId="5">
-									<Form.Label>Vínculo do Representante Legal</Form.Label>
-									<div key="vinculo">
-										<Form.Control as="select" required placeholder="Vínculo"   ref="vinculo">
-											<option>Escolha...</option>
-											<option>Advogado</option>
-											<option>Gestor</option>		
-											<option>Procurador</option>
-											<option>Proprietário</option>
-
-
-										</Form.Control>
-										<Form.Control.Feedback type="invalid">
-											Por favor selecione qual o vínculo do responsável com o órgão.
-										</Form.Control.Feedback>
-									</div>
-								</Form.Group>
-							</Form.Row>
-
-
-									
-							<Form.Row>
-							
-							
-								<Form.Group as={Col}  md="4" controlId="1">
-									<Form.Label>CPF do Representante Legal</Form.Label>
-									<div key="cpf">
-										<MaskedFormControl required placeholder="xxx.xxx.xxx-xx"  ref="cpf" mask='111.111.111-11' />
-										<Form.Control.Feedback type="invalid">
-											Por favor escreva o CPF do Representante Legal.
-										</Form.Control.Feedback>
-										
-									</div>
-								</Form.Group>
-
-								<Form.Group as={Col}  md="4" controlId="6">
-									<Form.Label>Telefone</Form.Label>
-									<div key="telefone">
-										<MaskedFormControl required placeholder="(XX)-XXXXX-XXXX" ref="telefone" mask='11-11111-1111' />
-										<Form.Control.Feedback type="invalid">
-											Por favor escreva pelo menos um telefone de contato com o responsável.
-										</Form.Control.Feedback>
-									</div>
-								</Form.Group>
-
-								<Form.Group as={Col}   md="4" controlId="7">
-									<Form.Label>Celular</Form.Label>
-									<div key="celular">
-										<MaskedFormControl placeholder="(XX)-XXXXX-XXXX" ref="celular" mask='11-11111-1111' />
-									</div>
-								</Form.Group>
-							</Form.Row>
-							
-							<Form.Row>
-								<Form.Group as={Col}  md="4" controlId="formGridEmail">
-									<Form.Label>E-mail</Form.Label>
-									<div key="email">
-										<Form.Control required type="email" placeholder="E-mail" ref="email" />      
-										<Form.Control.Feedback type="invalid">
-											Por favor escreva o e-mail com o padrão email@dominio.com
-										</Form.Control.Feedback>                                                                      
-									</div>
-								</Form.Group>
-								
-								<Form.Group as={Col}  md="4" controlId="file">
-									<Form.Label>Anexar Arquivo Comprobatório</Form.Label>
-									<div key="file">
-										<Form.Control required type="file"  onChange={this.handleUploadFile} />                                                                     
-										<Form.Control.Feedback type="invalid">
-											Por favor insira um arquivo comprobatório da representação legal.
-										</Form.Control.Feedback>   
-									</div>
-								</Form.Group>
-							
-
-								<Form.Group as={Col}  md="4" controlId="botao">
-									<Button variant="primary"  type="submit">
-										Gravar pré-cadastro 
-									</Button>
-								</Form.Group>
-
-							
-							</Form.Row>
 
 						</Form>
 
@@ -456,6 +277,245 @@ class CreateDialog extends React.Component {
 		)
 	}
 
+}
+
+
+class FormEmpresa extends Component {
+    state = {
+        step: 1,
+        firstName: '',
+        lastName: '',
+        email: '',
+        address: '',
+        city: '',
+        state: '',
+        zip:'',
+    }
+
+    nextStep = () => {
+        const { step } = this.state
+        this.setState({
+            step : step + 1
+        })
+    }
+
+    prevStep = () => {
+        const { step } = this.state
+        this.setState({
+            step : step - 1
+        })
+    }
+
+    handleChange = (event) => {
+        this.setState({[event.target.name]: event.target.value})
+    }
+
+    render(){
+        const { step, firstName, lastName, email, address, city, state, zip } = this.state;
+        const inputValues = { firstName, lastName, email, address, city, state, zip };
+
+
+		return(
+			<>
+			<Form.Row>
+
+
+								
+			<Form.Group as={Col} md="8" controlId="2">
+					<Form.Label>Nome da Empresa</Form.Label>
+					<div key="nome">
+						<Form.Control required type="text"   placeholder="Nome da Empresa" ref="nome" />
+						<Form.Control.Feedback type="invalid">
+							Por favor escreva o Nome do Escritório Jurídico.
+						</Form.Control.Feedback>
+					</div>
+				</Form.Group>
+
+				<Form.Group as={Col}  md="4" controlId="1">
+					<Form.Label>CNPJ</Form.Label>
+					<div key="cnpj">
+						<MaskedFormControl required placeholder="xx.xxx.xxx/xxxx-xx"  ref="cnpj" mask='11.111.111/1111-11' />
+						<Form.Control.Feedback type="invalid">
+							Por favor escreva o CNPJ da Empresa/Órgão.
+						</Form.Control.Feedback>
+						
+					</div>
+				</Form.Group>
+
+			</Form.Row>
+
+			<Form.Row>
+			
+			<Form.Group as={Col}   md="8" controlId="3">
+				<Form.Label>Endereço</Form.Label>
+				<div key="endereco">
+					<Form.Control required placeholder="Rua, bairro, complemento, cidade e estado" ref="endereco"/>
+					<Form.Control.Feedback type="invalid">
+						Por favor escreva o endereço do Escritório Jurídico.
+					</Form.Control.Feedback>
+				</div>
+			</Form.Group>
+
+
+			<Form.Group as={Col}   md="4" controlId="3">
+				<Form.Label>CEP</Form.Label>
+				<div key="cep">
+					<MaskedFormControl required placeholder="xx.xxx-xxx"  ref="cep" mask='11.111-111' />
+
+					<Form.Control.Feedback type="invalid">
+						Por favor escreva o endereço do Escritório Jurídico.
+					</Form.Control.Feedback>
+				</div>
+			</Form.Group>
+
+		
+		</Form.Row>
+
+
+			<Form.Row>
+			
+			<Form.Group as={Col}   md="6" controlId="3">
+				<Form.Label>Natureza Jurídica</Form.Label>
+				<div key="natureza">
+					<Form.Control as="select" required placeholder="Natureza Jurídica"   ref="natureza">
+							<option>Escolha...</option>
+							<option>MEI</option>
+							<option>EI</option>		
+							<option>EIRELI</option>
+							<option>Sociedade Anônima</option>
+							<option>Sociedade Simples Limitada</option>
+							<option>Sociedade Limitada Unipessoal</option>
+
+						</Form.Control>							
+
+						<Form.Control.Feedback type="invalid">
+							Por favor selecione a Natureza Jurídica da empresa.
+						</Form.Control.Feedback>
+				</div>
+			</Form.Group>
+
+			
+			<Form.Group as={Col}  md="6" controlId="5">
+				<Form.Label>Seguimento</Form.Label>
+				<div key="seguimento">
+					<Form.Control as="select" required placeholder="Seguimento"   ref="seguimento">
+						<option>Escolha...</option>
+							{seguimentos}
+
+
+					</Form.Control>
+					<Form.Control.Feedback type="invalid">
+						Por favor selecione qual o seguimento em que a empresa atua.
+					</Form.Control.Feedback>
+				</div>
+			</Form.Group>
+		</Form.Row>
+
+
+
+
+			<Form.Row>
+
+				<Form.Group as={Col}  md="6" controlId="4">
+					<Form.Label>Nome do Representante Legal</Form.Label>
+					<div key="nomeRepresentante">
+						<Form.Control required placeholder="Nome do Representante Legal"   ref="nomeRepresentante"/>
+						<Form.Control.Feedback type="invalid">
+							Por favor escreva o Nome do Representante Legal.
+						</Form.Control.Feedback>
+					</div>
+				</Form.Group>
+
+				<Form.Group as={Col}  md="6" controlId="5">
+					<Form.Label>Vínculo do Representante Legal</Form.Label>
+					<div key="vinculo">
+						<Form.Control as="select" required placeholder="Vínculo"   ref="vinculo">
+							<option>Escolha...</option>
+							<option>Advogado</option>
+							<option>Gestor</option>		
+							<option>Procurador</option>
+							<option>Proprietário</option>
+
+
+						</Form.Control>
+						<Form.Control.Feedback type="invalid">
+							Por favor selecione qual o vínculo do responsável com o órgão.
+						</Form.Control.Feedback>
+					</div>
+				</Form.Group>
+			</Form.Row>
+
+
+					
+			<Form.Row>
+			
+			
+				<Form.Group as={Col}  md="4" controlId="1">
+					<Form.Label>CPF do Representante Legal</Form.Label>
+					<div key="cpf">
+						<MaskedFormControl required placeholder="xxx.xxx.xxx-xx"  ref="cpf" mask='111.111.111-11' />
+						<Form.Control.Feedback type="invalid">
+							Por favor escreva o CPF do Representante Legal.
+						</Form.Control.Feedback>
+						
+					</div>
+				</Form.Group>
+
+				<Form.Group as={Col}  md="4" controlId="6">
+					<Form.Label>Telefone</Form.Label>
+					<div key="telefone">
+						<MaskedFormControl required placeholder="(XX)-XXXXX-XXXX" ref="telefone" mask='11-11111-1111' />
+						<Form.Control.Feedback type="invalid">
+							Por favor escreva pelo menos um telefone de contato com o responsável.
+						</Form.Control.Feedback>
+					</div>
+				</Form.Group>
+
+				<Form.Group as={Col}   md="4" controlId="7">
+					<Form.Label>Celular</Form.Label>
+					<div key="celular">
+						<MaskedFormControl placeholder="(XX)-XXXXX-XXXX" ref="celular" mask='11-11111-1111' />
+					</div>
+				</Form.Group>
+			</Form.Row>
+			
+			<Form.Row>
+				<Form.Group as={Col}  md="4" controlId="formGridEmail">
+					<Form.Label>E-mail</Form.Label>
+					<div key="email">
+						<Form.Control required type="email" placeholder="E-mail" ref="email" />      
+						<Form.Control.Feedback type="invalid">
+							Por favor escreva o e-mail com o padrão email@dominio.com
+						</Form.Control.Feedback>                                                                      
+					</div>
+				</Form.Group>
+				
+				<Form.Group as={Col}  md="4" controlId="file">
+					<Form.Label>Anexar Arquivo Comprobatório</Form.Label>
+					<div key="file">
+						<Form.Control required type="file"  onChange={this.handleUploadFile} />                                                                     
+						<Form.Control.Feedback type="invalid">
+							Por favor insira um arquivo comprobatório da representação legal.
+						</Form.Control.Feedback>   
+					</div>
+				</Form.Group>
+			
+
+				<Form.Group as={Col}  md="4" controlId="botao">
+					<Button variant="primary"  type="submit">
+						Gravar pré-cadastro 
+					</Button>
+				</Form.Group>
+
+			
+			</Form.Row>
+
+			</>
+
+		);
+
+
+    }
 }
 
 
@@ -475,3 +535,6 @@ class SignUp extends Component {
 }
 
 export default SignUp;
+
+
+
