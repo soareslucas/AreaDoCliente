@@ -48,7 +48,9 @@ class CreateDialog extends React.Component {
 	
 	constructor(props) {
 		super(props);
-		this.state = { validated: false, alerta: false, possuiAdvogado: false, mostra: false , clientes: [], seguimentos:[], existe: false};    
+		this.state = { validated: false, alerta: false, possuiAdvogado: false, mostra: false , clientes: [],  existe: false,
+			status: "", cnpj: "", nome: "" , endereco: "", nomeRepresentante: "", vinculo: "" , cpf: "" , celular: "", telefone: "", email: "", 
+			seguimento: "" };    
 		this.onPossuiAdvogadoTrue = this.onPossuiAdvogadoTrue.bind(this);
 		this.onPossuiAdvogadoFalse = this.onPossuiAdvogadoFalse.bind(this);
 		this.handleUploadFile = this.handleUploadFile.bind(this);
@@ -56,31 +58,16 @@ class CreateDialog extends React.Component {
 		this.handleSubmit = this.handleSubmit.bind(this);    
 
 	}
+
+
+
+	handleChange(event) {
+		const {name, value} = event.target
+		this.setState({
+		  [name]: value
+		}) 
+	  }
 	
-
-
-	loadSeguimentos() {
-		follow(client, root, [
-			{rel: 'seguimentos'}]
-		).then(seguimentoCollection => {
-			return client({
-				method: 'GET',
-				path: seguimentoCollection.entity._links.profile.href,
-				headers: {'Accept': 'application/schema+json'}
-			}).then(schema => {
-				this.schema = schema.entity;
-				return seguimentoCollection;
-			});
-		}).done(seguimentoCollection => {
-			this.setState({
-				seguimentos: seguimentoCollection.entity._embedded.seguimentos});
-		});
-	}
-
-	componentDidMount() {
-		this.loadSeguimentos();
-	}
-
 
 	verificaCnpj(cnpj) {
 		client({
@@ -135,24 +122,34 @@ class CreateDialog extends React.Component {
     };
 
 
-	nextStep = () => {
+	nextStep  ()  {
         const { step } = this.state
         this.setState({
             step : step + 1
         })
     }
 
-    prevStep = () => {
+    prevStep () {
         const { step } = this.state
         this.setState({
             step : step - 1
         })
     }
 
-    handleChange = (event) => {
+    handleChange (event) {
         this.setState({[event.target.name]: event.target.value})
     }
 
+	
+    back (e){
+        e.preventDefault();
+        this.props.prevStep();
+    }
+
+    saveAndContinue(e) {
+        e.preventDefault();
+        this.props.nextStep();
+    };
 
 	handleSubmit(e) {
 		
@@ -192,17 +189,7 @@ class CreateDialog extends React.Component {
 				this.setState({ validated: false });
 				this.setState({ alerta: true });
 				
-				ReactDOM.findDOMNode(this.refs['status']).value = '';
-				ReactDOM.findDOMNode(this.refs['cnpj']).value = '';
-				ReactDOM.findDOMNode(this.refs['nome']).value = '';
-				ReactDOM.findDOMNode(this.refs['endereco']).value = '';
-				ReactDOM.findDOMNode(this.refs['nomeRepresentante']).value = '';
-				ReactDOM.findDOMNode(this.refs['vinculo']).value = '';
-				ReactDOM.findDOMNode(this.refs['cpf']).value = '';
-				ReactDOM.findDOMNode(this.refs['celular']).value = '';
-				ReactDOM.findDOMNode(this.refs['telefone']).value = '';
-				ReactDOM.findDOMNode(this.refs['email']).value = '';
-				ReactDOM.findDOMNode(this.refs['seguimento']).value = '';
+
 
 
 			}
@@ -219,9 +206,13 @@ class CreateDialog extends React.Component {
 		const { alerta } = this.state;
 		const { mostra } = this.state;
 
-		const seguimentos = this.state.seguimentos.map( seguimento => {
-			return  <option key={seguimento.name} value={seguimento._links.self.href}> {seguimento.name}</option>
-		});
+
+
+        const { step, firstName, lastName, email, address, city, state, zip } = this.state;
+        const inputValues = { firstName, lastName, email, address, city, state, zip };
+
+
+
 
 		return (
 
@@ -259,15 +250,16 @@ class CreateDialog extends React.Component {
 						</div>
 
 
-
 						<Form
 							noValidate
 							validated={validated}
 							onSubmit={e => this.handleSubmit(e)} >
 
 								<input ref="status" type="hidden" name="status" value="" />
+									
+								<FirstStep/>
 
-
+								<SecondStep/>
 
 						</Form>
 
@@ -280,40 +272,11 @@ class CreateDialog extends React.Component {
 }
 
 
-class FormEmpresa extends Component {
-    state = {
-        step: 1,
-        firstName: '',
-        lastName: '',
-        email: '',
-        address: '',
-        city: '',
-        state: '',
-        zip:'',
-    }
+class FirstStep extends Component{
 
-    nextStep = () => {
-        const { step } = this.state
-        this.setState({
-            step : step + 1
-        })
-    }
 
-    prevStep = () => {
-        const { step } = this.state
-        this.setState({
-            step : step - 1
-        })
-    }
-
-    handleChange = (event) => {
-        this.setState({[event.target.name]: event.target.value})
-    }
 
     render(){
-        const { step, firstName, lastName, email, address, city, state, zip } = this.state;
-        const inputValues = { firstName, lastName, email, address, city, state, zip };
-
 
 		return(
 			<>
@@ -372,7 +335,7 @@ class FormEmpresa extends Component {
 		</Form.Row>
 
 
-			<Form.Row>
+		<Form.Row>
 			
 			<Form.Group as={Col}   md="6" controlId="3">
 				<Form.Label>Natureza Jurídica</Form.Label>
@@ -394,21 +357,6 @@ class FormEmpresa extends Component {
 				</div>
 			</Form.Group>
 
-			
-			<Form.Group as={Col}  md="6" controlId="5">
-				<Form.Label>Seguimento</Form.Label>
-				<div key="seguimento">
-					<Form.Control as="select" required placeholder="Seguimento"   ref="seguimento">
-						<option>Escolha...</option>
-							{seguimentos}
-
-
-					</Form.Control>
-					<Form.Control.Feedback type="invalid">
-						Por favor selecione qual o seguimento em que a empresa atua.
-					</Form.Control.Feedback>
-				</div>
-			</Form.Group>
 		</Form.Row>
 
 
@@ -480,15 +428,7 @@ class FormEmpresa extends Component {
 			</Form.Row>
 			
 			<Form.Row>
-				<Form.Group as={Col}  md="4" controlId="formGridEmail">
-					<Form.Label>E-mail</Form.Label>
-					<div key="email">
-						<Form.Control required type="email" placeholder="E-mail" ref="email" />      
-						<Form.Control.Feedback type="invalid">
-							Por favor escreva o e-mail com o padrão email@dominio.com
-						</Form.Control.Feedback>                                                                      
-					</div>
-				</Form.Group>
+
 				
 				<Form.Group as={Col}  md="4" controlId="file">
 					<Form.Label>Anexar Arquivo Comprobatório</Form.Label>
@@ -517,6 +457,128 @@ class FormEmpresa extends Component {
 
     }
 }
+
+
+
+
+class SecondStep extends Component{
+	
+	constructor(props) {
+		super(props);
+		this.state = { seguimentos:[], servicos: [] };    
+	}
+
+	loadServicos() {
+		follow(client, root, [
+			{rel: 'servicos'}]
+		).then(servicoCollection => {
+			return client({
+				method: 'GET',
+				path: servicoCollection.entity._links.profile.href,
+				headers: {'Accept': 'application/schema+json'}
+			}).then(schema => {
+				this.schema = schema.entity;
+				return servicoCollection;
+			});
+		}).done(servicoCollection => {
+			this.setState({
+				servicos: servicoCollection.entity._embedded.servicos});
+		});
+	}
+
+	loadSeguimentos() {
+		follow(client, root, [
+			{rel: 'seguimentos'}]
+		).then(seguimentoCollection => {
+			return client({
+				method: 'GET',
+				path: seguimentoCollection.entity._links.profile.href,
+				headers: {'Accept': 'application/schema+json'}
+			}).then(schema => {
+				this.schema = schema.entity;
+				return seguimentoCollection;
+			});
+		}).done(seguimentoCollection => {
+			this.setState({
+				seguimentos: seguimentoCollection.entity._embedded.seguimentos});
+		});
+	}
+
+
+	componentDidMount() {
+		this.loadSeguimentos();
+		this.loadServicos();
+
+	}
+
+
+    render(){
+		const seguimentos = this.state.seguimentos.map( seguimento => {
+			return  <option key={seguimento.name} value={seguimento._links.self.href}> {seguimento.name}</option>
+		});
+
+		const servicos = this.state.servicos.map( servico => {
+			return  <option key={servico.name} value={servico._links.self.href}> {servico.name}</option>
+		});
+
+		return(
+			<>
+
+
+
+					<Form.Row>
+						
+						
+						<Form.Group as={Col}  md="6" controlId="5">
+							<Form.Label>Serviços</Form.Label>
+							<div key="seguimento">
+								<Form.Control as="select" required placeholder="Seguimento"   ref="seguimento">
+									<option>Escolha...</option>
+										{servicos}
+
+
+								</Form.Control>
+								<Form.Control.Feedback type="invalid">
+									Por favor selecione qual o serviço em que a empresa atua.
+								</Form.Control.Feedback>
+							</div>
+						</Form.Group>
+					</Form.Row>
+
+
+
+
+				<Form.Row>
+
+					<Form.Group as={Col}  md="6" controlId="5">
+						<Form.Label>Seguimento</Form.Label>
+						<div key="seguimento">
+							<Form.Control as="select" required placeholder="Seguimento"   ref="seguimento">
+								<option>Escolha...</option>
+									{seguimentos}
+
+
+							</Form.Control>
+							<Form.Control.Feedback type="invalid">
+								Por favor selecione qual o seguimento em que a empresa atua.
+							</Form.Control.Feedback>
+						</div>
+					</Form.Group>
+				</Form.Row>
+
+
+
+
+
+
+			</>
+
+		);
+
+
+    }
+}
+
 
 
 
