@@ -11,7 +11,7 @@
 		<relativePath/>
 	</parent>
 	
-	<groupId>br.jus.tjgo</groupId>
+	<groupId>br.tjgo</groupId>
 	<artifactId>AreaDoCliente</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
 	<packaging>jar</packaging>

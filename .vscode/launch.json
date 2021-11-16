@@ -6,7 +6,7 @@
             "request": "launch",
             "cwd": "${workspaceFolder}",
             "console": "internalConsole",
-            "mainClass": "br.jus.tjgo.litigantes.ReactAndSpringDataRestApplication",
+            "mainClass": "br.tjgo.litigantes.ReactAndSpringDataRestApplication",
             "projectName": "AreaDoCliente",
             "args": ""
         },
@@ -16,7 +16,7 @@
             "request": "launch",
             "cwd": "${workspaceFolder}",
             "console": "internalConsole",
-            "mainClass": "br.jus.tjgo.litigantes.ReactAndSpringDataRestApplication",
+            "mainClass": "br.tjgo.litigantes.ReactAndSpringDataRestApplication",
             "projectName": "citacoes",
             "args": ""
         }
