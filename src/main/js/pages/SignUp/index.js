@@ -101,8 +101,6 @@ class CreateDialog extends React.Component {
 		this.prevStep = this.prevStep.bind(this);    
 		this.handleChange = this.handleChange.bind(this);    
 	}
-	
-
 
 	
 	handleUploadFile(e) {
@@ -147,6 +145,16 @@ class CreateDialog extends React.Component {
         this.setState({[event.target.name]: event.target.value});
     }
 
+	
+/*     back (e){
+        e.preventDefault();
+        this.props.prevStep();
+    }
+
+    saveAndContinue(e) {
+        e.preventDefault();
+        this.props.nextStep();
+    }; */
 
 	handleSubmit(e) {
 		
@@ -208,6 +216,128 @@ class CreateDialog extends React.Component {
 
 }
 
+
+
+
+
+
+class SecondStep extends Component{
+	
+	constructor(props) {
+		super(props);
+		this.state = { seguimentos:[], servicos: [] };    
+	}
+
+	loadServicos() {
+		follow(client, root, [
+			{rel: 'servicos'}]
+		).then(servicoCollection => {
+			return client({
+				method: 'GET',
+				path: servicoCollection.entity._links.profile.href,
+				headers: {'Accept': 'application/schema+json'}
+			}).then(schema => {
+				this.schema = schema.entity;
+				return servicoCollection;
+			});
+		}).done(servicoCollection => {
+			this.setState({
+				servicos: servicoCollection.entity._embedded.servicos});
+		});
+	}
+
+	loadSeguimentos() {
+		follow(client, root, [
+			{rel: 'seguimentos'}]
+		).then(seguimentoCollection => {
+			return client({
+				method: 'GET',
+				path: seguimentoCollection.entity._links.profile.href,
+				headers: {'Accept': 'application/schema+json'}
+			}).then(schema => {
+				this.schema = schema.entity;
+				return seguimentoCollection;
+			});
+		}).done(seguimentoCollection => {
+			this.setState({
+				seguimentos: seguimentoCollection.entity._embedded.seguimentos});
+		});
+	}
+
+
+	componentDidMount() {
+		this.loadSeguimentos();
+		this.loadServicos();
+
+	}
+
+
+    render(){
+		const seguimentos = this.state.seguimentos.map( seguimento => {
+			return  <option key={seguimento.name} value={seguimento._links.self.href}> {seguimento.name}</option>
+		});
+
+		const servicos = this.state.servicos.map( servico => {
+			return  <option key={servico.name} value={servico._links.self.href}> {servico.name}</option>
+		});
+
+		return(
+			<>
+
+
+
+					<Form.Row>
+						
+						
+						<Form.Group as={Col}  md="6" controlId="5">
+							<Form.Label>Serviços</Form.Label>
+							<div key="seguimento">
+								<Form.Control as="select" required placeholder="Seguimento"   ref="seguimento">
+									<option>Escolha...</option>
+										{servicos}
+
+
+								</Form.Control>
+								<Form.Control.Feedback type="invalid">
+									Por favor selecione qual o serviço em que a empresa atua.
+								</Form.Control.Feedback>
+							</div>
+						</Form.Group>
+					</Form.Row>
+
+
+
+
+				<Form.Row>
+
+					<Form.Group as={Col}  md="6" controlId="5">
+						<Form.Label>Seguimento</Form.Label>
+						<div key="seguimento">
+							<Form.Control as="select" required placeholder="Seguimento"   ref="seguimento">
+								<option>Escolha...</option>
+									{seguimentos}
+
+
+							</Form.Control>
+							<Form.Control.Feedback type="invalid">
+								Por favor selecione qual o seguimento em que a empresa atua.
+							</Form.Control.Feedback>
+						</div>
+					</Form.Group>
+				</Form.Row>
+
+
+
+
+
+
+			</>
+
+		);
+
+
+    }
+}
 
 
 
