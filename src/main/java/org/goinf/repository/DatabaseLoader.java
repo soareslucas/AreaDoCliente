@@ -36,7 +36,11 @@ import java.util.ArrayList;
 
    		//this.planos.save(new Plano("Básico", new Long(2) , list, new Float(500), false ) ); 
 		//this.usuarios.save(new Usuario("admin", "123456", "ROLE_MANAGER"));
- 		
+
+		Usuario usuario = this.usuarios.findByName("admin");
+		if(usuario == null){
+			this.usuarios.save(new Usuario("admin", "123456", "ROLE_MANAGER"));
+		}
 
  	}
  }

@@ -15,7 +15,7 @@ import Wrapper from "../../common/wrapper";
 
 const root = '/api';
 
-class FormEmpresa extends React.Component {
+class FormRepresentante extends React.Component {
 
 
 	constructor(props) {
@@ -103,8 +103,7 @@ class FormEmpresa extends React.Component {
 		});
         
         const centered = {display : 'flex', justifyContent: 'center'}
-        const lefted = {display: 'flex', flexDirection: 'row-reverse'}   
-
+        const lefted = {display: 'flex', flexDirection: 'row-reverse'}
 
 		return(
 			
@@ -113,96 +112,67 @@ class FormEmpresa extends React.Component {
             validated={validated} >
 
 
-                <Form.Row style={centered}>
-                    <Form.Group   as={Col} md="6" >
-                        <Form.Label>Nome da Empresa</Form.Label>
-                        <div key="nome">
-                            <Form.Control required type="text"   placeholder="Nome da Empresa" ref="nome" defaultValue={this.props.inputValues.nome}    onChange={e => this.handleChangeFormEmpresa(e)} />
+                <Form.Row  style={centered}>
+                    <Form.Group as={Col}  md="6" >
+                        <Form.Label>Nome do Representante Legal</Form.Label>
+                        <div key="nomeRepresentante">
+                            <Form.Control required placeholder="Nome do Representante Legal"   ref="nomeRepresentante" defaultValue={this.props.inputValues.nomeRepresentante}  onChange={e => this.handleChangeFormEmpresa(e)} />
                             <Form.Control.Feedback type="invalid">
-                                Por favor escreva o Nome da Pessoa Jurídica.
+                                Por favor escreva o Nome do Representante Legal.
                             </Form.Control.Feedback>
                         </div>
                     </Form.Group>
-
                 </Form.Row>
 
                 <Form.Row  style={centered}>
-                    <Form.Group as={Col}   md="6">
-                            <Form.Label>Natureza Jurídica</Form.Label>
-                            <div key="natureza">
-                                <Form.Control as="select" required placeholder="Natureza Jurídica"   ref="natureza" defaultValue={this.props.inputValues.natureza}  onChange={e => this.handleChangeFormEmpresa(e)} >
-                                        <option>Escolha...</option>
-                                        <option>MEI</option>
-                                        <option>EI</option>		
-                                        <option>EIRELI</option>
-                                        <option>Sociedade Anônima</option>
-                                        <option>Sociedade Simples Limitada</option>
-                                        <option>Sociedade Limitada Unipessoal</option>
-
-                                </Form.Control>							
-
-                                <Form.Control.Feedback type="invalid">
-                                    Por favor selecione a Natureza Jurídica da empresa.
-                                </Form.Control.Feedback>
-                            </div>
-                        </Form.Group>
-                </Form.Row>
+                    <Form.Group as={Col}  md="6" controlId="formGridEmail">
+                        <Form.Label>E-mail</Form.Label>
+                        <div key="email">
+                            <Form.Control required type="email" placeholder="E-mail" ref="email"  defaultValue={this.props.inputValues.email} onChange={e => this.handleChangeFormEmpresa(e)} />      
+                            <Form.Control.Feedback type="invalid">
+                                Por favor escreva o e-mail com o padrão email@dominio.com
+                            </Form.Control.Feedback>                                                                      
+                        </div>
+                    </Form.Group>
+                </Form.Row>                
 
                 <Form.Row  style={centered}>
                     <Form.Group as={Col}  md="6" >
-                        <Form.Label>Seguimento</Form.Label>
-                        <div key="seguimento">
-                            <Form.Control as="select" required placeholder="Seguimento"   ref="seguimento" defaultValue={this.props.inputValues.seguimento}   onChange={e => this.handleChangeFormEmpresa(e)} >
-                                <option>Escolha...</option>
-                                    {seguimentos}
-
-
-                            </Form.Control>
+                        <Form.Label>Telefone</Form.Label>
+                        <div key="telefone">
+                            <MaskedFormControl required placeholder="(XX)-XXXXX-XXXX" ref="telefone" mask='11-11111-1111' defaultValue={this.props.inputValues.telefone}   onChange={e => this.handleChangeFormEmpresa(e)} />
                             <Form.Control.Feedback type="invalid">
-                                Por favor selecione qual o seguimento em que a empresa atua.
+                                Por favor escreva pelo menos um telefone de contato com o responsável.
                             </Form.Control.Feedback>
                         </div>
                     </Form.Group>
-                </Form.Row>               
+                </Form.Row>
 
-                <Form.Row  style={centered}>
+                <Form.Row  style={centered}>                
                     <Form.Group as={Col}  md="6" >
-                        <Form.Label>CNPJ</Form.Label>
-                        <div key="cnpj">
-                            <MaskedFormControl required placeholder="xx.xxx.xxx/xxxx-xx"  name="cnpj" mask='11.111.111/1111-11' defaultValue={this.props.inputValues.cnpj}  onChange={e => this.handleChangeFormEmpresa(e)} />
+                        <Form.Label>CPF do Representante Legal</Form.Label>
+                        <div key="cpf">
+                            <MaskedFormControl required placeholder="xxx.xxx.xxx-xx"  ref="cpf" mask='111.111.111-11' defaultValue={this.props.inputValues.cpf} onChange={e => this.handleChangeFormEmpresa(e)} />
                             <Form.Control.Feedback type="invalid">
-                                Por favor escreva o CNPJ da Empresa/Órgão.
+                                Por favor escreva o CPF do Representante Legal.
                             </Form.Control.Feedback>
-                        </div>
-                    </Form.Group>
-                </Form.Row>
-                    
-
-                <Form.Row  style={centered}>
-                    <Form.Group as={Col}   md="6" >
-                        <Form.Label>Endereço</Form.Label>
-                        <div key="endereco">
-                            <Form.Control required placeholder="Rua, bairro, complemento, cidade e estado" ref="endereco" defaultValue={this.props.inputValues.endereco}   onChange={e => this.handleChangeFormEmpresa(e)} />
-                            <Form.Control.Feedback type="invalid">
-                                Por favor escreva o endereço da Pessoa Jurídica.
-                            </Form.Control.Feedback>
+                            
                         </div>
                     </Form.Group>
                 </Form.Row>
 
-                <Form.Row  style={centered}>
-                    <Form.Group as={Col}   md="6" >
-                        <Form.Label>CEP</Form.Label>
-                        <div key="cep">
-                            <MaskedFormControl required placeholder="xx.xxx-xxx"  ref="cep" mask='11.111-111' defaultValue={this.props.inputValues.cep}  onChange={e => this.handleChangeFormEmpresa(e)} />
-
+                <Form.Row  style={centered}>                
+                   <Form.Group as={Col}  md="6" controlId="file">
+                        <Form.Label>Anexar Arquivo Comprobatório</Form.Label>
+                        <div key="file">
+                            <Form.Control type="file"  onChange={this.handleUploadFile} />                                                                     
                             <Form.Control.Feedback type="invalid">
-                                Por favor escreva o CEP da Pessoa Jurídica.
-                            </Form.Control.Feedback>
+                                Por favor insira um arquivo comprobatório da representação legal.
+                            </Form.Control.Feedback>   
                         </div>
                     </Form.Group>
                 </Form.Row>
-
+                
                 <Form.Row  style={centered}>
                     <Form.Group style={lefted} as={Col}  md="6" controlId="botao">
                         <Button variant="primary"  onClick={this.handleNextStep}>
@@ -220,4 +190,4 @@ class FormEmpresa extends React.Component {
 
 
 
-export default FormEmpresa;
+export default FormRepresentante;

@@ -14,6 +14,7 @@ import Wrapper from "../../common/wrapper";
 import FormEmpresa from "./formEmpresa";
 import Confirmacao from "./confirmacao";
 import FormTipoCliente from "./formTipoCliente";
+import FormRepresentante from "./formRepresentante";
 
 
 const root = '/api';
@@ -46,7 +47,6 @@ class App extends React.Component {
 					<div className="container">
 						<div className="row mb-2">
 							<div className="col-sm-6">
-								{/* <h1 className="m-0 text-dark"> Top Navigation <small>Example 3.0</small></h1> */}
 							</div> {/* /.col */}
 							<div className="col-sm-6">
 								<ol className="breadcrumb float-sm-right">
@@ -86,27 +86,21 @@ class App extends React.Component {
 	}
 }
 
-
-
-// tag::create-dialog[]
 class CreateDialog extends React.Component {
-
 	
 	constructor(props) {
 		super(props);
-		this.state = { step: 1, cnpj : "", nome: "teste teste", endereco : "", nomeRepresentante : "", cpf: "", celular: "", telefone: "", email: "", seguimento : ""	 };    
+		this.state = { step: 1, cnpj : "", nome: "", endereco : "", nomeRepresentante : "", cpf: "", celular: "", telefone: "", email: "", seguimento : ""	 };    
 		this.handleUploadFile = this.handleUploadFile.bind(this);
 		this.handleSubmit = this.handleSubmit.bind(this);    
 		this.nextStep = this.nextStep.bind(this);    
 		this.prevStep = this.prevStep.bind(this);    
 		this.handleChange = this.handleChange.bind(this);    
 	}
-
 	
 	handleUploadFile(e) {
         const data = new FormData();
 
-        console.log("Uploading file", e.target.files[0]);
         data.append('file', e.target.files[0]);
 
 		axios.post('upload', data, {
@@ -176,10 +170,7 @@ class CreateDialog extends React.Component {
 
 			this.setState({ validated: false });
 			this.setState({ alerta: true });
-			
-
 		}
-
 	}
 
 	render() {
@@ -196,7 +187,7 @@ class CreateDialog extends React.Component {
 						inputValues={inputValues}
 						/>
 			case 2:
-				return <FormTipoCliente
+				return <FormRepresentante
 						nextStep={this.nextStep}
 						prevStep={this.prevStep}
 						handleChange = {this.handleChange}
